@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        AI Store Manager - Settings
+    </title>
+
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <div class="app-layout">
+
+
+        <aside class="sidebar">
+
+
+            <div class="sidebar-brand">
+
+                <div class="brand-logo">
+                    AI
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        AI Store
+                    </strong>
+
+                    <small>
+                        MANAGER
+                    </small>
+
+                </div>
+
+            </div>
+
+
+
+            <nav class="sidebar-menu">
+
+
+                <a
+                    href="dashboard.html"
+                    class="nav-item"
+                >
+                    <span>📊</span>
+                    Dashboard
+                </a>
+
+
+                <a
+                    href="products.html"
+                    class="nav-item"
+                >
+                    <span>📦</span>
+                    Products
+                </a>
+
+
+                <a
+                    href="settings.html"
+                    class="nav-item active"
+                >
+                    <span>⚙️</span>
+                    Settings
+                </a>
+
+
+            </nav>
+
+
+        </aside>
+
+
+
+        <main class="main-content">
+
+
+            <header class="dashboard-header">
+
+
+                <div>
+
+                    <p class="page-label">
+                        SYSTEM SETTINGS
+                    </p>
+
+
+                    <h1>
+                        Store Connections
+                    </h1>
+
+                </div>
+
+
+            </header>
+
+
+
+            <section class="settings-grid">
+
+
+                <article class="connection-card">
+
+
+                    <div class="connection-top">
+
+
+                        <div class="market-icon">
+                            🛒
+                        </div>
+
+
+                        <div>
+
+                            <h2>
+                                Amazon
+                            </h2>
+
+
+                            <p>
+                                Seller account integration
+                            </p>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <span class="connection-status">
+                        Not Connected
+                    </span>
+
+
+                    <button
+                        class="connect-btn"
+                        data-store="Amazon"
+                    >
+
+                        Configure Connection
+
+                    </button>
+
+
+                </article>
+
+
+
+                <article class="connection-card">
+
+
+                    <div class="connection-top">
+
+
+                        <div class="market-icon">
+                            🛍️
+                        </div>
+
+
+                        <div>
+
+                            <h2>
+                                Flipkart
+                            </h2>
+
+
+                            <p>
+                                Seller account integration
+                            </p>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <span class="connection-status">
+                        Not Connected
+                    </span>
+
+
+                    <button
+                        class="connect-btn"
+                        data-store="Flipkart"
+                    >
+
+                        Configure Connection
+
+                    </button>
+
+
+                </article>
+
+
+
+                <article class="connection-card">
+
+
+                    <div class="connection-top">
+
+
+                        <div class="market-icon">
+                            👜
+                        </div>
+
+
+                        <div>
+
+                            <h2>
+                                Meesho
+                            </h2>
+
+
+                            <p>
+                                Seller account integration
+                            </p>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <span class="connection-status">
+                        Not Connected
+                    </span>
+
+
+                    <button
+                        class="connect-btn"
+                        data-store="Meesho"
+                    >
+
+                        Configure Connection
+
+                    </button>
+
+
+                </article>
+
+
+            </section>
+
+
+
+            <section class="panel api-info">
+
+
+                <span class="panel-label">
+                    🔒 SECURITY
+                </span>
+
+
+                <h2>
+                    API Credentials
+                </h2>
+
+
+                <p>
+                    Marketplace API credentials should never
+                    be stored directly inside public HTML
+                    or JavaScript files.
+                </p>
+
+
+                <p>
+                    In the next step we will create a secure
+                    backend/database structure for authorized
+                    store connections.
+                </p>
+
+
+            </section>
+
+
+        </main>
+
+
+    </div>
+
+
+    <script>
+
+        document
+            .querySelectorAll(".connect-btn")
+            .forEach(
+                (button) => {
+
+                    button.addEventListener(
+                        "click",
+                        () => {
+
+                            alert(
+                                button.dataset.store +
+                                " connection setup will be added after the secure backend is configured."
+                            );
+
+                        }
+                    );
+
+                }
+            );
+
+    </script>
+
+
+</body>
+
+</html>
