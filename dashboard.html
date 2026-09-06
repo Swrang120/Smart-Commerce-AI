@@ -1,2131 +1,520 @@
-<!DOCTYPE html>
-<html lang="en">
+/**
+ * Smart Money AI Commerce - Dashboard Engine
+ * Handles navigation, AI scanning, state management, search, and UI updates.
+ */
 
-<head>
+document.addEventListener('DOMContentLoaded', () => {
 
-    <meta charset="UTF-8">
+    // ==========================================
+    // APP STATE MANAGEMENT
+    // ==========================================
+    const state = {
+        activeSection: 'dashboard',
+        storesCount: 0,
+        earnings: {
+            today: 0.00,
+            lifetime: 0.00,
+            estimatedProfit: 0.00
+        },
+        products: [],
+        activities: [
+            {
+                id: 1,
+                title: 'System Initialized',
+                desc: 'Smart Money AI workspace ready for integration.',
+                time: 'Just now',
+                type: 'system'
+            }
+        ],
+        approvals: [
+            {
+                id: 'APP-101',
+                title: 'Auto-Sync Integration',
+                desc: 'Grant AI permission to fetch store inventory metrics.',
+                time: '10 mins ago'
+            }
+        ],
+        connectedAccounts: [
+            {
+                id: 'ACC-1',
+                name: 'Primary Workspace Admin',
+                type: 'Internal Account',
+                status: 'Active'
+            }
+        ]
+    };
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    // Section Meta Titles Mapping
+    const sectionMeta = {
+        'dashboard': { title: 'Dashboard', eyebrow: 'AI COMMAND CENTER' },
+        'ai-hunter': { title: 'AI Product Hunter', eyebrow: 'AI RESEARCH ENGINE' },
+        'product-research': { title: 'Product Research', eyebrow: 'MARKET RESEARCH' },
+        'global-market': { title: 'Global Market', eyebrow: 'GLOBAL COMMERCE' },
+        'stores': { title: 'My Stores', eyebrow: 'STORE MANAGEMENT' },
+        'automation': { title: 'Automation', eyebrow: 'AUTOMATION WORKFLOWS' },
+        'earnings': { title: 'Earnings', eyebrow: 'ANALYTICS & REVENUE' },
+        'products': { title: 'Products', eyebrow: 'PRODUCT DATABASE' },
+        'price-history': { title: 'Price History', eyebrow: 'PRICE INTELLIGENCE' },
+        'activity': { title: 'AI Activity', eyebrow: 'SYSTEM LOG' },
+        'content-studio': { title: 'Content Studio', eyebrow: 'AI CONTENT ENGINE' },
+        'content-scheduler': { title: 'Content Scheduler', eyebrow: 'CONTENT PLANNING' },
+        'social-accounts': { title: 'Social Accounts', eyebrow: 'SOCIAL CONNECTIONS' },
+        'approval-center': { title: 'Approval Center', eyebrow: 'OWNER APPROVAL SYSTEM' },
+        'connected-accounts': { title: 'Connected Accounts', eyebrow: 'ACCOUNT MANAGEMENT' },
+        'settings': { title: 'Settings', eyebrow: 'WORKSPACE SETTINGS' }
+    };
 
-    <meta
-        name="theme-color"
-        content="#07111f"
-    >
+    // ==========================================
+    // DOM ELEMENTS CACHE
+    // ==========================================
+    const elements = {
+        // Layout & Navigation
+        sidebar: document.getElementById('sidebar'),
+        sidebarOverlay: document.getElementById('sidebarOverlay'),
+        menuToggle: document.getElementById('menuToggle'),
+        sidebarClose: document.getElementById('sidebarClose'),
+        navItems: document.querySelectorAll('.nav-item'),
+        dashboardPages: document.querySelectorAll('.dashboard-page'),
+        pageTitle: document.getElementById('pageTitle'),
+        pageEyebrow: document.getElementById('pageEyebrow'),
+        approvalBadge: document.getElementById('approvalBadge'),
+        
+        // Header & Search
+        globalSearch: document.getElementById('globalSearch'),
+        aiStatusBtn: document.getElementById('aiStatusBtn'),
+        aiStatusText: document.getElementById('aiStatus'),
+        
+        // Stats
+        todayEarnings: document.getElementById('todayEarnings'),
+        lifetimeRevenue: document.getElementById('lifetimeRevenue'),
+        estimatedProfit: document.getElementById('estimatedProfit'),
+        connectedStores: document.getElementById('connectedStores'),
+        storeSummaryCount: document.getElementById('storeSummaryCount'),
 
-    <meta
-        name="description"
-        content="Smart Money AI Commerce - AI powered e-commerce intelligence dashboard."
-    >
+        // Lists & Dynamic Containers
+        productList: document.getElementById('productList'),
+        productsPageList: document.getElementById('productsPageList'),
+        activityList: document.getElementById('activityList'),
+        fullActivityList: document.getElementById('fullActivityList'),
+        approvalList: document.getElementById('approvalList'),
+        connectedAccountsList: document.getElementById('connectedAccountsList'),
 
-    <title>
-        Smart Money AI Commerce - Dashboard
-    </title>
+        // Forms & Inputs
+        aiHunterInput: document.getElementById('aiHunterInput'),
+        aiHunterBtn: document.getElementById('aiHunterBtn'),
+        aiHunterResults: document.getElementById('aiHunterResults'),
+        
+        productSearchInput: document.getElementById('productSearchInput'),
+        analyzeProductBtn: document.getElementById('analyzeProductBtn'),
+        researchResults: document.getElementById('researchResults'),
 
-    <link
-        rel="stylesheet"
-        href="css/dashboard.css"
-    >
+        contentPromptInput: document.getElementById('contentPromptInput'),
+        generateContentBtn: document.getElementById('generateContentBtn'),
+        contentPreview: document.getElementById('contentPreview'),
 
-</head>
+        // Action Buttons
+        connectStoreBtn: document.getElementById('connectStoreBtn'),
+        refreshDashboardBtn: document.getElementById('refreshDashboardBtn'),
+        
+        // Toast
+        toast: document.getElementById('toast'),
+        toastIcon: document.getElementById('toastIcon'),
+        toastMessage: document.getElementById('toastMessage')
+    };
 
+    // ==========================================
+    // UTILITY & TOAST NOTIFICATION SYSTEM
+    // ==========================================
+    let toastTimeout;
+    function showToast(message, icon = '✓') {
+        if (!elements.toast) return;
+        
+        elements.toastIcon.textContent = icon;
+        elements.toastMessage.textContent = message;
+        
+        elements.toast.classList.add('show');
+        
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => {
+            elements.toast.classList.remove('show');
+        }, 3000);
+    }
 
-<body>
+    function addActivityLog(title, desc) {
+        const newLog = {
+            id: Date.now(),
+            title,
+            desc,
+            time: 'Just now'
+        };
+        state.activities.unshift(newLog);
+        renderActivities();
+    }
 
+    // ==========================================
+    // NAVIGATION & SIDEBAR LOGIC
+    // ==========================================
+    function switchSection(sectionId) {
+        if (!sectionMeta[sectionId]) return;
 
-    <div
-        class="dashboard-app"
-        id="dashboardApp"
-    >
+        // Update active nav button
+        elements.navItems.forEach(item => {
+            const isMatch = item.getAttribute('data-section') === sectionId;
+            item.classList.toggle('active', isMatch);
+        });
 
+        // Update active page view
+        elements.dashboardPages.forEach(page => {
+            const isMatch = page.getAttribute('data-page') === sectionId;
+            page.classList.toggle('active', isMatch);
+        });
 
-        <!-- ============================================
-             MOBILE SIDEBAR OVERLAY
-        ============================================= -->
+        // Update Header Titles
+        elements.pageTitle.textContent = sectionMeta[sectionId].title;
+        elements.pageEyebrow.textContent = sectionMeta[sectionId].eyebrow;
 
-        <div
-            class="sidebar-overlay"
-            id="sidebarOverlay"
-            aria-hidden="true"
-        ></div>
+        state.activeSection = sectionId;
 
+        // Mobile Sidebar Close on click
+        closeSidebar();
+        
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
+    function openSidebar() {
+        if (elements.sidebar) elements.sidebar.classList.add('open');
+        if (elements.sidebarOverlay) elements.sidebarOverlay.classList.add('show');
+        if (elements.menuToggle) elements.menuToggle.setAttribute('aria-expanded', 'true');
+    }
 
-        <!-- ============================================
-             SIDEBAR
-        ============================================= -->
+    function closeSidebar() {
+        if (elements.sidebar) elements.sidebar.classList.remove('open');
+        if (elements.sidebarOverlay) elements.sidebarOverlay.classList.remove('show');
+        if (elements.menuToggle) elements.menuToggle.setAttribute('aria-expanded', 'false');
+    }
 
-        <aside
-            class="sidebar"
-            id="sidebar"
-            aria-label="Dashboard navigation"
-        >
+    // Event Listeners for Nav items
+    elements.navItems.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetSection = button.getAttribute('data-section');
+            switchSection(targetSection);
+        });
+    });
 
+    // Global Section Jump Buttons (e.g., data-go-section)
+    document.addEventListener('click', (e) => {
+        const goBtn = e.target.closest('[data-go-section]');
+        if (goBtn) {
+            const sectionTarget = goBtn.getAttribute('data-go-section');
+            switchSection(sectionTarget);
+        }
+    });
 
-            <!-- ========================================
-                 SIDEBAR BRAND
-            ========================================= -->
+    if (elements.menuToggle) elements.menuToggle.addEventListener('click', openSidebar);
+    if (elements.sidebarClose) elements.sidebarClose.addEventListener('click', closeSidebar);
+    if (elements.sidebarOverlay) elements.sidebarOverlay.addEventListener('click', closeSidebar);
 
-            <div class="sidebar-brand">
+    // ==========================================
+    // RENDER FUNCTIONS
+    // ==========================================
+    function renderStats() {
+        if (elements.todayEarnings) elements.todayEarnings.textContent = `₹${state.earnings.today.toFixed(2)}`;
+        if (elements.lifetimeRevenue) elements.lifetimeRevenue.textContent = `₹${state.earnings.lifetime.toFixed(2)}`;
+        if (elements.estimatedProfit) elements.estimatedProfit.textContent = `₹${state.earnings.estimatedProfit.toFixed(2)}`;
+        if (elements.connectedStores) elements.connectedStores.textContent = state.storesCount;
+        if (elements.storeSummaryCount) elements.storeSummaryCount.textContent = state.storesCount;
+        
+        if (elements.approvalBadge) {
+            elements.approvalBadge.textContent = state.approvals.length;
+            elements.approvalBadge.style.display = state.approvals.length > 0 ? 'inline-block' : 'none';
+        }
+    }
 
+    function renderProducts() {
+        const renderList = (container) => {
+            if (!container) return;
+            if (state.products.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state small-empty">
+                        <span>🔍</span>
+                        <strong>No products found yet</strong>
+                        <small>Start product research to discover market opportunities.</small>
+                    </div>`;
+                return;
+            }
 
-                <a
-                    href="index.html"
-                    class="brand-link"
-                >
-
-
-                    <div class="brand-logo">
-                        AI
+            container.innerHTML = state.products.map(item => `
+                <div class="product-item-card" style="padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong style="display: block; font-size: 0.95rem;">${item.name}</strong>
+                        <small style="opacity: 0.7;">Est. Margin: ${item.margin} | Demand: ${item.demand}</small>
                     </div>
+                    <span style="background: rgba(0, 230, 153, 0.15); color: #00e699; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold;">
+                        ${item.status}
+                    </span>
+                </div>
+            `).join('');
+        };
 
+        renderList(elements.productList);
+        renderList(elements.productsPageList);
+    }
 
-                    <div class="brand-content">
+    function renderActivities() {
+        const renderContainer = (container) => {
+            if (!container) return;
+            if (state.activities.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state small-empty">
+                        <span>⚡</span>
+                        <strong>No recent AI activity</strong>
+                        <small>AI research and automation events will appear here.</small>
+                    </div>`;
+                return;
+            }
 
-                        <strong>
-                            AI Store Manager
-                        </strong>
-
-                        <span>
-                            SMART MONEY COMMERCE
-                        </span>
-
+            container.innerHTML = state.activities.map(act => `
+                <div class="activity-item" style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem;">
+                        <strong>⚡ ${act.title}</strong>
+                        <small style="opacity: 0.5;">${act.time}</small>
                     </div>
+                    <small style="display: block; opacity: 0.7; margin-top: 4px;">${act.desc}</small>
+                </div>
+            `).join('');
+        };
 
+        renderContainer(elements.activityList);
+        renderContainer(elements.fullActivityList);
+    }
 
-                </a>
+    function renderApprovals() {
+        if (!elements.approvalList) return;
+        if (state.approvals.length === 0) {
+            elements.approvalList.innerHTML = `
+                <div class="empty-state">
+                    <span>🛡️</span>
+                    <strong>No pending approvals</strong>
+                    <small>Actions requiring review will appear here.</small>
+                </div>`;
+            return;
+        }
 
-
-
-                <button
-                    type="button"
-                    class="sidebar-close"
-                    id="sidebarClose"
-                    aria-label="Close menu"
-                >
-                    ×
-                </button>
-
-
+        elements.approvalList.innerHTML = state.approvals.map(app => `
+            <div style="padding: 16px; background: rgba(255,255,255,0.02); border-radius: 8px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.08);">
+                <div>
+                    <strong>[${app.id}] ${app.title}</strong>
+                    <p style="margin: 4px 0 0; font-size: 0.85rem; opacity: 0.7;">${app.desc}</p>
+                </div>
+                <div>
+                    <button type="button" class="approve-btn primary-action" data-id="${app.id}" style="padding: 6px 12px; font-size: 0.8rem; margin-right: 6px;">Approve</button>
+                    <button type="button" class="reject-btn secondary-action" data-id="${app.id}" style="padding: 6px 12px; font-size: 0.8rem;">Dismiss</button>
+                </div>
             </div>
-
-
-
-            <!-- ========================================
-                 SIDEBAR NAVIGATION
-            ========================================= -->
-
-            <nav
-                class="sidebar-nav"
-                id="sidebarNav"
-            >
-
-
-                <!-- COMMAND CENTER -->
-
-                <p class="nav-label">
-                    COMMAND CENTER
-                </p>
-
-
-
-                <button
-                    type="button"
-                    class="nav-item active"
-                    data-section="dashboard"
-                >
-
-                    <span class="nav-icon">
-                        📊
-                    </span>
-
-                    <span class="nav-text">
-                        Dashboard
-                    </span>
-
-                </button>
-
-
-
-                <button
-                    type="button"
-                    class="nav-item"
-                    data-section="ai-hunter"
-                >
-
-                    <span class="nav-icon">
-                        🤖
-                    </span>
-
-                    <span class="nav-text">
-                        AI Product Hunter
-                    </span>
-
-                </button>
-
-
-
-                <button
-                    type="button"
-                    class="nav-item"
-                    data-section="product-research"
-                >
-
-                    <span class="nav-icon">
-                        🔍
-                    </span>
-
-                    <span class="nav-text">
-                        Product Research
-                    </span>
-
-                </button>
-
-
-
-                <button
-                    type="button"
-                    class="nav-item"
-                    data-section="global-market"
-                >
-
-                    <span class="nav-icon">
-                        🌍
-                    </span>
-
-                    <span class="nav-text">
-                        Global Market
-                    </span>
-
-                </button>
-
-
-
-                <button
-                    type="button"
-                    class="nav-item"
-                    data-section="stores"
-                >
-
-                    <span class="nav-icon">
-                        🏪
-                    </span>
-
-                    <span class="nav-text">
-                        My Stores
-                    </span>
-
-                </button>
-
-
-
-                <button
-                    type="button"
-                    class="nav-item"
-                    data-section="automation"
-                >
-
-                    <span class="nav-icon">
-                        ⚙️
-                    </span>
-
-                    <span class="nav-text">
-                        Automation
-                    </span>
-
-                </button>
-
-
-
-                <!-- ANALYTICS -->
-
-                <p class="nav-label nav-label-space">
-                    ANALYTICS
-                </p>
-
-
-
-                <button
-                    type="button"
-                    class="nav-item"
-                    data-section="earnings"
-                >
-
-                    <span class="nav-icon">
-                        💰
-                    </span>
-
-                    <span class="nav-text">
-                        Earnings
-                    </span>
-
-                </button>
-
-
-
-                <button
-                    type="button"
-                    class="nav-item"
-                    data-section="products"
-                >
-
-                    <span class="nav-icon">
-                        📦
-                    </span>
-
-                    <span class="nav-text">
-                        Products
-                    </span>
-
-                </button>
-
-
-
-                <button
-                    type="button"
-                    class="nav-item"
-                    data-section="price-history"
-                >
-
-                    <span class="nav-icon">
-                        📉
-                    </span>
-
-                    <span class="nav-text">
-                        Price History
-                    </span>
-
-                </button>
-
-
-
-                <button
-                    type="button"
-                    class="nav-item"
-                    data-section="activity"
-                >
-
-                    <span class="nav-icon">
-                        ⚡
-                    </span>
-
-                    <span class="nav-text">
-                        AI Activity
-                    </span>
-
-                </button>
-
-
-
-                <!-- CONTENT -->
-
-                <p class="nav-label nav-label-space">
-                    CONTENT
-                </p>
-
-
-
-                <button
-                    type="button"
-                    class="nav-item"
-                    data-section="content-studio"
-                >
-
-                    <span class="nav-icon">
-                        🎬
-                    </span>
-
-                    <span class="nav-text">
-                        Content Studio
-                    </span>
-
-                </button>
-
-
-
-                <button
-                    type="button"
-                    class="nav-item"
-                    data-section="content-scheduler"
-                >
-
-                    <span class="nav-icon">
-                        📅
-                    </span>
-
-                    <span class="nav-text">
-                        Content Scheduler
-                    </span>
-
-                </button>
-
-
-
-                <button
-                    type="button"
-                    class="nav-item"
-                    data-section="social-accounts"
-                >
-
-                    <span class="nav-icon">
-                        📱
-                    </span>
-
-                    <span class="nav-text">
-                        Social Accounts
-                    </span>
-
-                </button>
-
-
-
-                <!-- SECURITY -->
-
-                <p class="nav-label nav-label-space">
-                    SECURITY
-                </p>
-
-
-
-                <button
-                    type="button"
-                    class="nav-item"
-                    data-section="approval-center"
-                >
-
-                    <span class="nav-icon">
-                        🛡️
-                    </span>
-
-                    <span class="nav-text">
-                        Approval Center
-                    </span>
-
-                    <span
-                        class="nav-badge"
-                        id="approvalBadge"
-                    >
-                        0
-                    </span>
-
-                </button>
-
-
-
-                <button
-                    type="button"
-                    class="nav-item"
-                    data-section="connected-accounts"
-                >
-
-                    <span class="nav-icon">
-                        🔐
-                    </span>
-
-                    <span class="nav-text">
-                        Connected Accounts
-                    </span>
-
-                </button>
-
-
-
-                <!-- SETTINGS -->
-
-                <p class="nav-label nav-label-space">
-                    ACCOUNT
-                </p>
-
-
-
-                <button
-                    type="button"
-                    class="nav-item"
-                    data-section="settings"
-                    id="settingsNavBtn"
-                >
-
-                    <span class="nav-icon">
-                        ⚙️
-                    </span>
-
-                    <span class="nav-text">
-                        Settings
-                    </span>
-
-                </button>
-
-
-            </nav>
-
-
-
-            <!-- ========================================
-                 SIDEBAR BOTTOM
-            ========================================= -->
-
-            <div class="sidebar-bottom">
-
-
-                <div class="ai-status-card">
-
-
-                    <div class="ai-status-top">
-
-                        <span class="ai-pulse"></span>
-
-                        <span>
-                            AI SYSTEM
-                        </span>
-
-                    </div>
-
-
-                    <strong id="sidebarAiStatus">
-                        Ready for Analysis
-                    </strong>
-
-
-                    <small>
-                        Connect your authorized stores
-                        to begin AI intelligence.
-                    </small>
-
-
+        `).join('');
+    }
+
+    function renderConnectedAccounts() {
+        if (!elements.connectedAccountsList) return;
+        
+        elements.connectedAccountsList.innerHTML = state.connectedAccounts.map(acc => `
+            <div style="padding: 12px; background: rgba(255,255,255,0.02); border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <strong>🔐 ${acc.name}</strong>
+                    <small style="display: block; opacity: 0.6;">${acc.type}</small>
                 </div>
-
-
-
-                <div
-                    class="sidebar-user"
-                    id="sidebarUser"
-                >
-
-
-                    <span
-                        class="sidebar-user-avatar"
-                        id="sidebarUserAvatar"
-                    >
-                        SM
-                    </span>
-
-
-                    <div class="sidebar-user-info">
-
-                        <strong id="sidebarUserName">
-                            Owner
-                        </strong>
-
-                        <small id="sidebarUserEmail">
-                            Smart Money Account
-                        </small>
-
-                    </div>
-
-
-                </div>
-
-
+                <span style="color: #00e699; font-size: 0.8rem; font-weight: bold;">${acc.status}</span>
             </div>
-
-
-        </aside>
-
-
-
-        <!-- ============================================
-             MAIN CONTENT
-        ============================================= -->
-
-        <main
-            class="main-content"
-        >
-
-
-            <!-- ========================================
-                 TOP HEADER
-            ========================================= -->
-
-            <header
-                class="dashboard-header"
-            >
-
-
-                <div class="header-left">
-
-
-                    <button
-                        type="button"
-                        class="menu-toggle"
-                        id="menuToggle"
-                        aria-label="Open menu"
-                        aria-expanded="false"
-                    >
-                        ☰
-                    </button>
-
-
-
-                    <div class="page-heading">
-
-                        <span
-                            id="pageEyebrow"
-                        >
-                            AI COMMAND CENTER
-                        </span>
-
-                        <h1 id="pageTitle">
-                            Dashboard
-                        </h1>
-
-                    </div>
-
-
-                </div>
-
-
-
-                <div class="header-right">
-
-
-                    <!-- SEARCH -->
-
-                    <div class="global-search">
-
-                        <span>
-                            🔍
-                        </span>
-
-                        <input
-                            type="search"
-                            id="globalSearch"
-                            placeholder="Search products, stores..."
-                            autocomplete="off"
-                        >
-
-                    </div>
-
-
-
-                    <!-- AI STATUS -->
-
-                    <button
-                        type="button"
-                        class="header-ai-status"
-                        id="aiStatusBtn"
-                    >
-
-                        <span class="status-dot"></span>
-
-                        <span id="aiStatus">
-                            AI Ready
-                        </span>
-
-                    </button>
-
-
-
-                    <!-- PROFILE -->
-
-                    <button
-                        type="button"
-                        class="profile-button"
-                        id="profileButton"
-                    >
-
-                        <span
-                            class="profile-avatar"
-                            id="profileAvatar"
-                        >
-                            SM
-                        </span>
-
-
-                        <span
-                            class="profile-name"
-                            id="profileName"
-                        >
-                            Owner
-                        </span>
-
-
-                        <span class="profile-arrow">
-                            ▾
-                        </span>
-
-                    </button>
-
-
-                </div>
-
-
-            </header>
-
-
-
-            <!-- ========================================
-                 ALL PAGE CONTENT
-            ========================================= -->
-
-            <div
-                class="dashboard-content"
-                id="dashboardContent"
-            >
-
-
-
-                <!-- ====================================
-                     DASHBOARD PAGE
-                ===================================== -->
-
-                <section
-                    class="dashboard-page active"
-                    id="dashboard"
-                    data-page="dashboard"
-                >
-
-
-                    <!-- WELCOME -->
-
-                    <section
-                        class="welcome-banner"
-                    >
-
-
-                        <div class="welcome-content">
-
-
-                            <span class="welcome-badge">
-                                🤖 AI COMMERCE INTELLIGENCE
-                            </span>
-
-
-                            <h2>
-
-                                Your AI-powered
-
-                                <span>
-                                    global business command center.
-                                </span>
-
-                            </h2>
-
-
-                            <p>
-
-                                Research products, discover market
-                                opportunities, manage authorized stores,
-                                monitor analytics and automate your
-                                commerce workflow from one workspace.
-
+        `).join('');
+    }
+
+    // ==========================================
+    // INTERACTIVE AI FEATURES
+    // ==========================================
+
+    // 1. AI Product Hunter
+    if (elements.aiHunterBtn && elements.aiHunterInput) {
+        elements.aiHunterBtn.addEventListener('click', () => {
+            const query = elements.aiHunterInput.value.trim();
+            if (!query) {
+                showToast('Please enter a category or query', '⚠️');
+                return;
+            }
+
+            showToast('AI Scanning global markets...', '🤖');
+            elements.aiHunterBtn.disabled = true;
+            elements.aiHunterBtn.textContent = 'Scanning...';
+
+            setTimeout(() => {
+                elements.aiHunterBtn.disabled = false;
+                elements.aiHunterBtn.textContent = '🤖 Start AI Scan';
+
+                const newProduct = {
+                    name: query.toUpperCase(),
+                    margin: '45%',
+                    demand: 'High',
+                    status: 'Discovered'
+                };
+
+                state.products.unshift(newProduct);
+                renderProducts();
+                addActivityLog('AI Product Scan Complete', `Identified potential opportunity for "${query}".`);
+
+                if (elements.aiHunterResults) {
+                    elements.aiHunterResults.classList.remove('empty-module');
+                    elements.aiHunterResults.innerHTML = `
+                        <div style="padding: 10px;">
+                            <h3 style="color: #00e699; margin-bottom: 8px;">✅ Opportunity Detected</h3>
+                            <p><strong>Keyword:</strong> ${query}</p>
+                            <p><strong>Calculated Profit Margin:</strong> ~45%</p>
+                            <p><strong>Competition Index:</strong> Low to Medium</p>
+                            <button type="button" class="primary-action" data-go-section="products" style="margin-top: 12px;">View in Products</button>
+                        </div>
+                    `;
+                }
+                showToast('Product Opportunity Found!', '✨');
+            }, 1200);
+        });
+    }
+
+    // 2. Product Research
+    if (elements.analyzeProductBtn && elements.productSearchInput) {
+        elements.analyzeProductBtn.addEventListener('click', () => {
+            const query = elements.productSearchInput.value.trim();
+            if (!query) {
+                showToast('Enter a product name to analyze', '⚠️');
+                return;
+            }
+
+            showToast('Analyzing demand & price history...', '🔍');
+            
+            setTimeout(() => {
+                if (elements.researchResults) {
+                    elements.researchResults.innerHTML = `
+                        <div style="padding: 12px;">
+                            <h3>Analysis Result: ${query}</h3>
+                            <p style="margin-top: 6px; font-size: 0.9rem; opacity: 0.8;">Market Demand Score: <strong>88/100</strong></p>
+                            <p style="font-size: 0.9rem; opacity: 0.8;">Suggested Retailing Price: <strong>₹1,299 - ₹1,899</strong></p>
+                            <small style="color: #00e699; display: block; margin-top: 8px;">✔ High Search Volume Detected across major platforms.</small>
+                        </div>
+                    `;
+                }
+                addActivityLog('Product Analyzed', `Analyzed market depth for "${query}".`);
+                showToast('Analysis complete', '✓');
+            }, 1000);
+        });
+    }
+
+    // 3. Content Studio Generator
+    if (elements.generateContentBtn && elements.contentPromptInput) {
+        elements.generateContentBtn.addEventListener('click', () => {
+            const prompt = elements.contentPromptInput.value.trim();
+            if (!prompt) {
+                showToast('Please describe your product/content idea', '⚠️');
+                return;
+            }
+
+            showToast('Generating AI Content Draft...', '✨');
+            
+            setTimeout(() => {
+                if (elements.contentPreview) {
+                    elements.contentPreview.innerHTML = `
+                        <div style="padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                            <strong style="color: #00e699;">Generated Copy Idea:</strong>
+                            <p style="margin-top: 8px; font-style: italic; opacity: 0.9;">
+                                "Upgrade your daily routine with ${prompt}! 🔥 Experience premium quality designed for your modern lifestyle. Tap now to get limited-time exclusive offers! 🚀 #Commerce #SmartMoney"
                             </p>
-
-
-
-                            <div class="welcome-actions">
-
-
-                                <button
-                                    type="button"
-                                    class="primary-action"
-                                    id="startResearchBtn"
-                                    data-go-section="product-research"
-                                >
-
-                                    <span>
-                                        🔍
-                                    </span>
-
-                                    Start Product Research
-
-                                </button>
-
-
-
-                                <button
-                                    type="button"
-                                    class="secondary-action"
-                                    id="viewAutomationBtn"
-                                    data-go-section="automation"
-                                >
-
-                                    <span>
-                                        ⚙️
-                                    </span>
-
-                                    View Automation
-
-                                </button>
-
-
-                            </div>
-
-
                         </div>
-
-
-
-                        <div class="welcome-ai-visual">
-
-
-                            <div class="ai-orbit orbit-one"></div>
-
-                            <div class="ai-orbit orbit-two"></div>
-
-
-                            <div class="ai-core">
-                                🤖
-                            </div>
-
-
-                            <div class="ai-floating-card card-one">
-
-                                <span>
-                                    📈
-                                </span>
-
-                                <strong>
-                                    Market
-                                </strong>
-
-                                <small>
-                                    Analysis
-                                </small>
-
-                            </div>
-
-
-
-                            <div class="ai-floating-card card-two">
-
-                                <span>
-                                    💰
-                                </span>
-
-                                <strong>
-                                    Profit
-                                </strong>
-
-                                <small>
-                                    Intelligence
-                                </small>
-
-                            </div>
-
-
-                        </div>
-
-
-                    </section>
-
-
-
-                    <!-- STATISTICS -->
-
-                    <section
-                        class="stats-grid"
-                    >
-
-
-                        <article
-                            class="stat-card"
-                        >
-
-                            <div class="stat-card-top">
-
-                                <div class="stat-icon revenue">
-                                    💰
-                                </div>
-
-                                <span
-                                    class="stat-change positive"
-                                >
-                                    ↗ Live
-                                </span>
-
-                            </div>
-
-
-                            <p>
-                                Today Earnings
-                            </p>
-
-
-                            <h3 id="todayEarnings">
-                                ₹0.00
-                            </h3>
-
-
-                            <small>
-                                Awaiting connected store data
-                            </small>
-
-
-                        </article>
-
-
-
-                        <article
-                            class="stat-card"
-                        >
-
-                            <div class="stat-card-top">
-
-                                <div class="stat-icon total">
-                                    📊
-                                </div>
-
-                                <span
-                                    class="stat-change neutral"
-                                >
-                                    All Time
-                                </span>
-
-                            </div>
-
-
-                            <p>
-                                Lifetime Revenue
-                            </p>
-
-
-                            <h3 id="lifetimeRevenue">
-                                ₹0.00
-                            </h3>
-
-
-                            <small>
-                                Connected sales data will appear here
-                            </small>
-
-
-                        </article>
-
-
-
-                        <article
-                            class="stat-card"
-                        >
-
-                            <div class="stat-card-top">
-
-                                <div class="stat-icon profit">
-                                    📈
-                                </div>
-
-                                <span
-                                    class="stat-change neutral"
-                                >
-                                    Net
-                                </span>
-
-                            </div>
-
-
-                            <p>
-                                Estimated Profit
-                            </p>
-
-
-                            <h3 id="estimatedProfit">
-                                ₹0.00
-                            </h3>
-
-
-                            <small>
-                                Calculated from available cost data
-                            </small>
-
-
-                        </article>
-
-
-
-                        <article
-                            class="stat-card"
-                        >
-
-                            <div class="stat-card-top">
-
-                                <div class="stat-icon stores">
-                                    🏪
-                                </div>
-
-                                <span
-                                    class="stat-change neutral"
-                                >
-                                    Accounts
-                                </span>
-
-                            </div>
-
-
-                            <p>
-                                Connected Stores
-                            </p>
-
-
-                            <h3 id="connectedStores">
-                                0
-                            </h3>
-
-
-                            <small>
-                                Add authorized stores to connect
-                            </small>
-
-
-                        </article>
-
-
-                    </section>
-
-
-
-                    <!-- DASHBOARD GRID -->
-
-                    <section
-                        class="dashboard-grid"
-                    >
-
-
-                        <!-- TRENDING PRODUCTS -->
-
-                        <section
-                            class="dashboard-card trending-card"
-                        >
-
-
-                            <div class="card-header">
-
-                                <div>
-
-                                    <span class="card-eyebrow">
-                                        MARKET INTELLIGENCE
-                                    </span>
-
-                                    <h2>
-                                        Trending Products
-                                    </h2>
-
-                                </div>
-
-
-                                <button
-                                    type="button"
-                                    class="card-action"
-                                    id="viewProductsBtn"
-                                    data-go-section="products"
-                                >
-                                    View All
-                                </button>
-
-
-                            </div>
-
-
-
-                            <div
-                                class="product-list"
-                                id="productList"
-                            >
-
-
-                                <div
-                                    class="empty-state small-empty"
-                                >
-
-                                    <span>
-                                        🔍
-                                    </span>
-
-                                    <strong>
-                                        No products found yet
-                                    </strong>
-
-                                    <small>
-                                        Start product research to discover
-                                        market opportunities.
-                                    </small>
-
-                                </div>
-
-
-                            </div>
-
-
-                        </section>
-
-
-
-                        <!-- AI ACTIVITY -->
-
-                        <section
-                            class="dashboard-card activity-card"
-                        >
-
-
-                            <div class="card-header">
-
-
-                                <div>
-
-                                    <span class="card-eyebrow">
-                                        SYSTEM ACTIVITY
-                                    </span>
-
-                                    <h2>
-                                        AI Activity
-                                    </h2>
-
-                                </div>
-
-
-                                <button
-                                    type="button"
-                                    class="card-action"
-                                    id="refreshDashboardBtn"
-                                >
-                                    ↻ Refresh
-                                </button>
-
-
-                            </div>
-
-
-
-                            <div
-                                class="activity-list"
-                                id="activityList"
-                            >
-
-
-                                <div
-                                    class="empty-state small-empty"
-                                >
-
-                                    <span>
-                                        ⚡
-                                    </span>
-
-                                    <strong>
-                                        No recent AI activity
-                                    </strong>
-
-                                    <small>
-                                        AI research and automation events
-                                        will appear here.
-                                    </small>
-
-                                </div>
-
-
-                            </div>
-
-
-                        </section>
-
-
-                    </section>
-
-
-                </section>
-
-
-
-                <!-- ====================================
-                     AI PRODUCT HUNTER PAGE
-                ===================================== -->
-
-                <section
-                    class="dashboard-page"
-                    id="ai-hunter"
-                    data-page="ai-hunter"
-                >
-
-                    <div class="page-section-header">
-
-                        <span>
-                            🤖 AI RESEARCH ENGINE
-                        </span>
-
-                        <h2>
-                            AI Product Hunter
-                        </h2>
-
-                        <p>
-                            Discover product opportunities using
-                            market and demand analysis.
-                        </p>
-
-                    </div>
-
-
-                    <div class="dashboard-card">
-
-                        <div class="research-input-row">
-
-                            <input
-                                type="text"
-                                id="aiHunterInput"
-                                placeholder="Enter product or category..."
-                                autocomplete="off"
-                            >
-
-                            <button
-                                type="button"
-                                class="primary-action"
-                                id="aiHunterBtn"
-                            >
-                                🤖 Start AI Scan
-                            </button>
-
-                        </div>
-
-                    </div>
-
-
-                    <div
-                        class="dashboard-card empty-module"
-                        id="aiHunterResults"
-                    >
-
-                        <span>
-                            🤖
-                        </span>
-
-                        <h3>
-                            Ready to find opportunities
-                        </h3>
-
-                        <p>
-                            Enter a product or category and select
-                            your target market to begin.
-                        </p>
-
-                    </div>
-
-
-                </section>
-
-
-
-                <!-- ====================================
-                     PRODUCT RESEARCH PAGE
-                ===================================== -->
-
-                <section
-                    class="dashboard-page"
-                    id="product-research"
-                    data-page="product-research"
-                >
-
-                    <div class="page-section-header">
-
-                        <span>
-                            🔍 MARKET RESEARCH
-                        </span>
-
-                        <h2>
-                            Product Research
-                        </h2>
-
-                        <p>
-                            Analyze products and discover demand,
-                            competition and market opportunities.
-                        </p>
-
-                    </div>
-
-
-                    <div class="dashboard-card">
-
-                        <div class="research-input-row">
-
-                            <input
-                                type="text"
-                                id="productSearchInput"
-                                placeholder="Example: Wireless Earbuds"
-                                autocomplete="off"
-                            >
-
-                            <button
-                                type="button"
-                                class="primary-action"
-                                id="analyzeProductBtn"
-                            >
-                                🤖 Analyze Product
-                            </button>
-
-                        </div>
-
-                    </div>
-
-
-                    <div
-                        class="dashboard-card"
-                        id="researchResults"
-                    >
-
-                        <div class="empty-state">
-
-                            <span>
-                                🔍
-                            </span>
-
-                            <strong>
-                                Research Workspace
-                            </strong>
-
-                            <small>
-                                Product research results will appear here.
-                            </small>
-
-                        </div>
-
-                    </div>
-
-
-                </section>
-
-
-
-                <!-- ====================================
-                     GLOBAL MARKET PAGE
-                ===================================== -->
-
-                <section
-                    class="dashboard-page"
-                    id="global-market"
-                    data-page="global-market"
-                >
-
-                    <div class="page-section-header">
-
-                        <span>
-                            🌍 GLOBAL COMMERCE
-                        </span>
-
-                        <h2>
-                            Global Market
-                        </h2>
-
-                        <p>
-                            Explore product opportunities across
-                            supported countries and marketplaces.
-                        </p>
-
-                    </div>
-
-
-                    <div class="dashboard-card">
-
-                        <div class="empty-state">
-
-                            <span>
-                                🌍
-                            </span>
-
-                            <strong>
-                                Global market analysis
-                            </strong>
-
-                            <small>
-                                Select a country and marketplace to
-                                begin research.
-                            </small>
-
-                        </div>
-
-                    </div>
-
-
-                </section>
-
-
-
-                <!-- ====================================
-                     MY STORES PAGE
-                ===================================== -->
-
-                <section
-                    class="dashboard-page"
-                    id="stores"
-                    data-page="stores"
-                >
-
-                    <div class="page-section-header">
-
-                        <span>
-                            🏪 STORE MANAGEMENT
-                        </span>
-
-                        <h2>
-                            My Stores
-                        </h2>
-
-                        <p>
-                            Manage your authorized store and
-                            marketplace connections.
-                        </p>
-
-                    </div>
-
-
-                    <div
-                        class="dashboard-card"
-                    >
-
-                        <div class="store-summary">
-
-                            <div class="store-summary-icon">
-                                🏪
-                            </div>
-
-                            <div>
-
-                                <strong id="storeSummaryCount">
-                                    0
-                                </strong>
-
-                                <span>
-                                    authorized stores connected
-                                </span>
-
-                            </div>
-
-                        </div>
-
-
-                        <button
-                            type="button"
-                            class="primary-action"
-                            id="connectStoreBtn"
-                        >
-                            + Connect Store
-                        </button>
-
-                    </div>
-
-
-                </section>
-
-
-
-                <!-- ====================================
-                     AUTOMATION PAGE
-                ===================================== -->
-
-                <section
-                    class="dashboard-page"
-                    id="automation"
-                    data-page="automation"
-                >
-
-                    <div class="page-section-header">
-
-                        <span>
-                            ⚙️ AUTOMATION
-                        </span>
-
-                        <h2>
-                            Automation
-                        </h2>
-
-                        <p>
-                            Create and manage AI-powered workflows
-                            for your connected business accounts.
-                        </p>
-
-                    </div>
-
-
-                    <div class="dashboard-card">
-
-                        <div class="empty-state">
-
-                            <span>
-                                ⚙️
-                            </span>
-
-                            <strong>
-                                No automation created
-                            </strong>
-
-                            <small>
-                                Automation workflows will appear here.
-                            </small>
-
-                        </div>
-
-                    </div>
-
-
-                </section>
-
-
-
-                <!-- ====================================
-                     EARNINGS PAGE
-                ===================================== -->
-
-                <section
-                    class="dashboard-page"
-                    id="earnings"
-                    data-page="earnings"
-                >
-
-                    <div class="page-section-header">
-
-                        <span>
-                            💰 ANALYTICS
-                        </span>
-
-                        <h2>
-                            Earnings
-                        </h2>
-
-                        <p>
-                            Review revenue, earnings and sales data
-                            from connected stores.
-                        </p>
-
-                    </div>
-
-
-                    <div class="dashboard-card">
-
-                        <div class="empty-state">
-
-                            <span>
-                                💰
-                            </span>
-
-                            <strong>
-                                No earnings data yet
-                            </strong>
-
-                            <small>
-                                Connect an authorized store to view
-                                available earnings data.
-                            </small>
-
-                        </div>
-
-                    </div>
-
-
-                </section>
-
-
-
-                <!-- ====================================
-                     PRODUCTS PAGE
-                ===================================== -->
-
-                <section
-                    class="dashboard-page"
-                    id="products"
-                    data-page="products"
-                >
-
-                    <div class="page-section-header">
-
-                        <span>
-                            📦 PRODUCT DATABASE
-                        </span>
-
-                        <h2>
-                            Products
-                        </h2>
-
-                        <p>
-                            View products discovered through your
-                            research workspace.
-                        </p>
-
-                    </div>
-
-
-                    <div
-                        class="dashboard-card"
-                        id="productsPageList"
-                    >
-
-                        <div class="empty-state">
-
-                            <span>
-                                📦
-                            </span>
-
-                            <strong>
-                                No saved products
-                            </strong>
-
-                            <small>
-                                Analyze products to build your
-                                product opportunity list.
-                            </small>
-
-                        </div>
-
-                    </div>
-
-
-                </section>
-
-
-
-                <!-- ====================================
-                     PRICE HISTORY PAGE
-                ===================================== -->
-
-                <section
-                    class="dashboard-page"
-                    id="price-history"
-                    data-page="price-history"
-                >
-
-                    <div class="page-section-header">
-
-                        <span>
-                            📉 PRICE INTELLIGENCE
-                        </span>
-
-                        <h2>
-                            Price History
-                        </h2>
-
-                        <p>
-                            Monitor historical pricing information
-                            for tracked products.
-                        </p>
-
-                    </div>
-
-
-                    <div class="dashboard-card">
-
-                        <div class="empty-state">
-
-                            <span>
-                                📉
-                            </span>
-
-                            <strong>
-                                No price history yet
-                            </strong>
-
-                            <small>
-                                Historical pricing data will appear
-                                for tracked products.
-                            </small>
-
-                        </div>
-
-                    </div>
-
-
-                </section>
-
-
-
-                <!-- ====================================
-                     AI ACTIVITY PAGE
-                ===================================== -->
-
-                <section
-                    class="dashboard-page"
-                    id="activity"
-                    data-page="activity"
-                >
-
-                    <div class="page-section-header">
-
-                        <span>
-                            ⚡ SYSTEM LOG
-                        </span>
-
-                        <h2>
-                            AI Activity
-                        </h2>
-
-                        <p>
-                            Review recent AI analysis and automation
-                            events from your workspace.
-                        </p>
-
-                    </div>
-
-
-                    <div
-                        class="dashboard-card"
-                        id="fullActivityList"
-                    >
-
-                        <div class="empty-state">
-
-                            <span>
-                                ⚡
-                            </span>
-
-                            <strong>
-                                No activity yet
-                            </strong>
-
-                            <small>
-                                New AI events will appear here.
-                            </small>
-
-                        </div>
-
-                    </div>
-
-
-                </section>
-
-
-
-                <!-- ====================================
-                     CONTENT STUDIO PAGE
-                ===================================== -->
-
-                <section
-                    class="dashboard-page"
-                    id="content-studio"
-                    data-page="content-studio"
-                >
-
-                    <div class="page-section-header">
-
-                        <span>
-                            🎬 AI CONTENT ENGINE
-                        </span>
-
-                        <h2>
-                            Content Studio
-                        </h2>
-
-                        <p>
-                            Create product content and campaign
-                            ideas from your workspace.
-                        </p>
-
-                    </div>
-
-
-                    <div class="dashboard-card">
-
-                        <div class="research-input-row">
-
-                            <input
-                                type="text"
-                                id="contentPromptInput"
-                                placeholder="Describe the content you want..."
-                            >
-
-                            <button
-                                type="button"
-                                class="primary-action"
-                                id="generateContentBtn"
-                            >
-                                ✨ Generate Content
-                            </button>
-
-                        </div>
-
-                    </div>
-
-
-                    <div
-                        class="dashboard-card"
-                        id="contentPreview"
-                    >
-
-                        <div class="empty-state">
-
-                            <span>
-                                🎬
-                            </span>
-
-                            <strong>
-                                No content generated
-                            </strong>
-
-                            <small>
-                                Generated content will appear here.
-                            </small>
-
-                        </div>
-
-                    </div>
-
-
-                </section>
-
-
-
-                <!-- ====================================
-                     CONTENT SCHEDULER PAGE
-                ===================================== -->
-
-                <section
-                    class="dashboard-page"
-                    id="content-scheduler"
-                    data-page="content-scheduler"
-                >
-
-                    <div class="page-section-header">
-
-                        <span>
-                            📅 CONTENT PLANNING
-                        </span>
-
-                        <h2>
-                            Content Scheduler
-                        </h2>
-
-                        <p>
-                            Organize planned content and publishing
-                            workflows.
-                        </p>
-
-                    </div>
-
-
-                    <div class="dashboard-card">
-
-                        <div class="empty-state">
-
-                            <span>
-                                📅
-                            </span>
-
-                            <strong>
-                                No scheduled content
-                            </strong>
-
-                            <small>
-                                Your planned content schedule will
-                                appear here.
-                            </small>
-
-                        </div>
-
-                    </div>
-
-
-                </section>
-
-
-
-                <!-- ====================================
-                     SOCIAL ACCOUNTS PAGE
-                ===================================== -->
-
-                <section
-                    class="dashboard-page"
-                    id="social-accounts"
-                    data-page="social-accounts"
-                >
-
-                    <div class="page-section-header">
-
-                        <span>
-                            📱 SOCIAL CONNECTIONS
-                        </span>
-
-                        <h2>
-                            Social Accounts
-                        </h2>
-
-                        <p>
-                            Manage authorized social connections
-                            and content workflows.
-                        </p>
-
-                    </div>
-
-
-                    <div class="dashboard-card">
-
-                        <div class="empty-state">
-
-                            <span>
-                                📱
-                            </span>
-
-                            <strong>
-                                No social account connected
-                            </strong>
-
-                            <small>
-                                Connect authorized accounts through
-                                supported integrations.
-                            </small>
-
-                        </div>
-
-                    </div>
-
-
-                </section>
-
-
-
-                <!-- ====================================
-                     APPROVAL CENTER PAGE
-                ===================================== -->
-
-                <section
-                    class="dashboard-page"
-                    id="approval-center"
-                    data-page="approval-center"
-                >
-
-                    <div class="page-section-header">
-
-                        <span>
-                            🛡️ OWNER APPROVAL SYSTEM
-                        </span>
-
-                        <h2>
-                            Approval Center
-                        </h2>
-
-                        <p>
-                            Review important actions before they are
-                            confirmed in your workspace.
-                        </p>
-
-                    </div>
-
-
-                    <div
-                        class="dashboard-card"
-                        id="approvalList"
-                    >
-
-                        <div class="empty-state">
-
-                            <span>
-                                🛡️
-                            </span>
-
-                            <strong>
-                                No pending approvals
-                            </strong>
-
-                            <small>
-                                Actions requiring review will appear
-                                here.
-                            </small>
-
-                        </div>
-
-                    </div>
-
-
-                </section>
-
-
-
-                <!-- ====================================
-                     CONNECTED ACCOUNTS PAGE
-                ===================================== -->
-
-                <section
-                    class="dashboard-page"
-                    id="connected-accounts"
-                    data-page="connected-accounts"
-                >
-
-                    <div class="page-section-header">
-
-                        <span>
-                            🔐 ACCOUNT MANAGEMENT
-                        </span>
-
-                        <h2>
-                            Connected Accounts
-                        </h2>
-
-                        <p>
-                            Review authorized accounts and workspace
-                            connections.
-                        </p>
-
-                    </div>
-
-
-                    <div
-                        class="dashboard-card"
-                        id="connectedAccountsList"
-                    >
-
-                        <div class="empty-state">
-
-                            <span>
-                                🔐
-                            </span>
-
-                            <strong>
-                                No connected accounts
-                            </strong>
-
-                            <small>
-                                Authorized account connections will
-                                appear here.
-                            </small>
-
-                        </div>
-
-                    </div>
-
-
-                </section>
-
-
-
-                <!-- ====================================
-                     SETTINGS PAGE
-                ===================================== -->
-
-                <section
-                    class="dashboard-page"
-                    id="settings"
-                    data-page="settings"
-                >
-
-                    <div class="page-section-header">
-
-                        <span>
-                            ⚙️ WORKSPACE SETTINGS
-                        </span>
-
-                        <h2>
-                            Settings
-                        </h2>
-
-                        <p>
-                            Manage your Smart Money AI Commerce
-                            workspace preferences.
-                        </p>
-
-                    </div>
-
-
-                    <div class="dashboard-card settings-card">
-
-
-                        <div class="settings-group">
-
-
-                            <div>
-
-                                <strong>
-                                    Workspace Preferences
-                                </strong>
-
-                                <small>
-                                    Customize your dashboard experience.
-                                </small>
-
-                            </div>
-
-
-                            <button
-                                type="button"
-                                class="secondary-action"
-                                id="workspaceSettingsBtn"
-                            >
-                                Open Settings
-                            </button>
-
-
-                        </div>
-
-
-
-                        <div class="settings-group">
-
-
-                            <div>
-
-                                <strong>
-                                    Account Security
-                                </strong>
-
-                                <small>
-                                    Review security and authorized
-                                    account connections.
-                                </small>
-
-                            </div>
-
-
-                            <button
-                                type="button"
-                                class="secondary-action"
-                                id="securitySettingsBtn"
-                            >
-                                Security
-                            </button>
-
-
-                        </div>
-
-
-                    </div>
-
-
-                </section>
-
-
-            </div>
-
-
-        </main>
-
-
-    </div>
-
-
-
-    <!-- ============================================
-         TOAST
-    ============================================= -->
-
-    <div
-        class="toast"
-        id="toast"
-        role="status"
-        aria-live="polite"
-    >
-
-        <span id="toastIcon">
-            ✓
-        </span>
-
-        <span id="toastMessage">
-            Ready
-        </span>
-
-    </div>
-
-
-
-    <!-- ============================================
-         JAVASCRIPT
-    ============================================= -->
-
-    <script
-        src="js/dashboard.js"
-    ></script>
-
-
-</body>
-
-</html>
+                    `;
+                }
+                addActivityLog('Content Generated', `Created ad copy draft for "${prompt}".`);
+                showToast('Content Ready!', '🎬');
+            }, 1000);
+        });
+    }
+
+    // 4. Store Connection Simulation
+    if (elements.connectStoreBtn) {
+        elements.connectStoreBtn.addEventListener('click', () => {
+            state.storesCount += 1;
+            state.connectedAccounts.push({
+                id: `ACC-${state.storesCount + 1}`,
+                name: `Store Node #${state.storesCount}`,
+                type: 'Authorized Store',
+                status: 'Connected'
+            });
+
+            renderStats();
+            renderConnectedAccounts();
+            addActivityLog('New Store Connected', `Connected Store Node #${state.storesCount} successfully.`);
+            showToast('Store Connected Successfully!', '🏪');
+        });
+    }
+
+    // 5. Refresh Dashboard Data
+    if (elements.refreshDashboardBtn) {
+        elements.refreshDashboardBtn.addEventListener('click', () => {
+            showToast('Refreshing workspace data...', '↻');
+            renderStats();
+            renderProducts();
+            renderActivities();
+            renderApprovals();
+            setTimeout(() => {
+                showToast('Dashboard Up to Date', '✓');
+            }, 600);
+        });
+    }
+
+    // 6. Approval Center Interactions (Event Delegation)
+    if (elements.approvalList) {
+        elements.approvalList.addEventListener('click', (e) => {
+            const target = e.target;
+            const appId = target.getAttribute('data-id');
+
+            if (target.classList.contains('approve-btn')) {
+                state.approvals = state.approvals.filter(a => a.id !== appId);
+                renderApprovals();
+                renderStats();
+                addActivityLog('Approval Granted', `Approved request ${appId}.`);
+                showToast(`Approved ${appId}`, '🛡️');
+            } else if (target.classList.contains('reject-btn')) {
+                state.approvals = state.approvals.filter(a => a.id !== appId);
+                renderApprovals();
+                renderStats();
+                showToast(`Dismissed ${appId}`, 'ℹ️');
+            }
+        });
+    }
+
+    // 7. Global Search Filter
+    if (elements.globalSearch) {
+        elements.globalSearch.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            if (!query) return;
+
+            // Jump to research if searching specifically
+            if (e.key === 'Enter') {
+                if (elements.productSearchInput) {
+                    elements.productSearchInput.value = query;
+                }
+                switchSection('product-research');
+                if (elements.analyzeProductBtn) elements.analyzeProductBtn.click();
+            }
+        });
+    }
+
+    // ==========================================
+    // INITIALIZATION
+    // ==========================================
+    function init() {
+        renderStats();
+        renderProducts();
+        renderActivities();
+        renderApprovals();
+        renderConnectedAccounts();
+        switchSection('dashboard');
+        showToast('Smart Money AI Workspace Ready', '🤖');
+    }
+
+    init();
+});
