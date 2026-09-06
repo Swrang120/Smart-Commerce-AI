@@ -24,11 +24,6 @@
         Smart Money AI Commerce - Dashboard
     </title>
 
-
-    <!-- ================================================
-         MAIN DASHBOARD CSS
-    ================================================= -->
-
     <link
         rel="stylesheet"
         href="css/dashboard.css"
@@ -40,38 +35,34 @@
 <body>
 
 
-    <!-- =================================================
-         APP SHELL
-    ================================================= -->
-
     <div
         class="dashboard-app"
         id="dashboardApp"
     >
 
 
-        <!-- =================================================
-             MOBILE OVERLAY
-        ================================================= -->
+        <!-- MOBILE OVERLAY -->
 
         <div
             class="sidebar-overlay"
             id="sidebarOverlay"
+            aria-hidden="true"
         ></div>
 
 
 
-        <!-- =================================================
+        <!-- ============================================
              SIDEBAR
-        ================================================= -->
+        ============================================= -->
 
         <aside
             class="sidebar"
             id="sidebar"
+            aria-label="Dashboard navigation"
         >
 
 
-            <!-- BRAND -->
+            <!-- SIDEBAR BRAND -->
 
             <div class="sidebar-brand">
 
@@ -79,14 +70,11 @@
                 <a
                     href="index.html"
                     class="brand-link"
-                    aria-label="Smart Money AI Commerce Home"
                 >
 
 
                     <div class="brand-logo">
-
                         AI
-
                     </div>
 
 
@@ -95,7 +83,6 @@
                         <strong>
                             AI Store Manager
                         </strong>
-
 
                         <span>
                             SMART MONEY COMMERCE
@@ -113,9 +100,7 @@
                     id="sidebarClose"
                     aria-label="Close menu"
                 >
-
                     ×
-
                 </button>
 
 
@@ -123,9 +108,7 @@
 
 
 
-            <!-- =============================================
-                 NAVIGATION
-            ============================================== -->
+            <!-- NAVIGATION -->
 
             <nav
                 class="sidebar-nav"
@@ -148,13 +131,8 @@
                         📊
                     </span>
 
-
                     <span>
                         Dashboard
-                    </span>
-
-
-                    <span class="nav-indicator">
                     </span>
 
                 </button>
@@ -170,7 +148,6 @@
                     <span class="nav-icon">
                         🤖
                     </span>
-
 
                     <span>
                         AI Product Hunter
@@ -190,7 +167,6 @@
                         🔍
                     </span>
 
-
                     <span>
                         Product Research
                     </span>
@@ -209,7 +185,6 @@
                         🏪
                     </span>
 
-
                     <span>
                         My Stores
                     </span>
@@ -227,7 +202,6 @@
                     <span class="nav-icon">
                         ⚙️
                     </span>
-
 
                     <span>
                         Automation
@@ -253,7 +227,6 @@
                         💰
                     </span>
 
-
                     <span>
                         Earnings
                     </span>
@@ -271,7 +244,6 @@
                     <span class="nav-icon">
                         📦
                     </span>
-
 
                     <span>
                         Products
@@ -291,7 +263,6 @@
                         📉
                     </span>
 
-
                     <span>
                         Price History
                     </span>
@@ -310,7 +281,6 @@
                         ⚡
                     </span>
 
-
                     <span>
                         AI Activity
                     </span>
@@ -322,9 +292,7 @@
 
 
 
-            <!-- =============================================
-                 SIDEBAR BOTTOM
-            ============================================== -->
+            <!-- SIDEBAR BOTTOM -->
 
             <div class="sidebar-bottom">
 
@@ -334,20 +302,16 @@
 
                     <div class="ai-status-top">
 
-
-                        <span class="ai-pulse">
-                        </span>
-
+                        <span class="ai-pulse"></span>
 
                         <span>
                             AI SYSTEM
                         </span>
 
-
                     </div>
 
 
-                    <strong>
+                    <strong id="sidebarAiStatus">
                         Ready for Analysis
                     </strong>
 
@@ -359,6 +323,7 @@
 
 
                 </div>
+
 
 
                 <button
@@ -383,18 +348,16 @@
 
 
 
-        <!-- =================================================
-             MAIN AREA
-        ================================================= -->
+        <!-- ============================================
+             MAIN CONTENT
+        ============================================= -->
 
         <main
             class="main-content"
         >
 
 
-            <!-- =============================================
-                 TOP HEADER
-            ============================================== -->
+            <!-- HEADER -->
 
             <header
                 class="dashboard-header"
@@ -409,27 +372,22 @@
                         class="menu-toggle"
                         id="menuToggle"
                         aria-label="Open menu"
+                        aria-expanded="false"
                     >
-
                         ☰
-
                     </button>
 
 
-                    <div class="page-heading">
 
+                    <div class="page-heading">
 
                         <span>
                             AI COMMAND CENTER
                         </span>
 
-
-                        <h1
-                            id="pageTitle"
-                        >
+                        <h1 id="pageTitle">
                             Dashboard
                         </h1>
-
 
                     </div>
 
@@ -441,15 +399,13 @@
                 <div class="header-right">
 
 
-                    <!-- GLOBAL SEARCH -->
+                    <!-- SEARCH -->
 
                     <div class="global-search">
-
 
                         <span>
                             🔍
                         </span>
-
 
                         <input
                             type="search"
@@ -457,7 +413,6 @@
                             placeholder="Search products..."
                             autocomplete="off"
                         >
-
 
                     </div>
 
@@ -471,15 +426,11 @@
                         id="aiStatusBtn"
                     >
 
+                        <span class="status-dot"></span>
 
-                        <span class="status-dot">
+                        <span id="aiStatus">
+                            AI Ready
                         </span>
-
-
-                        <span>
-                            AI Online
-                        </span>
-
 
                     </button>
 
@@ -493,27 +444,23 @@
                         id="profileButton"
                     >
 
-
                         <span
                             class="profile-avatar"
+                            id="profileAvatar"
                         >
                             SM
                         </span>
 
-
                         <span
                             class="profile-name"
+                            id="profileName"
                         >
                             Owner
                         </span>
 
-
-                        <span
-                            class="profile-arrow"
-                        >
+                        <span class="profile-arrow">
                             ▾
                         </span>
-
 
                     </button>
 
@@ -525,41 +472,32 @@
 
 
 
-            <!-- =================================================
-                 PAGE CONTENT
-            ================================================= -->
+            <!-- ============================================
+                 DASHBOARD CONTENT
+            ============================================= -->
 
-            <div
-                class="dashboard-content"
-            >
+            <div class="dashboard-content">
 
 
-                <!-- =============================================
-                     WELCOME
-                ============================================== -->
+                <!-- WELCOME -->
 
                 <section
                     class="welcome-banner"
                 >
 
 
-                    <div
-                        class="welcome-content"
-                    >
+                    <div class="welcome-content">
 
 
-                        <span
-                            class="welcome-badge"
-                        >
-
+                        <span class="welcome-badge">
                             🤖 AI COMMERCE INTELLIGENCE
-
                         </span>
 
 
                         <h2>
 
                             Your AI-powered
+
                             <span>
                                 business command center.
                             </span>
@@ -570,16 +508,15 @@
                         <p>
 
                             Research products, monitor market
-                            opportunities, track earnings and
-                            manage authorized store integrations
-                            from one workspace.
+                            opportunities, track earnings and manage
+                            authorized store integrations from one
+                            workspace.
 
                         </p>
 
 
-                        <div
-                            class="welcome-actions"
-                        >
+
+                        <div class="welcome-actions">
 
 
                             <button
@@ -595,6 +532,7 @@
                                 Start Product Research
 
                             </button>
+
 
 
                             <button
@@ -619,35 +557,20 @@
 
 
 
-                    <div
-                        class="welcome-ai-visual"
-                    >
+                    <div class="welcome-ai-visual">
 
 
-                        <div
-                            class="ai-orbit orbit-one"
-                        >
-                        </div>
+                        <div class="ai-orbit orbit-one"></div>
+
+                        <div class="ai-orbit orbit-two"></div>
 
 
-                        <div
-                            class="ai-orbit orbit-two"
-                        >
-                        </div>
-
-
-                        <div
-                            class="ai-core"
-                        >
-
+                        <div class="ai-core">
                             🤖
-
                         </div>
 
 
-                        <div
-                            class="ai-floating-card card-one"
-                        >
+                        <div class="ai-floating-card card-one">
 
                             <span>
                                 📈
@@ -664,9 +587,8 @@
                         </div>
 
 
-                        <div
-                            class="ai-floating-card card-two"
-                        >
+
+                        <div class="ai-floating-card card-two">
 
                             <span>
                                 💰
@@ -690,44 +612,22 @@
 
 
 
-                <!-- =============================================
-                     STATISTICS
-                ============================================== -->
+                <!-- STATISTICS -->
 
-                <section
-                    class="stats-grid"
-                >
+                <section class="stats-grid">
 
 
-                    <!-- TODAY EARNINGS -->
+                    <article class="stat-card">
 
-                    <article
-                        class="stat-card"
-                    >
+                        <div class="stat-card-top">
 
-
-                        <div
-                            class="stat-card-top"
-                        >
-
-
-                            <div
-                                class="stat-icon revenue"
-                            >
-
+                            <div class="stat-icon revenue">
                                 💰
-
                             </div>
 
-
-                            <span
-                                class="stat-change positive"
-                            >
-
+                            <span class="stat-change positive">
                                 ↗ Live
-
                             </span>
-
 
                         </div>
 
@@ -737,9 +637,7 @@
                         </p>
 
 
-                        <h3
-                            id="todayEarnings"
-                        >
+                        <h3 id="todayEarnings">
                             ₹0.00
                         </h3>
 
@@ -753,35 +651,17 @@
 
 
 
-                    <!-- TOTAL REVENUE -->
+                    <article class="stat-card">
 
-                    <article
-                        class="stat-card"
-                    >
+                        <div class="stat-card-top">
 
-
-                        <div
-                            class="stat-card-top"
-                        >
-
-
-                            <div
-                                class="stat-icon total"
-                            >
-
+                            <div class="stat-icon total">
                                 📊
-
                             </div>
 
-
-                            <span
-                                class="stat-change neutral"
-                            >
-
+                            <span class="stat-change neutral">
                                 All Time
-
                             </span>
-
 
                         </div>
 
@@ -791,9 +671,7 @@
                         </p>
 
 
-                        <h3
-                            id="lifetimeRevenue"
-                        >
+                        <h3 id="lifetimeRevenue">
                             ₹0.00
                         </h3>
 
@@ -807,35 +685,17 @@
 
 
 
-                    <!-- PROFIT -->
+                    <article class="stat-card">
 
-                    <article
-                        class="stat-card"
-                    >
+                        <div class="stat-card-top">
 
-
-                        <div
-                            class="stat-card-top"
-                        >
-
-
-                            <div
-                                class="stat-icon profit"
-                            >
-
+                            <div class="stat-icon profit">
                                 📈
-
                             </div>
 
-
-                            <span
-                                class="stat-change neutral"
-                            >
-
+                            <span class="stat-change neutral">
                                 Net
-
                             </span>
-
 
                         </div>
 
@@ -845,9 +705,7 @@
                         </p>
 
 
-                        <h3
-                            id="estimatedProfit"
-                        >
+                        <h3 id="estimatedProfit">
                             ₹0.00
                         </h3>
 
@@ -861,35 +719,17 @@
 
 
 
-                    <!-- CONNECTED STORES -->
+                    <article class="stat-card">
 
-                    <article
-                        class="stat-card"
-                    >
+                        <div class="stat-card-top">
 
-
-                        <div
-                            class="stat-card-top"
-                        >
-
-
-                            <div
-                                class="stat-icon stores"
-                            >
-
+                            <div class="stat-icon stores">
                                 🏪
-
                             </div>
 
-
-                            <span
-                                class="stat-change neutral"
-                            >
-
+                            <span class="stat-change neutral">
                                 Accounts
-
                             </span>
-
 
                         </div>
 
@@ -899,9 +739,7 @@
                         </p>
 
 
-                        <h3
-                            id="connectedStores"
-                        >
+                        <h3 id="connectedStores">
                             0
                         </h3>
 
@@ -918,113 +756,40 @@
 
 
 
-                <!-- =============================================
-                     MAIN GRID
-                ============================================== -->
+                <!-- MAIN GRID -->
 
-                <section
-                    class="dashboard-grid"
-                >
+                <section class="dashboard-grid">
 
 
-                    <!-- =========================================
-                         TRENDING PRODUCTS
-                    ========================================== -->
+                    <!-- TRENDING PRODUCTS -->
 
                     <section
                         class="dashboard-card trending-card"
                     >
 
 
-                        <div
-                            class="card-header"
-                        >
+                        <div class="card-header">
 
 
                             <div>
 
-
-                                <span
-                                    class="card-eyebrow"
-                                >
-
+                                <span class="card-eyebrow">
                                     MARKET INTELLIGENCE
-
                                 </span>
 
-
                                 <h2>
-
-                                    🔥 Trending Opportunities
-
+                                    Trending Products
                                 </h2>
-
 
                             </div>
 
 
                             <button
                                 type="button"
-                                class="text-button"
-                                data-section-target="ai-hunter"
+                                class="card-action"
+                                id="viewProductsBtn"
                             >
-
-                                AI Hunter
-                                →
-
-                            </button>
-
-
-                        </div>
-
-
-
-                        <div
-                            class="trend-tabs"
-                        >
-
-
-                            <button
-                                type="button"
-                                class="trend-tab active"
-                                data-market="all"
-                            >
-
-                                All Sources
-
-                            </button>
-
-
-                            <button
-                                type="button"
-                                class="trend-tab"
-                                data-market="amazon"
-                            >
-
-                                Amazon
-
-                            </button>
-
-
-                            <button
-                                type="button"
-                                class="trend-tab"
-                                data-market="shopify"
-                            >
-
-                                Shopify
-
-                            </button>
-
-
-                            <button
-                                type="button"
-                                class="trend-tab"
-                                data-market="alibaba"
-                            >
-
-                                Alibaba
-
+                                View All
                             </button>
 
 
@@ -1034,34 +799,19 @@
 
                         <div
                             class="product-list"
-                            id="trendingProducts"
+                            id="productList"
                         >
 
 
-                            <!-- JS WILL RENDER PRODUCTS -->
-
-
-                            <div
-                                class="empty-product-state"
-                            >
-
+                            <div class="empty-state small-empty">
 
                                 <span>
-                                    🔎
+                                    🔍
                                 </span>
-
 
                                 <strong>
-                                    No market scan yet
+                                    Loading products...
                                 </strong>
-
-
-                                <p>
-                                    Start AI Product Research to
-                                    discover products and trends.
-
-                                </p>
-
 
                             </div>
 
@@ -1073,256 +823,35 @@
 
 
 
-                    <!-- =========================================
-                         AI OPPORTUNITY SCORE
-                    ========================================== -->
-
-                    <section
-                        class="dashboard-card opportunity-card"
-                    >
-
-
-                        <div
-                            class="card-header"
-                        >
-
-
-                            <div>
-
-
-                                <span
-                                    class="card-eyebrow"
-                                >
-
-                                    AI DECISION ENGINE
-
-                                </span>
-
-
-                                <h2>
-
-                                    🧠 Opportunity Score
-
-                                </h2>
-
-
-                            </div>
-
-
-                            <span
-                                class="live-label"
-                            >
-
-                                <span>
-                                </span>
-
-                                LIVE
-
-                            </span>
-
-
-                        </div>
-
-
-
-                        <div
-                            class="opportunity-main"
-                        >
-
-
-                            <div
-                                class="score-circle"
-                            >
-
-
-                                <div>
-
-
-                                    <strong
-                                        id="opportunityScore"
-                                    >
-                                        --
-                                    </strong>
-
-
-                                    <span>
-                                        SCORE
-                                    </span>
-
-
-                                </div>
-
-
-                            </div>
-
-
-
-                            <div
-                                class="opportunity-info"
-                            >
-
-
-                                <strong
-                                    id="opportunityTitle"
-                                >
-
-                                    No product selected
-
-                                </strong>
-
-
-                                <p
-                                    id="opportunityDescription"
-                                >
-
-                                    Run product research to receive
-                                    an AI opportunity analysis.
-
-                                </p>
-
-
-                            </div>
-
-
-                        </div>
-
-
-
-                        <div
-                            class="opportunity-factors"
-                        >
-
-
-                            <div>
-
-
-                                <span>
-                                    Demand
-                                </span>
-
-
-                                <strong
-                                    id="demandScore"
-                                >
-                                    --
-                                </strong>
-
-
-                            </div>
-
-
-                            <div>
-
-
-                                <span>
-                                    Competition
-                                </span>
-
-
-                                <strong
-                                    id="competitionScore"
-                                >
-                                    --
-                                </strong>
-
-
-                            </div>
-
-
-                            <div>
-
-
-                                <span>
-                                    Margin
-                                </span>
-
-
-                                <strong
-                                    id="marginScore"
-                                >
-                                    --
-                                </strong>
-
-
-                            </div>
-
-
-                        </div>
-
-
-
-                        <button
-                            type="button"
-                            class="full-card-button"
-                            id="runAiAnalysisBtn"
-                        >
-
-                            🤖 Run AI Analysis
-
-                        </button>
-
-
-                    </section>
-
-
-                </section>
-
-
-
-                <!-- =============================================
-                     LOWER GRID
-                ============================================== -->
-
-                <section
-                    class="dashboard-grid lower-grid"
-                >
-
-
-                    <!-- =========================================
-                         AI ACTIVITY
-                    ========================================== -->
+                    <!-- AI ACTIVITY -->
 
                     <section
                         class="dashboard-card activity-card"
                     >
 
 
-                        <div
-                            class="card-header"
-                        >
+                        <div class="card-header">
 
 
                             <div>
 
-
-                                <span
-                                    class="card-eyebrow"
-                                >
-
-                                    AUTOMATION MONITOR
-
+                                <span class="card-eyebrow">
+                                    SYSTEM ACTIVITY
                                 </span>
 
-
                                 <h2>
-
-                                    ⚡ AI Activity
-
+                                    AI Activity
                                 </h2>
-
 
                             </div>
 
 
                             <button
                                 type="button"
-                                class="text-button"
-                                data-section-target="activity"
+                                class="card-action"
+                                id="refreshDashboardBtn"
                             >
-
-                                View All
-                                →
-
+                                ↻ Refresh
                             </button>
 
 
@@ -1332,696 +861,133 @@
 
                         <div
                             class="activity-list"
-                            id="aiActivityList"
-                        >
-
-
-                            <div
-                                class="empty-activity"
-                            >
-
-
-                                <span>
-                                    🤖
-                                </span>
-
-
-                                <div>
-
-
-                                    <strong>
-                                        AI is standing by
-                                    </strong>
-
-
-                                    <p>
-                                        Product research activity
-                                        will appear here.
-
-                                    </p>
-
-
-                                </div>
-
-
-                            </div>
-
-
-                        </div>
+                            id="activityList"
+                        ></div>
 
 
                     </section>
 
 
 
-                    <!-- =========================================
-                         STORE STATUS
-                    ========================================== -->
+                    <!-- PRODUCT RESEARCH -->
 
                     <section
-                        class="dashboard-card stores-card"
+                        class="dashboard-card research-card"
                     >
 
 
-                        <div
-                            class="card-header"
-                        >
-
+                        <div class="card-header">
 
                             <div>
 
-
-                                <span
-                                    class="card-eyebrow"
-                                >
-
-                                    AUTHORIZED INTEGRATIONS
-
+                                <span class="card-eyebrow">
+                                    AI RESEARCH ENGINE
                                 </span>
 
-
                                 <h2>
-
-                                    🏪 Store Status
-
+                                    Product Research
                                 </h2>
 
-
                             </div>
+
+                        </div>
+
+
+
+                        <p class="research-description">
+
+                            Enter a product name and let the AI
+                            research engine generate a market
+                            intelligence result.
+
+                        </p>
+
+
+
+                        <div class="research-input-row">
+
+
+                            <input
+                                type="text"
+                                id="productSearchInput"
+                                placeholder="Example: Wireless Earbuds"
+                                autocomplete="off"
+                            >
 
 
                             <button
                                 type="button"
-                                class="text-button"
-                                id="manageStoresBtn"
+                                class="primary-action"
+                                id="analyzeProductBtn"
                             >
-
-                                Manage
-                                →
-
+                                🤖 Analyze
                             </button>
 
 
                         </div>
 
 
-
-                        <div
-                            class="store-status-list"
-                            id="storeStatusList"
-                        >
-
-
-                            <!-- =================================
-                                 AMAZON
-                            ================================== -->
-
-                            <div
-                                class="store-status-item"
-                            >
-
-
-                                <div
-                                    class="store-status-left"
-                                >
-
-
-                                    <span
-                                        class="store-logo"
-                                    >
-
-                                        A
-
-                                    </span>
-
-
-                                    <div>
-
-
-                                        <strong>
-                                            Amazon
-                                        </strong>
-
-
-                                        <small>
-                                            Research API available
-                                        </small>
-
-
-                                    </div>
-
-
-                                </div>
-
-
-                                <span
-                                    class="store-status-badge ready"
-                                >
-
-                                    Data Ready
-
-                                </span>
-
-
-                            </div>
-
-
-
-                            <!-- SHOPIFY -->
-
-                            <div
-                                class="store-status-item"
-                            >
-
-
-                                <div
-                                    class="store-status-left"
-                                >
-
-
-                                    <span
-                                        class="store-logo"
-                                    >
-
-                                        S
-
-                                    </span>
-
-
-                                    <div>
-
-
-                                        <strong>
-                                            Shopify
-                                        </strong>
-
-
-                                        <small>
-                                            Research API available
-                                        </small>
-
-
-                                    </div>
-
-
-                                </div>
-
-
-                                <span
-                                    class="store-status-badge ready"
-                                >
-
-                                    Data Ready
-
-                                </span>
-
-
-                            </div>
-
-
-
-                            <!-- ALIBABA -->
-
-                            <div
-                                class="store-status-item"
-                            >
-
-
-                                <div
-                                    class="store-status-left"
-                                >
-
-
-                                    <span
-                                        class="store-logo"
-                                    >
-
-                                        阿
-
-                                    </span>
-
-
-                                    <div>
-
-
-                                        <strong>
-                                            Alibaba
-                                        </strong>
-
-
-                                        <small>
-                                            Research API available
-                                        </small>
-
-
-                                    </div>
-
-
-                                </div>
-
-
-                                <span
-                                    class="store-status-badge ready"
-                                >
-
-                                    Data Ready
-
-                                </span>
-
-
-                            </div>
-
-
-
-                            <!-- MORE -->
-
-                            <div
-                                class="store-status-item"
-                            >
-
-
-                                <div
-                                    class="store-status-left"
-                                >
-
-
-                                    <span
-                                        class="store-logo"
-                                    >
-
-                                        +
-
-                                    </span>
-
-
-                                    <div>
-
-
-                                        <strong>
-                                            More Stores
-                                        </strong>
-
-
-                                        <small>
-                                            Connect authorized APIs
-                                        </small>
-
-
-                                    </div>
-
-
-                                </div>
-
-
-                                <span
-                                    class="store-status-badge inactive"
-                                >
-
-                                    Not Connected
-
-                                </span>
-
-
-                            </div>
-
-
-                        </div>
-
-
                     </section>
 
 
-                </section>
 
+                    <!-- STORE CONNECTION -->
 
-
-                <!-- =============================================
-                     QUICK ACTIONS
-                ============================================== -->
-
-                <section
-                    class="quick-actions-section"
-                >
-
-
-                    <div
-                        class="section-heading"
+                    <section
+                        class="dashboard-card store-card"
                     >
 
 
-                        <div>
+                        <div class="card-header">
 
+                            <div>
 
-                            <span>
-                                QUICK COMMANDS
-                            </span>
+                                <span class="card-eyebrow">
+                                    INTEGRATIONS
+                                </span>
 
+                                <h2>
+                                    Connected Stores
+                                </h2>
 
-                            <h2>
-                                What do you want the AI
-                                system to analyze?
-                            </h2>
-
+                            </div>
 
                         </div>
 
 
-                    </div>
+                        <div class="store-summary">
 
+                            <div class="store-summary-icon">
+                                🏪
+                            </div>
 
+                            <div>
 
-                    <div
-                        class="quick-actions-grid"
-                    >
+                                <strong
+                                    id="storeSummaryCount"
+                                >
+                                    0
+                                </strong>
 
+                                <span>
+                                    authorized stores connected
+                                </span>
 
-                        <button
-                            type="button"
-                            class="quick-action-card"
-                            data-action="amazon-search"
-                        >
-
-
-                            <span>
-                                🔍
-                            </span>
-
-
-                            <strong>
-                                Search Products
-                            </strong>
-
-
-                            <small>
-                                Search available market
-                                data sources
-
-                            </small>
-
-
-                        </button>
-
-
-
-                        <button
-                            type="button"
-                            class="quick-action-card"
-                            data-action="best-sellers"
-                        >
-
-
-                            <span>
-                                🔥
-                            </span>
-
-
-                            <strong>
-                                Find Best Sellers
-                            </strong>
-
-
-                            <small>
-                                Discover products with
-                                strong market signals
-
-                            </small>
-
-
-                        </button>
-
-
-
-                        <button
-                            type="button"
-                            class="quick-action-card"
-                            data-action="new-releases"
-                        >
-
-
-                            <span>
-                                🆕
-                            </span>
-
-
-                            <strong>
-                                New Releases
-                            </strong>
-
-
-                            <small>
-                                Monitor new product
-                                opportunities
-
-                            </small>
-
-
-                        </button>
-
-
-
-                        <button
-                            type="button"
-                            class="quick-action-card"
-                            data-action="price-analysis"
-                        >
-
-
-                            <span>
-                                📉
-                            </span>
-
-
-                            <strong>
-                                Price Analysis
-                            </strong>
-
-
-                            <small>
-                                Review available price
-                                history signals
-
-                            </small>
-
-
-                        </button>
-
-
-                    </div>
-
-
-                </section>
-
-
-
-                <!-- =============================================
-                     PRODUCT RESEARCH PANEL
-                ============================================== -->
-
-                <section
-                    class="research-panel"
-                    id="researchPanel"
-                >
-
-
-                    <div
-                        class="research-panel-header"
-                    >
-
-
-                        <div>
-
-
-                            <span>
-                                PRODUCT RESEARCH LAB
-                            </span>
-
-
-                            <h2>
-                                Search & Analyze Products
-                            </h2>
-
-
-                            <p>
-                                Use connected and authorized
-                                data providers to research
-                                product opportunities.
-
-                            </p>
-
+                            </div>
 
                         </div>
 
 
                         <button
                             type="button"
-                            class="panel-close-btn"
-                            id="researchPanelClose"
-                            aria-label="Close research panel"
+                            class="secondary-action full-button"
+                            id="connectStoreBtn"
                         >
-
-                            ×
-
+                            + Connect Store
                         </button>
 
 
-                    </div>
-
-
-
-                    <form
-                        class="research-form"
-                        id="researchForm"
-                    >
-
-
-                        <div
-                            class="research-input-wrap"
-                        >
-
-
-                            <span>
-                                🔎
-                            </span>
-
-
-                            <input
-                                type="text"
-                                id="researchQuery"
-                                placeholder="Example: wireless earbuds"
-                                autocomplete="off"
-                                required
-                            >
-
-
-                        </div>
-
-
-
-                        <select
-                            id="researchSource"
-                        >
-
-
-                            <option
-                                value="all"
-                            >
-
-                                All Available Sources
-
-                            </option>
-
-
-                            <option
-                                value="amazon"
-                            >
-
-                                Amazon
-
-                            </option>
-
-
-                            <option
-                                value="shopify"
-                            >
-
-                                Shopify
-
-                            </option>
-
-
-                            <option
-                                value="alibaba"
-                            >
-
-                                Alibaba
-
-                            </option>
-
-
-                        </select>
-
-
-
-                        <button
-                            type="submit"
-                            class="research-submit-btn"
-                            id="researchSubmitBtn"
-                        >
-
-                            🤖 Analyze
-
-                        </button>
-
-
-                    </form>
-
-
-
-                    <div
-                        class="research-result"
-                        id="researchResult"
-                    >
-
-
-                        <div
-                            class="research-placeholder"
-                        >
-
-
-                            <span>
-                                🤖
-                            </span>
-
-
-                            <strong>
-                                AI Research Ready
-                            </strong>
-
-
-                            <p>
-                                Enter a product name and
-                                start your first market scan.
-
-                            </p>
-
-
-                        </div>
-
-
-                    </div>
-
-
-                </section>
-
-
-
-                <!-- =============================================
-                     SYSTEM NOTICE
-                ============================================== -->
-
-                <section
-                    class="system-notice"
-                >
-
-
-                    <span>
-                        🔒
-                    </span>
-
-
-                    <p>
-
-                        This workspace is designed for
-                        product research, analytics and
-                        management of accounts and APIs
-                        that you own or are explicitly
-                        authorized to use. Marketplace
-                        publishing and account actions
-                        should use official supported
-                        integrations and applicable
-                        platform permissions.
-
-                    </p>
+                    </section>
 
 
                 </section>
@@ -2037,53 +1003,25 @@
 
 
 
-    <!-- =================================================
-         TOAST
-    ================================================= -->
+    <!-- TOAST -->
 
     <div
         class="toast"
         id="toast"
         role="status"
-        aria-live="polite"
     >
 
-
-        <span
-            id="toastIcon"
-        >
-
+        <span id="toastIcon">
             ✓
-
         </span>
 
-
-        <p
-            id="toastMessage"
-        >
-
-            Action completed.
-
-        </p>
-
+        <span id="toastMessage">
+            Ready
+        </span>
 
     </div>
 
 
-
-    <!-- =================================================
-         CONFIGURATION
-    ================================================= -->
-
-    <script
-        src="config.js"
-    ></script>
-
-
-
-    <!-- =================================================
-         DASHBOARD JAVASCRIPT
-    ================================================= -->
 
     <script
         src="js/dashboard.js"
