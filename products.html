@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        AI Store Manager - Products
+    </title>
+
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <div class="app-layout">
+
+
+        <aside class="sidebar">
+
+
+            <div class="sidebar-brand">
+
+                <div class="brand-logo">
+                    AI
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        AI Store
+                    </strong>
+
+                    <small>
+                        MANAGER
+                    </small>
+
+                </div>
+
+            </div>
+
+
+
+            <nav class="sidebar-menu">
+
+
+                <a
+                    href="dashboard.html"
+                    class="nav-item"
+                >
+                    <span>📊</span>
+                    Dashboard
+                </a>
+
+
+                <a
+                    href="products.html"
+                    class="nav-item active"
+                >
+                    <span>📦</span>
+                    Products
+                </a>
+
+
+                <a
+                    href="#"
+                    class="nav-item"
+                >
+                    <span>🔍</span>
+                    AI Research
+                </a>
+
+
+                <a
+                    href="#"
+                    class="nav-item"
+                >
+                    <span>🛒</span>
+                    Orders
+                </a>
+
+
+                <a
+                    href="settings.html"
+                    class="nav-item"
+                >
+                    <span>⚙️</span>
+                    Settings
+                </a>
+
+
+            </nav>
+
+
+        </aside>
+
+
+
+        <main class="main-content">
+
+
+            <header class="dashboard-header">
+
+                <div>
+
+                    <p class="page-label">
+                        PRODUCT MANAGEMENT
+                    </p>
+
+
+                    <h1>
+                        Products
+                    </h1>
+
+                </div>
+
+
+            </header>
+
+
+
+            <section class="panel product-control-panel">
+
+
+                <div class="panel-header">
+
+
+                    <div>
+
+                        <span class="panel-label">
+                            AI RESEARCH
+                        </span>
+
+
+                        <h2>
+                            Find Products
+                        </h2>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="research-box">
+
+
+                    <input
+                        type="text"
+                        id="productSearch"
+                        placeholder="Search a product category to research..."
+                    >
+
+
+                    <button
+                        id="researchBtn"
+                    >
+
+                        🔍 Research
+
+                    </button>
+
+
+                </div>
+
+
+
+                <p class="research-note">
+
+                    Research results will later be connected
+                    to approved data providers and marketplace APIs.
+
+                </p>
+
+
+            </section>
+
+
+
+            <section class="panel">
+
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <span class="panel-label">
+                            PRODUCT DATABASE
+                        </span>
+
+
+                        <h2>
+                            Saved Products
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+
+                <div
+                    class="product-empty"
+                    id="productResults"
+                >
+
+                    <div class="empty-icon">
+                        📦
+                    </div>
+
+
+                    <h3>
+                        No products researched yet
+                    </h3>
+
+
+                    <p>
+                        Search for a category above to start
+                        building your product research database.
+                    </p>
+
+
+                </div>
+
+
+            </section>
+
+
+        </main>
+
+
+    </div>
+
+
+
+    <script
+        src="js/config.js"
+    ></script>
+
+
+    <script
+        src="js/products.js"
+    ></script>
+
+
+</body>
+
+</html>
