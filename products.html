@@ -10,14 +10,21 @@
         content="width=device-width, initial-scale=1.0"
     >
 
+    <meta
+        name="theme-color"
+        content="#07111f"
+    >
+
     <title>
-        AI Store Manager - Products
+        Product Research - Smart Money AI Commerce
     </title>
 
 
+    <!-- MAIN DASHBOARD CSS -->
+
     <link
         rel="stylesheet"
-        href="css/style.css"
+        href="css/dashboard.css"
     >
 
 </head>
@@ -26,105 +33,351 @@
 <body>
 
 
-    <div class="app-layout">
+    <!-- ================================================
+         APP WRAPPER
+    ================================================= -->
+
+    <div class="dashboard-app">
 
 
-        <aside class="sidebar">
+        <!-- ============================================
+             SIDEBAR
+        ============================================= -->
 
+        <aside
+            class="sidebar"
+            id="sidebar"
+        >
+
+
+            <!-- BRAND -->
 
             <div class="sidebar-brand">
 
-                <div class="brand-logo">
-                    AI
-                </div>
+
+                <a
+                    href="dashboard.html"
+                    class="brand-link"
+                >
+
+                    <div class="sidebar-logo">
+
+                        AI
+
+                    </div>
 
 
-                <div>
+                    <div class="sidebar-brand-text">
 
-                    <strong>
-                        AI Store
-                    </strong>
+                        <strong>
+                            Smart Money
+                        </strong>
 
-                    <small>
-                        MANAGER
-                    </small>
 
-                </div>
+                        <span>
+                            AI Commerce
+                        </span>
+
+                    </div>
+
+                </a>
+
 
             </div>
 
 
 
-            <nav class="sidebar-menu">
+            <!-- NAVIGATION -->
 
+            <nav
+                class="sidebar-nav"
+            >
+
+
+                <!-- DASHBOARD -->
 
                 <a
                     href="dashboard.html"
                     class="nav-item"
                 >
-                    <span>📊</span>
-                    Dashboard
+
+                    <span
+                        class="nav-icon"
+                    >
+                        📊
+                    </span>
+
+
+                    <span>
+                        Dashboard
+                    </span>
+
                 </a>
 
+
+
+                <!-- PRODUCT RESEARCH -->
 
                 <a
                     href="products.html"
                     class="nav-item active"
                 >
-                    <span>📦</span>
-                    Products
+
+                    <span
+                        class="nav-icon"
+                    >
+                        🔍
+                    </span>
+
+
+                    <span>
+                        Product Research
+                    </span>
+
                 </a>
 
+
+
+                <!-- STORES -->
 
                 <a
                     href="#"
                     class="nav-item"
                 >
-                    <span>🔍</span>
-                    AI Research
+
+                    <span
+                        class="nav-icon"
+                    >
+                        🏪
+                    </span>
+
+
+                    <span>
+                        My Stores
+                    </span>
+
                 </a>
 
+
+
+                <!-- ANALYTICS -->
 
                 <a
                     href="#"
                     class="nav-item"
                 >
-                    <span>🛒</span>
-                    Orders
+
+                    <span
+                        class="nav-icon"
+                    >
+                        📈
+                    </span>
+
+
+                    <span>
+                        Analytics
+                    </span>
+
                 </a>
 
 
+
+                <!-- AUTOMATION -->
+
                 <a
-                    href="settings.html"
+                    href="#"
                     class="nav-item"
                 >
-                    <span>⚙️</span>
-                    Settings
+
+                    <span
+                        class="nav-icon"
+                    >
+                        🤖
+                    </span>
+
+
+                    <span>
+                        Automation
+                    </span>
+
+                </a>
+
+
+
+                <!-- SETTINGS -->
+
+                <a
+                    href="#"
+                    class="nav-item"
+                >
+
+                    <span
+                        class="nav-icon"
+                    >
+                        ⚙️
+                    </span>
+
+
+                    <span>
+                        Settings
+                    </span>
+
                 </a>
 
 
             </nav>
 
 
+
+            <!-- SIDEBAR BOTTOM -->
+
+            <div
+                class="sidebar-bottom"
+            >
+
+
+                <div
+                    class="ai-system-card"
+                >
+
+
+                    <div
+                        class="ai-system-icon"
+                    >
+                        🤖
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            AI System
+                        </strong>
+
+
+                        <span
+                            id="aiSystemStatus"
+                        >
+                            Ready for research
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+                <a
+                    href="index.html"
+                    class="logout-btn"
+                >
+
+                    <span>
+                        ←
+                    </span>
+
+                    Exit Dashboard
+
+                </a>
+
+
+            </div>
+
+
         </aside>
 
 
 
-        <main class="main-content">
+        <!-- ============================================
+             MAIN AREA
+        ============================================= -->
+
+        <main
+            class="main-content"
+        >
 
 
-            <header class="dashboard-header">
+            <!-- ========================================
+                 TOP HEADER
+            ========================================= -->
 
-                <div>
-
-                    <p class="page-label">
-                        PRODUCT MANAGEMENT
-                    </p>
+            <header
+                class="dashboard-header"
+            >
 
 
-                    <h1>
-                        Products
-                    </h1>
+                <!-- LEFT -->
+
+                <div
+                    class="header-left"
+                >
+
+
+                    <button
+                        type="button"
+                        class="mobile-menu-btn"
+                        id="mobileMenuBtn"
+                        aria-label="Open menu"
+                    >
+
+                        ☰
+
+                    </button>
+
+
+                    <div>
+
+                        <span
+                            class="header-eyebrow"
+                        >
+                            PRODUCT INTELLIGENCE
+                        </span>
+
+
+                        <h1>
+                            Product Research
+                        </h1>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- RIGHT -->
+
+                <div
+                    class="header-right"
+                >
+
+
+                    <div
+                        class="system-status"
+                    >
+
+                        <span
+                            class="status-dot"
+                        ></span>
+
+
+                        <span>
+                            System Online
+                        </span>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="profile-btn"
+                        aria-label="Profile"
+                    >
+
+                        SM
+
+                    </button>
+
 
                 </div>
 
@@ -133,112 +386,953 @@
 
 
 
-            <section class="panel product-control-panel">
+            <!-- ========================================
+                 PAGE CONTENT
+            ========================================= -->
+
+            <div
+                class="page-content"
+            >
 
 
-                <div class="panel-header">
+                <!-- ====================================
+                     HERO
+                ===================================== -->
+
+                <section
+                    class="research-hero"
+                >
 
 
-                    <div>
+                    <div
+                        class="research-hero-content"
+                    >
 
-                        <span class="panel-label">
-                            AI RESEARCH
-                        </span>
+
+                        <div
+                            class="research-badge"
+                        >
+
+                            <span>
+                                🤖
+                            </span>
+
+                            AI PRODUCT HUNTER
+
+                        </div>
 
 
                         <h2>
-                            Find Products
+
+                            Find Products With
+
+                            <span>
+                                Better Opportunities
+                            </span>
+
                         </h2>
+
+
+                        <p>
+
+                            Research products across your
+                            connected data sources, compare
+                            prices and analyze market signals
+                            before making a business decision.
+
+                        </p>
+
 
                     </div>
 
 
-                </div>
+
+                    <div
+                        class="research-hero-icon"
+                    >
+
+                        🔍
+
+                    </div>
+
+
+                </section>
 
 
 
-                <div class="research-box">
+                <!-- ====================================
+                     SEARCH PANEL
+                ===================================== -->
+
+                <section
+                    class="research-search-card"
+                >
 
 
-                    <input
-                        type="text"
-                        id="productSearch"
-                        placeholder="Search a product category to research..."
+                    <div
+                        class="search-card-header"
                     >
 
 
-                    <button
-                        id="researchBtn"
+                        <div>
+
+                            <span>
+                                PRODUCT SEARCH
+                            </span>
+
+
+                            <h3>
+                                Start Product Research
+                            </h3>
+
+                        </div>
+
+
+                        <div
+                            class="research-mode"
+                        >
+
+                            <span
+                                class="mode-dot"
+                            ></span>
+
+                            AI Assisted
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- SEARCH INPUT -->
+
+                    <div
+                        class="product-search-row"
                     >
 
-                        🔍 Research
 
-                    </button>
+                        <div
+                            class="product-search-box"
+                        >
 
-
-                </div>
-
-
-
-                <p class="research-note">
-
-                    Research results will later be connected
-                    to approved data providers and marketplace APIs.
-
-                </p>
+                            <span>
+                                🔍
+                            </span>
 
 
-            </section>
+                            <input
+                                type="text"
+                                id="productSearchInput"
+                                placeholder="Search a product, category or keyword..."
+                                autocomplete="off"
+                            >
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            class="research-search-btn"
+                            id="productSearchBtn"
+                        >
+
+                            <span>
+                                Search Products
+                            </span>
+
+                            <span>
+                                →
+                            </span>
+
+                        </button>
+
+
+                    </div>
 
 
 
-            <section class="panel">
+                    <!-- QUICK SEARCHES -->
+
+                    <div
+                        class="quick-searches"
+                    >
 
 
-                <div class="panel-header">
+                        <span>
+                            Quick Research:
+                        </span>
+
+
+                        <button
+                            type="button"
+                            class="quick-search-btn"
+                            data-search="wireless earbuds"
+                        >
+                            Wireless Earbuds
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="quick-search-btn"
+                            data-search="smart watch"
+                        >
+                            Smart Watch
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="quick-search-btn"
+                            data-search="kitchen products"
+                        >
+                            Kitchen Products
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="quick-search-btn"
+                            data-search="mobile accessories"
+                        >
+                            Mobile Accessories
+                        </button>
+
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- ====================================
+                     RESEARCH FILTERS
+                ===================================== -->
+
+                <section
+                    class="research-filter-card"
+                >
+
+
+                    <div
+                        class="filter-heading"
+                    >
+
+                        <div>
+
+                            <span>
+                                RESEARCH FILTERS
+                            </span>
+
+
+                            <h3>
+                                Refine Your Results
+                            </h3>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            id="clearFiltersBtn"
+                            class="clear-filter-btn"
+                        >
+
+                            Clear Filters
+
+                        </button>
+
+
+                    </div>
+
+
+
+                    <div
+                        class="filter-grid"
+                    >
+
+
+                        <!-- MARKETPLACE -->
+
+                        <div
+                            class="filter-group"
+                        >
+
+                            <label
+                                for="marketplaceFilter"
+                            >
+                                Marketplace
+                            </label>
+
+
+                            <select
+                                id="marketplaceFilter"
+                            >
+
+                                <option
+                                    value="all"
+                                >
+                                    All Sources
+                                </option>
+
+
+                                <option
+                                    value="amazon"
+                                >
+                                    Amazon
+                                </option>
+
+
+                                <option
+                                    value="flipkart"
+                                >
+                                    Flipkart
+                                </option>
+
+
+                                <option
+                                    value="meesho"
+                                >
+                                    Meesho
+                                </option>
+
+
+                                <option
+                                    value="shopify"
+                                >
+                                    Shopify
+                                </option>
+
+
+                                <option
+                                    value="alibaba"
+                                >
+                                    Alibaba
+                                </option>
+
+                            </select>
+
+
+                        </div>
+
+
+
+                        <!-- CATEGORY -->
+
+                        <div
+                            class="filter-group"
+                        >
+
+                            <label
+                                for="categoryFilter"
+                            >
+                                Category
+                            </label>
+
+
+                            <select
+                                id="categoryFilter"
+                            >
+
+                                <option
+                                    value="all"
+                                >
+                                    All Categories
+                                </option>
+
+
+                                <option
+                                    value="electronics"
+                                >
+                                    Electronics
+                                </option>
+
+
+                                <option
+                                    value="fashion"
+                                >
+                                    Fashion
+                                </option>
+
+
+                                <option
+                                    value="home"
+                                >
+                                    Home & Kitchen
+                                </option>
+
+
+                                <option
+                                    value="beauty"
+                                >
+                                    Beauty
+                                </option>
+
+
+                                <option
+                                    value="accessories"
+                                >
+                                    Accessories
+                                </option>
+
+                            </select>
+
+
+                        </div>
+
+
+
+                        <!-- MIN PRICE -->
+
+                        <div
+                            class="filter-group"
+                        >
+
+                            <label
+                                for="minPriceFilter"
+                            >
+                                Minimum Price
+                            </label>
+
+
+                            <input
+                                type="number"
+                                id="minPriceFilter"
+                                placeholder="₹ 0"
+                                min="0"
+                            >
+
+
+                        </div>
+
+
+
+                        <!-- MAX PRICE -->
+
+                        <div
+                            class="filter-group"
+                        >
+
+                            <label
+                                for="maxPriceFilter"
+                            >
+                                Maximum Price
+                            </label>
+
+
+                            <input
+                                type="number"
+                                id="maxPriceFilter"
+                                placeholder="No limit"
+                                min="0"
+                            >
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- ====================================
+                     AI ANALYSIS STATUS
+                ===================================== -->
+
+                <section
+                    class="ai-research-status"
+                    id="aiResearchStatus"
+                >
+
+
+                    <div
+                        class="ai-research-left"
+                    >
+
+
+                        <div
+                            class="ai-research-icon"
+                        >
+
+                            🤖
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                AI RESEARCH ENGINE
+                            </span>
+
+
+                            <strong
+                                id="researchStatusText"
+                            >
+
+                                Ready to analyze products
+
+                            </strong>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div
+                        class="ai-research-right"
+                    >
+
+                        <span
+                            id="researchSourceCount"
+                        >
+                            0 sources
+                        </span>
+
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- ====================================
+                     RESULT HEADER
+                ===================================== -->
+
+                <section
+                    class="results-header"
+                >
+
 
                     <div>
 
-                        <span class="panel-label">
-                            PRODUCT DATABASE
+                        <span>
+                            RESEARCH RESULTS
                         </span>
 
 
                         <h2>
-                            Saved Products
+                            Product Opportunities
                         </h2>
+
 
                     </div>
 
-                </div>
+
+
+                    <div
+                        class="result-header-right"
+                    >
+
+
+                        <span
+                            id="productResultCount"
+                        >
+                            0 Products
+                        </span>
+
+
+                        <select
+                            id="sortProducts"
+                            class="sort-select"
+                        >
+
+                            <option
+                                value="score"
+                            >
+                                Sort: Opportunity Score
+                            </option>
+
+
+                            <option
+                                value="price-low"
+                            >
+                                Price: Low to High
+                            </option>
+
+
+                            <option
+                                value="price-high"
+                            >
+                                Price: High to Low
+                            </option>
+
+
+                            <option
+                                value="profit"
+                            >
+                                Estimated Profit
+                            </option>
+
+                        </select>
+
+
+                    </div>
+
+
+                </section>
 
 
 
-                <div
-                    class="product-empty"
+                <!-- ====================================
+                     PRODUCT RESULTS
+                ===================================== -->
+
+                <section
+                    class="product-results"
                     id="productResults"
                 >
 
-                    <div class="empty-icon">
-                        📦
+
+                    <!-- LOADING / EMPTY / PRODUCT CARDS
+                         WILL BE INSERTED BY JAVASCRIPT -->
+
+
+                    <div
+                        class="research-empty-state"
+                    >
+
+
+                        <div
+                            class="empty-state-icon"
+                        >
+                            🔎
+                        </div>
+
+
+                        <h3>
+                            Search for a Product
+                        </h3>
+
+
+                        <p>
+
+                            Enter a product name or select
+                            a quick research option to begin
+                            AI-assisted product research.
+
+                        </p>
+
+
                     </div>
 
 
-                    <h3>
-                        No products researched yet
-                    </h3>
+                </section>
+
+
+
+                <!-- ====================================
+                     PRODUCT ANALYSIS PANEL
+                ===================================== -->
+
+                <section
+                    class="product-analysis-panel"
+                    id="productAnalysisPanel"
+                >
+
+
+                    <div
+                        class="analysis-panel-header"
+                    >
+
+
+                        <div>
+
+                            <span>
+                                AI OPPORTUNITY ANALYSIS
+                            </span>
+
+
+                            <h2
+                                id="analysisProductName"
+                            >
+                                Select a product to analyze
+                            </h2>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            id="closeAnalysisBtn"
+                            class="close-analysis-btn"
+                        >
+
+                            ×
+
+                        </button>
+
+
+                    </div>
+
+
+
+                    <div
+                        class="analysis-grid"
+                    >
+
+
+                        <!-- OPPORTUNITY SCORE -->
+
+                        <div
+                            class="analysis-score-card"
+                        >
+
+
+                            <span>
+                                OPPORTUNITY SCORE
+                            </span>
+
+
+                            <strong
+                                id="analysisScore"
+                            >
+                                --
+                            </strong>
+
+
+                            <small
+                                id="analysisScoreLabel"
+                            >
+                                No product selected
+                            </small>
+
+
+                        </div>
+
+
+
+                        <!-- MARKET SIGNAL -->
+
+                        <div
+                            class="analysis-detail-card"
+                        >
+
+
+                            <span>
+                                📈
+                            </span>
+
+
+                            <div>
+
+                                <small>
+                                    MARKET SIGNAL
+                                </small>
+
+
+                                <strong
+                                    id="analysisMarketSignal"
+                                >
+                                    --
+                                </strong>
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        <!-- PRICE -->
+
+                        <div
+                            class="analysis-detail-card"
+                        >
+
+
+                            <span>
+                                💰
+                            </span>
+
+
+                            <div>
+
+                                <small>
+                                    PRICE RANGE
+                                </small>
+
+
+                                <strong
+                                    id="analysisPriceRange"
+                                >
+                                    --
+                                </strong>
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        <!-- PROFIT -->
+
+                        <div
+                            class="analysis-detail-card"
+                        >
+
+
+                            <span>
+                                💎
+                            </span>
+
+
+                            <div>
+
+                                <small>
+                                    ESTIMATED MARGIN
+                                </small>
+
+
+                                <strong
+                                    id="analysisMargin"
+                                >
+                                    --
+                                </strong>
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- AI NOTES -->
+
+                    <div
+                        class="analysis-ai-note"
+                    >
+
+
+                        <div
+                            class="analysis-note-icon"
+                        >
+
+                            🤖
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                AI RESEARCH NOTE
+                            </span>
+
+
+                            <p
+                                id="analysisAiNote"
+                            >
+
+                                Product analysis will appear here.
+
+                            </p>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- ANALYSIS ACTIONS -->
+
+                    <div
+                        class="analysis-actions"
+                    >
+
+
+                        <button
+                            type="button"
+                            class="secondary-analysis-btn"
+                            id="researchAgainBtn"
+                        >
+
+                            🔄 Research Again
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="primary-analysis-btn"
+                            id="saveProductBtn"
+                        >
+
+                            ⭐ Save Product
+
+                        </button>
+
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- ====================================
+                     RESEARCH DISCLAIMER
+                ===================================== -->
+
+                <section
+                    class="research-disclaimer"
+                >
+
+
+                    <span>
+                        ℹ️
+                    </span>
 
 
                     <p>
-                        Search for a category above to start
-                        building your product research database.
+
+                        Product research results are market
+                        signals and estimates. Verify supplier
+                        information, pricing, marketplace rules,
+                        fees and legal requirements before
+                        listing or promoting any product.
+
                     </p>
 
 
-                </div>
+                </section>
 
 
-            </section>
+            </div>
+
+
+            <!-- ========================================
+                 FOOTER
+            ========================================= -->
+
+            <footer
+                class="dashboard-footer"
+            >
+
+                © 2026 Smart Money AI Commerce
+
+                <span>
+                    •
+                </span>
+
+                Product Intelligence System
+
+
+            </footer>
 
 
         </main>
@@ -248,10 +1342,69 @@
 
 
 
+    <!-- ================================================
+         TOAST
+    ================================================= -->
+
+    <div
+        class="app-toast"
+        id="appToast"
+        role="status"
+        aria-live="polite"
+    >
+
+
+        <span
+            id="appToastIcon"
+        >
+            ✓
+        </span>
+
+
+        <p
+            id="appToastMessage"
+        >
+            Ready
+        </p>
+
+
+    </div>
+
+
+
+    <!-- ================================================
+         CONFIG
+    ================================================= -->
+
     <script
         src="js/config.js"
     ></script>
 
+
+
+    <!-- ================================================
+         API MANAGER
+    ================================================= -->
+
+    <script
+        src="js/api.js"
+    ></script>
+
+
+
+    <!-- ================================================
+         PRODUCT RESEARCH
+    ================================================= -->
+
+    <script
+        src="js/product-research.js"
+    ></script>
+
+
+
+    <!-- ================================================
+         PAGE CONTROLLER
+    ================================================= -->
 
     <script
         src="js/products.js"
