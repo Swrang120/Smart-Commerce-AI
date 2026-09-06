@@ -15,11 +15,23 @@
         content="#07111f"
     >
 
-    <title>AI Store Manager</title>
+    <meta
+        name="description"
+        content="Smart Money AI Commerce - Global AI powered e-commerce intelligence and automation dashboard."
+    >
+
+    <title>
+        Smart Money AI Commerce - Dashboard
+    </title>
+
+
+    <!-- =================================================
+         MAIN DASHBOARD CSS
+    ================================================= -->
 
     <link
         rel="stylesheet"
-        href="css/style.css"
+        href="css/dashboard.css"
     >
 
 </head>
@@ -28,102 +40,678 @@
 <body>
 
 
-    <main class="login-page">
+    <!-- =================================================
+         APPLICATION SHELL
+    ================================================= -->
+
+    <div
+        class="dashboard-app"
+        id="dashboardApp"
+    >
 
 
-        <section class="login-card">
+        <!-- =================================================
+             MOBILE SIDEBAR OVERLAY
+        ================================================= -->
 
-
-            <div class="brand">
-
-                <div class="brand-logo">
-                    AI
-                </div>
-
-
-                <div>
-
-                    <h1>
-                        AI Store Manager
-                    </h1>
-
-                    <p>
-                        Automated E-Commerce Intelligence
-                    </p>
-
-                </div>
-
-            </div>
+        <div
+            class="sidebar-overlay"
+            id="sidebarOverlay"
+        ></div>
 
 
 
-            <div class="login-content">
+        <!-- =================================================
+             SIDEBAR
+        ================================================= -->
+
+        <aside
+            class="sidebar"
+            id="sidebar"
+        >
 
 
-                <span class="badge">
-                    🤖 AI POWERED BUSINESS
-                </span>
+            <!-- =============================================
+                 SIDEBAR BRAND
+            ============================================== -->
 
-
-                <h2>
-                    Manage Your Stores
-                    <span>Intelligently</span>
-                </h2>
-
-
-                <p>
-                    Connect your authorized marketplace accounts,
-                    analyze products, track sales and monitor
-                    business performance from one dashboard.
-                </p>
+            <div
+                class="sidebar-brand"
+            >
 
 
                 <a
-                    href="dashboard.html"
-                    class="primary-btn"
+                    href="index.html"
+                    class="brand-link"
+                    aria-label="Smart Money AI Commerce Home"
                 >
 
-                    Open Dashboard
 
-                    <span>
-                        →
-                    </span>
+                    <div
+                        class="brand-logo"
+                    >
+
+                        AI
+
+                    </div>
+
+
+                    <div
+                        class="brand-content"
+                    >
+
+
+                        <strong>
+                            AI Store Manager
+                        </strong>
+
+
+                        <span>
+                            SMART MONEY COMMERCE
+                        </span>
+
+
+                    </div>
+
 
                 </a>
 
 
-                <div class="login-features">
+
+                <button
+                    type="button"
+                    class="sidebar-close"
+                    id="sidebarClose"
+                    aria-label="Close menu"
+                >
+
+                    ×
+
+                </button>
 
 
-                    <div>
+            </div>
 
-                        <span>📊</span>
 
-                        <p>
-                            Sales Analytics
-                        </p>
+
+            <!-- =============================================
+                 SIDEBAR NAVIGATION
+            ============================================== -->
+
+            <nav
+                class="sidebar-nav"
+                id="sidebarNav"
+            >
+
+
+                <!-- COMMAND CENTER -->
+
+                <p
+                    class="nav-label"
+                >
+
+                    COMMAND CENTER
+
+                </p>
+
+
+
+                <button
+                    type="button"
+                    class="nav-item active"
+                    data-section="dashboard"
+                >
+
+                    <span
+                        class="nav-icon"
+                    >
+                        📊
+                    </span>
+
+
+                    <span
+                        class="nav-text"
+                    >
+                        Dashboard
+                    </span>
+
+
+                    <span
+                        class="nav-indicator"
+                    ></span>
+
+
+                </button>
+
+
+
+                <button
+                    type="button"
+                    class="nav-item"
+                    data-section="ai-hunter"
+                >
+
+                    <span
+                        class="nav-icon"
+                    >
+                        🤖
+                    </span>
+
+
+                    <span
+                        class="nav-text"
+                    >
+                        AI Product Hunter
+                    </span>
+
+
+                </button>
+
+
+
+                <button
+                    type="button"
+                    class="nav-item"
+                    data-section="product-research"
+                >
+
+                    <span
+                        class="nav-icon"
+                    >
+                        🔍
+                    </span>
+
+
+                    <span
+                        class="nav-text"
+                    >
+                        Product Research
+                    </span>
+
+
+                </button>
+
+
+
+                <button
+                    type="button"
+                    class="nav-item"
+                    data-section="global-markets"
+                >
+
+                    <span
+                        class="nav-icon"
+                    >
+                        🌍
+                    </span>
+
+
+                    <span
+                        class="nav-text"
+                    >
+                        Global Markets
+                    </span>
+
+
+                </button>
+
+
+
+                <button
+                    type="button"
+                    class="nav-item"
+                    data-section="stores"
+                >
+
+                    <span
+                        class="nav-icon"
+                    >
+                        🏪
+                    </span>
+
+
+                    <span
+                        class="nav-text"
+                    >
+                        My Stores
+                    </span>
+
+
+                </button>
+
+
+
+                <button
+                    type="button"
+                    class="nav-item"
+                    data-section="automation"
+                >
+
+                    <span
+                        class="nav-icon"
+                    >
+                        ⚙️
+                    </span>
+
+
+                    <span
+                        class="nav-text"
+                    >
+                        Automation
+                    </span>
+
+
+                </button>
+
+
+
+                <!-- ANALYTICS -->
+
+                <p
+                    class="nav-label nav-label-space"
+                >
+
+                    ANALYTICS
+
+                </p>
+
+
+
+                <button
+                    type="button"
+                    class="nav-item"
+                    data-section="earnings"
+                >
+
+                    <span
+                        class="nav-icon"
+                    >
+                        💰
+                    </span>
+
+
+                    <span
+                        class="nav-text"
+                    >
+                        Earnings
+                    </span>
+
+
+                </button>
+
+
+
+                <button
+                    type="button"
+                    class="nav-item"
+                    data-section="products"
+                >
+
+                    <span
+                        class="nav-icon"
+                    >
+                        📦
+                    </span>
+
+
+                    <span
+                        class="nav-text"
+                    >
+                        Products
+                    </span>
+
+
+                </button>
+
+
+
+                <button
+                    type="button"
+                    class="nav-item"
+                    data-section="price-history"
+                >
+
+                    <span
+                        class="nav-icon"
+                    >
+                        📉
+                    </span>
+
+
+                    <span
+                        class="nav-text"
+                    >
+                        Price History
+                    </span>
+
+
+                </button>
+
+
+
+                <button
+                    type="button"
+                    class="nav-item"
+                    data-section="activity"
+                >
+
+                    <span
+                        class="nav-icon"
+                    >
+                        ⚡
+                    </span>
+
+
+                    <span
+                        class="nav-text"
+                    >
+                        AI Activity
+                    </span>
+
+
+                </button>
+
+
+
+                <!-- CONTENT -->
+
+                <p
+                    class="nav-label nav-label-space"
+                >
+
+                    CONTENT
+
+                </p>
+
+
+
+                <button
+                    type="button"
+                    class="nav-item"
+                    data-section="content-studio"
+                >
+
+                    <span
+                        class="nav-icon"
+                    >
+                        🎥
+                    </span>
+
+
+                    <span
+                        class="nav-text"
+                    >
+                        Content Studio
+                    </span>
+
+
+                </button>
+
+
+
+                <button
+                    type="button"
+                    class="nav-item"
+                    data-section="content-scheduler"
+                >
+
+                    <span
+                        class="nav-icon"
+                    >
+                        📅
+                    </span>
+
+
+                    <span
+                        class="nav-text"
+                    >
+                        Content Scheduler
+                    </span>
+
+
+                </button>
+
+
+
+                <button
+                    type="button"
+                    class="nav-item"
+                    data-section="social-accounts"
+                >
+
+                    <span
+                        class="nav-icon"
+                    >
+                        📱
+                    </span>
+
+
+                    <span
+                        class="nav-text"
+                    >
+                        Social Accounts
+                    </span>
+
+
+                </button>
+
+
+
+                <!-- SECURITY -->
+
+                <p
+                    class="nav-label nav-label-space"
+                >
+
+                    SECURITY
+
+                </p>
+
+
+
+                <button
+                    type="button"
+                    class="nav-item"
+                    data-section="approval-center"
+                >
+
+                    <span
+                        class="nav-icon"
+                    >
+                        🛡️
+                    </span>
+
+
+                    <span
+                        class="nav-text"
+                    >
+                        Approval Center
+                    </span>
+
+
+                    <span
+                        class="nav-count"
+                        id="approvalCount"
+                    >
+                        0
+                    </span>
+
+
+                </button>
+
+
+
+                <button
+                    type="button"
+                    class="nav-item"
+                    data-section="settings"
+                >
+
+                    <span
+                        class="nav-icon"
+                    >
+                        🔐
+                    </span>
+
+
+                    <span
+                        class="nav-text"
+                    >
+                        Connected Accounts
+                    </span>
+
+
+                </button>
+
+
+            </nav>
+
+
+
+            <!-- =============================================
+                 SIDEBAR BOTTOM
+            ============================================== -->
+
+            <div
+                class="sidebar-bottom"
+            >
+
+
+                <!-- AI STATUS -->
+
+                <div
+                    class="ai-status-card"
+                >
+
+
+                    <div
+                        class="ai-status-top"
+                    >
+
+
+                        <span
+                            class="ai-pulse"
+                        ></span>
+
+
+                        <span>
+                            AI SYSTEM
+                        </span>
+
 
                     </div>
 
 
-                    <div>
+                    <strong
+                        id="sidebarAIStatus"
+                    >
 
-                        <span>🔍</span>
+                        Ready for Analysis
 
-                        <p>
-                            Product Research
-                        </p>
-
-                    </div>
+                    </strong>
 
 
-                    <div>
+                    <small>
 
-                        <span>💰</span>
+                        Connect authorized data sources
+                        to begin AI commerce intelligence.
 
-                        <p>
-                            Profit Tracking
-                        </p>
+                    </small>
+
+
+                </div>
+
+
+
+                <!-- SETTINGS -->
+
+                <button
+                    type="button"
+                    class="sidebar-settings"
+                    id="settingsBtn"
+                >
+
+
+                    <span>
+                        ⚙️
+                    </span>
+
+
+                    <span>
+                        Settings
+                    </span>
+
+
+                </button>
+
+
+            </div>
+
+
+        </aside>
+
+
+
+        <!-- =================================================
+             MAIN CONTENT
+        ================================================= -->
+
+        <main
+            class="main-content"
+        >
+
+
+            <!-- =============================================
+                 TOP HEADER
+            ============================================== -->
+
+            <header
+                class="dashboard-header"
+            >
+
+
+                <!-- HEADER LEFT -->
+
+                <div
+                    class="header-left"
+                >
+
+
+                    <button
+                        type="button"
+                        class="menu-toggle"
+                        id="menuToggle"
+                        aria-label="Open menu"
+                    >
+
+                        ☰
+
+                    </button>
+
+
+
+                    <div
+                        class="page-heading"
+                    >
+
+
+                        <span
+                            id="pageEyebrow"
+                        >
+
+                            AI COMMAND CENTER
+
+                        </span>
+
+
+                        <h1
+                            id="pageTitle"
+                        >
+
+                            Dashboard
+
+                        </h1>
+
 
                     </div>
 
@@ -131,25 +719,2947 @@
                 </div>
 
 
+
+                <!-- HEADER RIGHT -->
+
+                <div
+                    class="header-right"
+                >
+
+
+                    <!-- GLOBAL SEARCH -->
+
+                    <div
+                        class="global-search"
+                    >
+
+
+                        <span
+                            class="search-icon"
+                        >
+                            🔍
+                        </span>
+
+
+                        <input
+                            type="search"
+                            id="globalSearch"
+                            placeholder="Search products, stores..."
+                            autocomplete="off"
+                        >
+
+
+                    </div>
+
+
+
+                    <!-- AI STATUS -->
+
+                    <button
+                        type="button"
+                        class="header-ai-status"
+                        id="aiStatusBtn"
+                    >
+
+
+                        <span
+                            class="status-dot"
+                        ></span>
+
+
+                        <span
+                            id="aiStatus"
+                        >
+                            AI Ready
+                        </span>
+
+
+                    </button>
+
+
+
+                    <!-- PROFILE -->
+
+                    <div
+                        class="profile-wrapper"
+                    >
+
+
+                        <button
+                            type="button"
+                            class="profile-button"
+                            id="profileButton"
+                        >
+
+
+                            <span
+                                class="profile-avatar"
+                                id="profileAvatar"
+                            >
+
+                                SM
+
+                            </span>
+
+
+                            <span
+                                class="profile-name"
+                                id="profileName"
+                            >
+
+                                Owner
+
+                            </span>
+
+
+                            <span
+                                class="profile-arrow"
+                            >
+
+                                ▾
+
+                            </span>
+
+
+                        </button>
+
+
+
+                        <!-- PROFILE DROPDOWN -->
+
+                        <div
+                            class="profile-dropdown"
+                            id="profileDropdown"
+                        >
+
+
+                            <div
+                                class="profile-dropdown-user"
+                            >
+
+
+                                <div
+                                    class="profile-dropdown-avatar"
+                                    id="profileDropdownAvatar"
+                                >
+
+                                    SM
+
+                                </div>
+
+
+                                <div>
+
+
+                                    <strong
+                                        id="profileDropdownName"
+                                    >
+
+                                        Owner
+
+                                    </strong>
+
+
+                                    <small
+                                        id="profileDropdownEmail"
+                                    >
+
+                                        Smart Money Account
+
+                                    </small>
+
+
+                                </div>
+
+
+                            </div>
+
+
+                            <div
+                                class="profile-dropdown-divider"
+                            ></div>
+
+
+
+                            <button
+                                type="button"
+                                id="profileSettingsBtn"
+                            >
+
+                                ⚙️ Account Settings
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                id="securityCenterBtn"
+                            >
+
+                                🛡️ Security Center
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                id="logoutBtn"
+                            >
+
+                                ↪ Logout
+
+                            </button>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </header>
+
+
+
+            <!-- =================================================
+                 PAGE CONTENT
+            ================================================= -->
+
+            <div
+                class="dashboard-content"
+            >
+
+
+
+                <!-- =================================================
+                     DASHBOARD PAGE
+                ================================================= -->
+
+                <section
+                    class="page-section active"
+                    id="section-dashboard"
+                    data-page="dashboard"
+                >
+
+
+                    <!-- =========================================
+                         WELCOME BANNER
+                    ========================================== -->
+
+                    <section
+                        class="welcome-banner"
+                    >
+
+
+                        <div
+                            class="welcome-content"
+                        >
+
+
+                            <span
+                                class="welcome-badge"
+                            >
+
+                                🤖 AI COMMERCE INTELLIGENCE
+
+                            </span>
+
+
+                            <h2>
+
+                                Your AI-powered
+                                <span>
+                                    global business command center.
+                                </span>
+
+                            </h2>
+
+
+                            <p>
+
+                                Research products, discover global
+                                opportunities, manage authorized stores,
+                                track earnings and organize content
+                                workflows from one secure workspace.
+
+                            </p>
+
+
+                            <div
+                                class="welcome-actions"
+                            >
+
+
+                                <button
+                                    type="button"
+                                    class="primary-action"
+                                    id="startResearchBtn"
+                                >
+
+
+                                    <span>
+                                        🔍
+                                    </span>
+
+                                    Start Product Research
+
+
+                                </button>
+
+
+
+                                <button
+                                    type="button"
+                                    class="secondary-action"
+                                    id="viewAutomationBtn"
+                                >
+
+
+                                    <span>
+                                        ⚙️
+                                    </span>
+
+                                    View Automation
+
+
+                                </button>
+
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        <!-- AI VISUAL -->
+
+                        <div
+                            class="welcome-ai-visual"
+                        >
+
+
+                            <div
+                                class="ai-orbit orbit-one"
+                            ></div>
+
+
+                            <div
+                                class="ai-orbit orbit-two"
+                            ></div>
+
+
+                            <div
+                                class="ai-orbit orbit-three"
+                            ></div>
+
+
+                            <div
+                                class="ai-core"
+                            >
+
+                                🤖
+
+                            </div>
+
+
+
+                            <div
+                                class="ai-floating-card card-one"
+                            >
+
+
+                                <span>
+                                    📈
+                                </span>
+
+
+                                <strong>
+                                    Market
+                                </strong>
+
+
+                                <small>
+                                    Analysis
+                                </small>
+
+
+                            </div>
+
+
+
+                            <div
+                                class="ai-floating-card card-two"
+                            >
+
+
+                                <span>
+                                    💰
+                                </span>
+
+
+                                <strong>
+                                    Profit
+                                </strong>
+
+
+                                <small>
+                                    Intelligence
+                                </small>
+
+
+                            </div>
+
+
+
+                            <div
+                                class="ai-floating-card card-three"
+                            >
+
+
+                                <span>
+                                    🌍
+                                </span>
+
+
+                                <strong>
+                                    Global
+                                </strong>
+
+
+                                <small>
+                                    Markets
+                                </small>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    </section>
+
+
+
+                    <!-- =========================================
+                         STATISTICS
+                    ========================================== -->
+
+                    <section
+                        class="stats-grid"
+                    >
+
+
+                        <!-- TODAY EARNINGS -->
+
+                        <article
+                            class="stat-card"
+                        >
+
+
+                            <div
+                                class="stat-card-top"
+                            >
+
+
+                                <div
+                                    class="stat-icon revenue"
+                                >
+
+                                    💰
+
+                                </div>
+
+
+                                <span
+                                    class="stat-change positive"
+                                >
+
+                                    ↗ Live
+
+                                </span>
+
+
+                            </div>
+
+
+                            <p>
+                                Today Earnings
+                            </p>
+
+
+                            <h3
+                                id="todayEarnings"
+                            >
+
+                                ₹0.00
+
+                            </h3>
+
+
+                            <small>
+
+                                Awaiting connected sales data
+
+                            </small>
+
+
+                        </article>
+
+
+
+                        <!-- LIFETIME REVENUE -->
+
+                        <article
+                            class="stat-card"
+                        >
+
+
+                            <div
+                                class="stat-card-top"
+                            >
+
+
+                                <div
+                                    class="stat-icon total"
+                                >
+
+                                    📊
+
+                                </div>
+
+
+                                <span
+                                    class="stat-change neutral"
+                                >
+
+                                    All Time
+
+                                </span>
+
+
+                            </div>
+
+
+                            <p>
+                                Lifetime Revenue
+                            </p>
+
+
+                            <h3
+                                id="lifetimeRevenue"
+                            >
+
+                                ₹0.00
+
+                            </h3>
+
+
+                            <small>
+
+                                Connected sales data will appear here
+
+                            </small>
+
+
+                        </article>
+
+
+
+                        <!-- PROFIT -->
+
+                        <article
+                            class="stat-card"
+                        >
+
+
+                            <div
+                                class="stat-card-top"
+                            >
+
+
+                                <div
+                                    class="stat-icon profit"
+                                >
+
+                                    📈
+
+                                </div>
+
+
+                                <span
+                                    class="stat-change neutral"
+                                >
+
+                                    Net
+
+                                </span>
+
+
+                            </div>
+
+
+                            <p>
+                                Estimated Profit
+                            </p>
+
+
+                            <h3
+                                id="estimatedProfit"
+                            >
+
+                                ₹0.00
+
+                            </h3>
+
+
+                            <small>
+
+                                Calculated from available product data
+
+                            </small>
+
+
+                        </article>
+
+
+
+                        <!-- CONNECTED STORES -->
+
+                        <article
+                            class="stat-card"
+                        >
+
+
+                            <div
+                                class="stat-card-top"
+                            >
+
+
+                                <div
+                                    class="stat-icon stores"
+                                >
+
+                                    🏪
+
+                                </div>
+
+
+                                <span
+                                    class="stat-change neutral"
+                                >
+
+                                    Accounts
+
+                                </span>
+
+
+                            </div>
+
+
+                            <p>
+                                Connected Stores
+                            </p>
+
+
+                            <h3
+                                id="connectedStores"
+                            >
+
+                                0
+
+                            </h3>
+
+
+                            <small>
+
+                                Add authorized integrations to connect
+
+                            </small>
+
+
+                        </article>
+
+
+                    </section>
+
+
+
+                    <!-- =========================================
+                         MAIN GRID
+                    ========================================== -->
+
+                    <section
+                        class="dashboard-grid"
+                    >
+
+
+                        <!-- =====================================
+                             TRENDING PRODUCTS
+                        ====================================== -->
+
+                        <section
+                            class="dashboard-card trending-card"
+                        >
+
+
+                            <div
+                                class="card-header"
+                            >
+
+
+                                <div>
+
+
+                                    <span
+                                        class="card-eyebrow"
+                                    >
+
+                                        MARKET INTELLIGENCE
+
+                                    </span>
+
+
+                                    <h3>
+                                        Trending Product Opportunities
+                                    </h3>
+
+
+                                    <p>
+
+                                        AI-ranked products based on
+                                        available market research.
+
+                                    </p>
+
+
+                                </div>
+
+
+                                <button
+                                    type="button"
+                                    class="card-action"
+                                    id="viewAllProductsBtn"
+                                >
+
+                                    View All
+
+                                </button>
+
+
+                            </div>
+
+
+
+                            <div
+                                class="product-list"
+                                id="trendingProductList"
+                            >
+
+
+                                <div
+                                    class="empty-state compact"
+                                >
+
+
+                                    <div
+                                        class="empty-state-icon"
+                                    >
+
+                                        🔍
+
+                                    </div>
+
+
+                                    <h3>
+                                        No research data yet
+                                    </h3>
+
+
+                                    <p>
+
+                                        Start product research to see
+                                        AI-ranked opportunities.
+
+                                    </p>
+
+
+                                </div>
+
+
+                            </div>
+
+
+                        </section>
+
+
+
+                        <!-- =====================================
+                             AI ACTIVITY
+                        ====================================== -->
+
+                        <section
+                            class="dashboard-card activity-card"
+                        >
+
+
+                            <div
+                                class="card-header"
+                            >
+
+
+                                <div>
+
+
+                                    <span
+                                        class="card-eyebrow"
+                                    >
+
+                                        SYSTEM ACTIVITY
+
+                                    </span>
+
+
+                                    <h3>
+                                        AI Activity
+                                    </h3>
+
+
+                                    <p>
+
+                                        Latest actions and intelligence
+                                        events from your workspace.
+
+                                    </p>
+
+
+                                </div>
+
+
+                                <button
+                                    type="button"
+                                    class="card-action"
+                                    id="viewActivityBtn"
+                                >
+
+                                    View All
+
+                                </button>
+
+
+                            </div>
+
+
+
+                            <div
+                                class="activity-list"
+                                id="activityList"
+                            >
+
+
+                                <div
+                                    class="empty-activity"
+                                >
+
+                                    No recent AI activity
+
+                                </div>
+
+
+                            </div>
+
+
+                        </section>
+
+
+
+                        <!-- =====================================
+                             CONNECTED STORES
+                        ====================================== -->
+
+                        <section
+                            class="dashboard-card stores-overview-card"
+                        >
+
+
+                            <div
+                                class="card-header"
+                            >
+
+
+                                <div>
+
+
+                                    <span
+                                        class="card-eyebrow"
+                                    >
+
+                                        STORE NETWORK
+
+                                    </span>
+
+
+                                    <h3>
+                                        Connected Stores
+                                    </h3>
+
+
+                                    <p>
+
+                                        Manage your authorized marketplace
+                                        and store connections.
+
+                                    </p>
+
+
+                                </div>
+
+
+                                <button
+                                    type="button"
+                                    class="card-action"
+                                    id="connectStoreBtn"
+                                >
+
+                                    + Connect
+
+                                </button>
+
+
+                            </div>
+
+
+
+                            <div
+                                class="store-list"
+                                id="storeList"
+                            >
+
+
+                                <div
+                                    class="empty-state compact"
+                                >
+
+
+                                    <div
+                                        class="empty-state-icon"
+                                    >
+
+                                        🏪
+
+                                    </div>
+
+
+                                    <h3>
+                                        No stores connected
+                                    </h3>
+
+
+                                    <p>
+
+                                        Connect an authorized store
+                                        integration to begin.
+
+                                    </p>
+
+
+                                </div>
+
+
+                            </div>
+
+
+                        </section>
+
+
+
+                        <!-- =====================================
+                             APPROVAL CENTER
+                        ====================================== -->
+
+                        <section
+                            class="dashboard-card approval-overview-card"
+                        >
+
+
+                            <div
+                                class="card-header"
+                            >
+
+
+                                <div>
+
+
+                                    <span
+                                        class="card-eyebrow"
+                                    >
+
+                                        OWNER CONTROL
+
+                                    </span>
+
+
+                                    <h3>
+                                        Approval Center
+                                    </h3>
+
+
+                                    <p>
+
+                                        Review sensitive actions before
+                                        they are executed.
+
+                                    </p>
+
+
+                                </div>
+
+
+                                <button
+                                    type="button"
+                                    class="card-action"
+                                    id="viewApprovalsBtn"
+                                >
+
+                                    Open Center
+
+                                </button>
+
+
+                            </div>
+
+
+
+                            <div
+                                class="approval-summary"
+                            >
+
+
+                                <div
+                                    class="approval-summary-item"
+                                >
+
+
+                                    <span>
+                                        Pending
+                                    </span>
+
+
+                                    <strong
+                                        id="pendingApprovals"
+                                    >
+                                        0
+                                    </strong>
+
+
+                                </div>
+
+
+                                <div
+                                    class="approval-summary-item"
+                                >
+
+
+                                    <span>
+                                        Approved
+                                    </span>
+
+
+                                    <strong
+                                        id="approvedActions"
+                                    >
+                                        0
+                                    </strong>
+
+
+                                </div>
+
+
+                                <div
+                                    class="approval-summary-item"
+                                >
+
+
+                                    <span>
+                                        Protected
+                                    </span>
+
+
+                                    <strong>
+                                        ✓
+                                    </strong>
+
+
+                                </div>
+
+
+                            </div>
+
+
+                        </section>
+
+
+                    </section>
+
+
+
+                    <!-- =========================================
+                         PRODUCT TABLE
+                    ========================================== -->
+
+                    <section
+                        class="dashboard-card product-table-card"
+                    >
+
+
+                        <div
+                            class="card-header product-table-header"
+                        >
+
+
+                            <div>
+
+
+                                <span
+                                    class="card-eyebrow"
+                                >
+
+                                    PRODUCT INTELLIGENCE
+
+                                </span>
+
+
+                                <h3>
+                                    Product Research Results
+                                </h3>
+
+
+                                <p>
+
+                                    Products analyzed and saved
+                                    in your AI workspace.
+
+                                </p>
+
+
+                            </div>
+
+
+
+                            <div
+                                class="table-actions"
+                            >
+
+
+                                <button
+                                    type="button"
+                                    class="secondary-action small"
+                                    id="refreshDashboardBtn"
+                                >
+
+                                    🔄 Refresh
+
+                                </button>
+
+
+                                <button
+                                    type="button"
+                                    class="primary-action small"
+                                    id="analyzeProductBtn"
+                                >
+
+                                    🤖 Analyze Product
+
+                                </button>
+
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        <!-- PRODUCT SEARCH -->
+
+                        <div
+                            class="product-search-row"
+                        >
+
+
+                            <div
+                                class="product-search-box"
+                            >
+
+
+                                <span>
+                                    🔍
+                                </span>
+
+
+                                <input
+                                    type="search"
+                                    id="productSearchInput"
+                                    placeholder="Enter a product name for research..."
+                                    autocomplete="off"
+                                >
+
+
+                            </div>
+
+
+
+                            <button
+                                type="button"
+                                class="search-product-btn"
+                                id="productSearchBtn"
+                            >
+
+                                Search
+
+                            </button>
+
+
+                        </div>
+
+
+
+                        <!-- TABLE -->
+
+                        <div
+                            class="table-wrapper"
+                        >
+
+
+                            <table
+                                class="product-table"
+                            >
+
+
+                                <thead>
+
+
+                                    <tr>
+
+
+                                        <th>
+                                            Product
+                                        </th>
+
+
+                                        <th>
+                                            Market
+                                        </th>
+
+
+                                        <th>
+                                            Price
+                                        </th>
+
+
+                                        <th>
+                                            Profit
+                                        </th>
+
+
+                                        <th>
+                                            AI Score
+                                        </th>
+
+
+                                        <th>
+                                            Trend
+                                        </th>
+
+
+                                        <th>
+                                            Status
+                                        </th>
+
+
+                                        <th>
+                                            Action
+                                        </th>
+
+
+                                    </tr>
+
+
+                                </thead>
+
+
+
+                                <tbody
+                                    id="productTableBody"
+                                >
+
+
+                                    <tr>
+
+
+                                        <td
+                                            colspan="8"
+                                            class="empty-table"
+                                        >
+
+
+                                            <div>
+
+
+                                                <span>
+                                                    🔍
+                                                </span>
+
+
+                                                <strong>
+                                                    No products found
+                                                </strong>
+
+
+                                                <p>
+
+                                                    Search for a product
+                                                    to start AI analysis.
+
+                                                </p>
+
+
+                                            </div>
+
+
+                                        </td>
+
+
+                                    </tr>
+
+
+                                </tbody>
+
+
+                            </table>
+
+
+                        </div>
+
+
+                    </section>
+
+
+                </section>
+
+
+
+                <!-- =================================================
+                     AI PRODUCT HUNTER PAGE
+                ================================================= -->
+
+                <section
+                    class="page-section"
+                    id="section-ai-hunter"
+                    data-page="ai-hunter"
+                >
+
+
+                    <div
+                        class="section-page-header"
+                    >
+
+
+                        <span>
+                            🤖 AI INTELLIGENCE ENGINE
+                        </span>
+
+
+                        <h2>
+                            AI Product Hunter
+                        </h2>
+
+
+                        <p>
+
+                            Discover product opportunities using
+                            market, price, demand and profitability
+                            research signals.
+
+                        </p>
+
+
+                    </div>
+
+
+
+                    <div
+                        class="hunter-search-card"
+                    >
+
+
+                        <div
+                            class="hunter-search-grid"
+                        >
+
+
+                            <div
+                                class="form-group"
+                            >
+
+
+                                <label>
+                                    Product or Category
+                                </label>
+
+
+                                <input
+                                    type="text"
+                                    id="hunterProductInput"
+                                    placeholder="Example: Wireless earbuds"
+                                >
+
+
+                            </div>
+
+
+
+                            <div
+                                class="form-group"
+                            >
+
+
+                                <label>
+                                    Target Market
+                                </label>
+
+
+                                <select
+                                    id="hunterCountrySelect"
+                                >
+
+                                    <option value="global">
+                                        🌍 Global
+                                    </option>
+
+                                    <option value="india">
+                                        🇮🇳 India
+                                    </option>
+
+                                    <option value="usa">
+                                        🇺🇸 United States
+                                    </option>
+
+                                    <option value="uk">
+                                        🇬🇧 United Kingdom
+                                    </option>
+
+                                    <option value="canada">
+                                        🇨🇦 Canada
+                                    </option>
+
+                                    <option value="australia">
+                                        🇦🇺 Australia
+                                    </option>
+
+                                    <option value="uae">
+                                        🇦🇪 United Arab Emirates
+                                    </option>
+
+                                    <option value="europe">
+                                        🇪🇺 Europe
+                                    </option>
+
+                                </select>
+
+
+                            </div>
+
+
+
+                            <button
+                                type="button"
+                                class="primary-action hunter-analyze-btn"
+                                id="hunterAnalyzeBtn"
+                            >
+
+                                🤖 Start AI Analysis
+
+                            </button>
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div
+                        class="empty-state large"
+                        id="hunterResultState"
+                    >
+
+
+                        <div
+                            class="empty-state-icon"
+                        >
+
+                            🤖
+
+                        </div>
+
+
+                        <h3>
+                            Ready to find opportunities
+                        </h3>
+
+
+                        <p>
+
+                            Enter a product or category and select
+                            your target market.
+
+                        </p>
+
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- =================================================
+                     PRODUCT RESEARCH PAGE
+                ================================================= -->
+
+                <section
+                    class="page-section"
+                    id="section-product-research"
+                    data-page="product-research"
+                >
+
+
+                    <div
+                        class="section-page-header"
+                    >
+
+                        <span>
+                            🔍 MARKET RESEARCH
+                        </span>
+
+                        <h2>
+                            Product Research
+                        </h2>
+
+                        <p>
+                            Analyze saved products and organize
+                            research opportunities.
+                        </p>
+
+                    </div>
+
+
+
+                    <div
+                        class="dashboard-card"
+                    >
+
+
+                        <div
+                            class="card-header"
+                        >
+
+                            <div>
+
+                                <h3>
+                                    Research Workspace
+                                </h3>
+
+                                <p>
+                                    Product research data will appear here.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            id="researchProductList"
+                            class="research-product-list"
+                        ></div>
+
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- =================================================
+                     GLOBAL MARKETS PAGE
+                ================================================= -->
+
+                <section
+                    class="page-section"
+                    id="section-global-markets"
+                    data-page="global-markets"
+                >
+
+
+                    <div
+                        class="section-page-header"
+                    >
+
+                        <span>
+                            🌍 GLOBAL COMMERCE
+                        </span>
+
+                        <h2>
+                            Global Markets
+                        </h2>
+
+                        <p>
+                            Organize research opportunities by
+                            supported countries and markets.
+                        </p>
+
+                    </div>
+
+
+
+                    <div
+                        class="market-grid"
+                        id="globalMarketGrid"
+                    >
+
+
+                        <article class="market-card">
+                            <span>🌍</span>
+                            <strong>Global</strong>
+                            <small>Cross-market research</small>
+                        </article>
+
+                        <article class="market-card">
+                            <span>🇮🇳</span>
+                            <strong>India</strong>
+                            <small>Local market research</small>
+                        </article>
+
+                        <article class="market-card">
+                            <span>🇺🇸</span>
+                            <strong>United States</strong>
+                            <small>North America research</small>
+                        </article>
+
+                        <article class="market-card">
+                            <span>🇬🇧</span>
+                            <strong>United Kingdom</strong>
+                            <small>UK market research</small>
+                        </article>
+
+                        <article class="market-card">
+                            <span>🇨🇦</span>
+                            <strong>Canada</strong>
+                            <small>Canadian opportunities</small>
+                        </article>
+
+                        <article class="market-card">
+                            <span>🇦🇺</span>
+                            <strong>Australia</strong>
+                            <small>Australian market</small>
+                        </article>
+
+                        <article class="market-card">
+                            <span>🇦🇪</span>
+                            <strong>UAE</strong>
+                            <small>Middle East market</small>
+                        </article>
+
+                        <article class="market-card">
+                            <span>🇪🇺</span>
+                            <strong>Europe</strong>
+                            <small>Regional research</small>
+                        </article>
+
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- =================================================
+                     MY STORES PAGE
+                ================================================= -->
+
+                <section
+                    class="page-section"
+                    id="section-stores"
+                    data-page="stores"
+                >
+
+
+                    <div
+                        class="section-page-header"
+                    >
+
+                        <span>
+                            🏪 STORE NETWORK
+                        </span>
+
+                        <h2>
+                            My Stores
+                        </h2>
+
+                        <p>
+                            Manage authorized store and marketplace
+                            connections from one workspace.
+                        </p>
+
+                    </div>
+
+
+
+                    <div
+                        class="section-actions"
+                    >
+
+                        <button
+                            type="button"
+                            class="primary-action"
+                            id="addStoreBtn"
+                        >
+
+                            + Connect Store
+
+                        </button>
+
+                    </div>
+
+
+
+                    <div
+                        class="store-management-grid"
+                        id="storeManagementGrid"
+                    >
+
+
+                        <div
+                            class="empty-state large"
+                        >
+
+                            <div class="empty-state-icon">
+                                🏪
+                            </div>
+
+                            <h3>
+                                No connected stores
+                            </h3>
+
+                            <p>
+                                Add an authorized integration when
+                                you are ready.
+                            </p>
+
+                        </div>
+
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- =================================================
+                     AUTOMATION PAGE
+                ================================================= -->
+
+                <section
+                    class="page-section"
+                    id="section-automation"
+                    data-page="automation"
+                >
+
+
+                    <div
+                        class="section-page-header"
+                    >
+
+                        <span>
+                            ⚙️ WORKFLOW AUTOMATION
+                        </span>
+
+                        <h2>
+                            Automation Center
+                        </h2>
+
+                        <p>
+                            Configure AI-assisted workflows and
+                            review actions requiring approval.
+                        </p>
+
+                    </div>
+
+
+
+                    <div
+                        class="automation-grid"
+                    >
+
+
+                        <article class="automation-card">
+
+                            <div class="automation-card-icon">
+                                🔍
+                            </div>
+
+                            <h3>
+                                Product Monitoring
+                            </h3>
+
+                            <p>
+                                Track saved product opportunities.
+                            </p>
+
+                            <label class="switch-row">
+
+                                <span>
+                                    Enable monitoring
+                                </span>
+
+                                <input
+                                    type="checkbox"
+                                    id="productMonitoringToggle"
+                                >
+
+                            </label>
+
+                        </article>
+
+
+
+                        <article class="automation-card">
+
+                            <div class="automation-card-icon">
+                                💰
+                            </div>
+
+                            <h3>
+                                Earnings Tracking
+                            </h3>
+
+                            <p>
+                                Organize revenue and commission data
+                                from connected sources.
+                            </p>
+
+                            <label class="switch-row">
+
+                                <span>
+                                    Enable tracking
+                                </span>
+
+                                <input
+                                    type="checkbox"
+                                    id="earningsTrackingToggle"
+                                >
+
+                            </label>
+
+                        </article>
+
+
+
+                        <article class="automation-card">
+
+                            <div class="automation-card-icon">
+                                🎥
+                            </div>
+
+                            <h3>
+                                Content Workflow
+                            </h3>
+
+                            <p>
+                                Prepare content ideas and scheduling
+                                tasks for review.
+                            </p>
+
+                            <label class="switch-row">
+
+                                <span>
+                                    Enable workflow
+                                </span>
+
+                                <input
+                                    type="checkbox"
+                                    id="contentWorkflowToggle"
+                                >
+
+                            </label>
+
+                        </article>
+
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- =================================================
+                     EARNINGS PAGE
+                ================================================= -->
+
+                <section
+                    class="page-section"
+                    id="section-earnings"
+                    data-page="earnings"
+                >
+
+
+                    <div
+                        class="section-page-header"
+                    >
+
+                        <span>
+                            💰 FINANCIAL OVERVIEW
+                        </span>
+
+                        <h2>
+                            Earnings
+                        </h2>
+
+                        <p>
+                            Track available sales, revenue and
+                            commission information.
+                        </p>
+
+                    </div>
+
+
+
+                    <div
+                        class="earnings-grid"
+                    >
+
+
+                        <article class="stat-card">
+
+                            <p>
+                                Today
+                            </p>
+
+                            <h3 id="earningsPageToday">
+                                ₹0.00
+                            </h3>
+
+                            <small>
+                                Current recorded earnings
+                            </small>
+
+                        </article>
+
+
+
+                        <article class="stat-card">
+
+                            <p>
+                                Lifetime Revenue
+                            </p>
+
+                            <h3 id="earningsPageLifetime">
+                                ₹0.00
+                            </h3>
+
+                            <small>
+                                All available records
+                            </small>
+
+                        </article>
+
+
+
+                        <article class="stat-card">
+
+                            <p>
+                                Estimated Profit
+                            </p>
+
+                            <h3 id="earningsPageProfit">
+                                ₹0.00
+                            </h3>
+
+                            <small>
+                                Product cost estimates applied
+                            </small>
+
+                        </article>
+
+
+
+                        <article class="stat-card">
+
+                            <p>
+                                Pending
+                            </p>
+
+                            <h3 id="pendingCommission">
+                                ₹0.00
+                            </h3>
+
+                            <small>
+                                Awaiting source confirmation
+                            </small>
+
+                        </article>
+
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- =================================================
+                     PRODUCTS PAGE
+                ================================================= -->
+
+                <section
+                    class="page-section"
+                    id="section-products"
+                    data-page="products"
+                >
+
+
+                    <div
+                        class="section-page-header"
+                    >
+
+                        <span>
+                            📦 PRODUCT MANAGER
+                        </span>
+
+                        <h2>
+                            Products
+                        </h2>
+
+                        <p>
+                            Manage saved product research and
+                            AI opportunity scores.
+                        </p>
+
+                    </div>
+
+
+
+                    <div
+                        class="dashboard-card"
+                    >
+
+                        <div
+                            id="allProductsList"
+                        ></div>
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- =================================================
+                     PRICE HISTORY PAGE
+                ================================================= -->
+
+                <section
+                    class="page-section"
+                    id="section-price-history"
+                    data-page="price-history"
+                >
+
+
+                    <div
+                        class="section-page-header"
+                    >
+
+                        <span>
+                            📉 PRICE INTELLIGENCE
+                        </span>
+
+                        <h2>
+                            Price History
+                        </h2>
+
+                        <p>
+                            Organize historical pricing information
+                            when data is available.
+                        </p>
+
+                    </div>
+
+
+
+                    <div
+                        class="dashboard-card"
+                    >
+
+                        <div
+                            class="empty-state large"
+                        >
+
+                            <div class="empty-state-icon">
+                                📉
+                            </div>
+
+                            <h3>
+                                No price history yet
+                            </h3>
+
+                            <p>
+                                Historical pricing will appear when
+                                product data is available.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- =================================================
+                     ACTIVITY PAGE
+                ================================================= -->
+
+                <section
+                    class="page-section"
+                    id="section-activity"
+                    data-page="activity"
+                >
+
+
+                    <div
+                        class="section-page-header"
+                    >
+
+                        <span>
+                            ⚡ SYSTEM LOG
+                        </span>
+
+                        <h2>
+                            AI Activity
+                        </h2>
+
+                        <p>
+                            Review recent AI-assisted actions and
+                            workspace events.
+                        </p>
+
+                    </div>
+
+
+
+                    <div
+                        class="dashboard-card"
+                    >
+
+                        <div
+                            class="activity-list full"
+                            id="fullActivityList"
+                        ></div>
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- =================================================
+                     CONTENT STUDIO PAGE
+                ================================================= -->
+
+                <section
+                    class="page-section"
+                    id="section-content-studio"
+                    data-page="content-studio"
+                >
+
+
+                    <div
+                        class="section-page-header"
+                    >
+
+                        <span>
+                            🎥 AI CONTENT ENGINE
+                        </span>
+
+                        <h2>
+                            Content Studio
+                        </h2>
+
+                        <p>
+                            Create product marketing ideas,
+                            captions and campaign concepts.
+                        </p>
+
+                    </div>
+
+
+
+                    <div
+                        class="content-studio-grid"
+                    >
+
+
+                        <div
+                            class="dashboard-card"
+                        >
+
+
+                            <h3>
+                                Create Product Content
+                            </h3>
+
+
+                            <div
+                                class="form-group"
+                            >
+
+                                <label>
+                                    Product Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="contentProductInput"
+                                    placeholder="Enter product name"
+                                >
+
+                            </div>
+
+
+                            <div
+                                class="form-group"
+                            >
+
+                                <label>
+                                    Content Type
+                                </label>
+
+                                <select
+                                    id="contentTypeSelect"
+                                >
+
+                                    <option value="short">
+                                        Short Video
+                                    </option>
+
+                                    <option value="video">
+                                        Product Video
+                                    </option>
+
+                                    <option value="post">
+                                        Social Post
+                                    </option>
+
+                                    <option value="campaign">
+                                        Marketing Campaign
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <button
+                                type="button"
+                                class="primary-action"
+                                id="generateContentBtn"
+                            >
+
+                                ✨ Generate Content Idea
+
+                            </button>
+
+
+                        </div>
+
+
+
+                        <div
+                            class="dashboard-card"
+                        >
+
+
+                            <h3>
+                                AI Content Preview
+                            </h3>
+
+
+                            <div
+                                class="content-preview"
+                                id="contentPreview"
+                            >
+
+                                <div class="empty-state compact">
+
+                                    <div class="empty-state-icon">
+                                        🎬
+                                    </div>
+
+                                    <h3>
+                                        No content generated
+                                    </h3>
+
+                                    <p>
+                                        Generate a product content idea
+                                        to preview it here.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- =================================================
+                     CONTENT SCHEDULER PAGE
+                ================================================= -->
+
+                <section
+                    class="page-section"
+                    id="section-content-scheduler"
+                    data-page="content-scheduler"
+                >
+
+
+                    <div
+                        class="section-page-header"
+                    >
+
+                        <span>
+                            📅 CONTENT PLANNING
+                        </span>
+
+                        <h2>
+                            Content Scheduler
+                        </h2>
+
+                        <p>
+                            Organize planned content and approved
+                            publishing workflows.
+                        </p>
+
+                    </div>
+
+
+
+                    <div
+                        class="dashboard-card"
+                    >
+
+
+                        <div
+                            class="scheduler-summary"
+                        >
+
+
+                            <div>
+
+                                <span>
+                                    Planned Content
+                                </span>
+
+                                <strong
+                                    id="plannedContentCount"
+                                >
+                                    0
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Approved
+                                </span>
+
+                                <strong
+                                    id="approvedContentCount"
+                                >
+                                    0
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Connected Channels
+                                </span>
+
+                                <strong
+                                    id="connectedSocialCount"
+                                >
+                                    0
+                                </strong>
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        <div
+                            id="scheduledContentList"
+                            class="scheduled-content-list"
+                        ></div>
+
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- =================================================
+                     SOCIAL ACCOUNTS PAGE
+                ================================================= -->
+
+                <section
+                    class="page-section"
+                    id="section-social-accounts"
+                    data-page="social-accounts"
+                >
+
+
+                    <div
+                        class="section-page-header"
+                    >
+
+                        <span>
+                            📱 SOCIAL CONNECTIONS
+                        </span>
+
+                        <h2>
+                            Social Accounts
+                        </h2>
+
+                        <p>
+                            Manage authorized social account
+                            connections and content workflows.
+                        </p>
+
+                    </div>
+
+
+
+                    <div
+                        class="social-account-grid"
+                    >
+
+
+                        <article
+                            class="social-account-card"
+                        >
+
+                            <div class="social-icon">
+                                ▶️
+                            </div>
+
+                            <h3>
+                                YouTube
+                            </h3>
+
+                            <p>
+                                Connect an authorized account for
+                                supported content workflows.
+                            </p>
+
+                            <button
+                                type="button"
+                                class="secondary-action"
+                                id="connectYoutubeBtn"
+                            >
+                                Connect
+                            </button>
+
+                        </article>
+
+
+
+                        <article
+                            class="social-account-card"
+                        >
+
+                            <div class="social-icon">
+                                👍
+                            </div>
+
+                            <h3>
+                                Facebook
+                            </h3>
+
+                            <p>
+                                Manage approved content workflows
+                                through authorized connections.
+                            </p>
+
+                            <button
+                                type="button"
+                                class="secondary-action"
+                                id="connectFacebookBtn"
+                            >
+                                Connect
+                            </button>
+
+                        </article>
+
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- =================================================
+                     APPROVAL CENTER PAGE
+                ================================================= -->
+
+                <section
+                    class="page-section"
+                    id="section-approval-center"
+                    data-page="approval-center"
+                >
+
+
+                    <div
+                        class="section-page-header"
+                    >
+
+                        <span>
+                            🛡️ OWNER APPROVAL SYSTEM
+                        </span>
+
+                        <h2>
+                            Approval Center
+                        </h2>
+
+                        <p>
+                            Review important actions before they
+                            are confirmed in your workflow.
+                        </p>
+
+                    </div>
+
+
+
+                    <div
+                        class="approval-list"
+                        id="approvalList"
+                    >
+
+
+                        <div
+                            class="empty-state large"
+                        >
+
+                            <div class="empty-state-icon">
+                                🛡️
+                            </div>
+
+                            <h3>
+                                No pending approvals
+                            </h3>
+
+                            <p>
+                                Actions requiring owner review
+                                will appear here.
+                            </p>
+
+                        </div>
+
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- =================================================
+                     CONNECTED ACCOUNTS / SETTINGS
+                ================================================= -->
+
+                <section
+                    class="page-section"
+                    id="section-settings"
+                    data-page="settings"
+                >
+
+
+                    <div
+                        class="section-page-header"
+                    >
+
+                        <span>
+                            🔐 ACCOUNT MANAGEMENT
+                        </span>
+
+                        <h2>
+                            Connected Accounts
+                        </h2>
+
+                        <p>
+                            Review authorized connections and
+                            workspace preferences.
+                        </p>
+
+                    </div>
+
+
+
+                    <div
+                        class="settings-grid"
+                    >
+
+
+                        <section
+                            class="dashboard-card"
+                        >
+
+                            <h3>
+                                Account Profile
+                            </h3>
+
+
+                            <div class="form-group">
+
+                                <label>
+                                    Display Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="settingsDisplayName"
+                                    placeholder="Owner"
+                                >
+
+                            </div>
+
+
+                            <button
+                                type="button"
+                                class="primary-action"
+                                id="saveProfileBtn"
+                            >
+
+                                Save Profile
+
+                            </button>
+
+
+                        </section>
+
+
+
+                        <section
+                            class="dashboard-card"
+                        >
+
+                            <h3>
+                                Workspace Security
+                            </h3>
+
+
+                            <p class="settings-description">
+
+                                Sensitive actions should remain
+                                under owner review and use
+                                authorized platform connections.
+
+                            </p>
+
+
+                            <button
+                                type="button"
+                                class="secondary-action"
+                                id="securitySettingsBtn"
+                            >
+
+                                🛡️ Open Security Settings
+
+                            </button>
+
+
+                        </section>
+
+
+                    </div>
+
+
+                </section>
+
+
             </div>
 
 
-            <div class="login-footer">
+        </main>
+
+
+    </div>
+
+
+
+    <!-- =================================================
+         PRODUCT DETAILS MODAL
+    ================================================= -->
+
+    <div
+        class="modal-backdrop"
+        id="productModal"
+        aria-hidden="true"
+    >
+
+
+        <div
+            class="modal-card product-modal-card"
+        >
+
+
+            <button
+                type="button"
+                class="modal-close"
+                id="closeProductModalBtn"
+                aria-label="Close"
+            >
+
+                ×
+
+            </button>
+
+
+            <div
+                id="productModalContent"
+            ></div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =================================================
+         STORE CONNECTION MODAL
+    ================================================= -->
+
+    <div
+        class="modal-backdrop"
+        id="storeModal"
+        aria-hidden="true"
+    >
+
+
+        <div
+            class="modal-card"
+        >
+
+
+            <button
+                type="button"
+                class="modal-close"
+                id="closeStoreModalBtn"
+                aria-label="Close"
+            >
+
+                ×
+
+            </button>
+
+
+            <div
+                class="modal-header"
+            >
 
                 <span>
-                    🔒
+                    🏪 STORE CONNECTION
                 </span>
 
-                Connect only accounts and APIs you own
-                or are authorized to manage.
+                <h3>
+                    Add Store Connection
+                </h3>
+
+                <p>
+                    Add an authorized marketplace or store
+                    integration to your workspace.
+                </p>
 
             </div>
 
 
-        </section>
+            <div
+                class="form-group"
+            >
+
+                <label>
+                    Store Name
+                </label>
+
+                <input
+                    type="text"
+                    id="storeNameInput"
+                    placeholder="Example: My Online Store"
+                >
+
+            </div>
 
 
-    </main>
+            <div
+                class="form-group"
+            >
+
+                <label>
+                    Platform
+                </label>
+
+                <select
+                    id="storePlatformInput"
+                >
+
+                    <option value="">
+                        Select Platform
+                    </option>
+
+                    <option value="Amazon">
+                        Amazon
+                    </option>
+
+                    <option value="Flipkart">
+                        Flipkart
+                    </option>
+
+                    <option value="Meesho">
+                        Meesho
+                    </option>
+
+                    <option value="Shopify">
+                        Shopify
+                    </option>
+
+                    <option value="WooCommerce">
+                        WooCommerce
+                    </option>
+
+                    <option value="Other">
+                        Other
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div
+                class="form-group"
+            >
+
+                <label>
+                    Country / Market
+                </label>
+
+                <input
+                    type="text"
+                    id="storeCountryInput"
+                    placeholder="Example: India"
+                >
+
+            </div>
+
+
+            <button
+                type="button"
+                class="primary-action full-button"
+                id="saveStoreBtn"
+            >
+
+                Add to Workspace
+
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =================================================
+         TOAST NOTIFICATION
+    ================================================= -->
+
+    <div
+        class="toast"
+        id="toast"
+        role="status"
+        aria-live="polite"
+    >
+
+
+        <span
+            class="toast-icon"
+            id="toastIcon"
+        >
+            ✓
+        </span>
+
+
+        <span
+            class="toast-message"
+            id="toastMessage"
+        >
+            Action completed successfully.
+        </span>
+
+
+    </div>
+
+
+
+    <!-- =================================================
+         DASHBOARD JAVASCRIPT
+    ================================================= -->
+
+    <script
+        src="js/dashboard.js"
+    ></script>
 
 
 </body>
