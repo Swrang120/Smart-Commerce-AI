@@ -1,1132 +1,1693 @@
 /* =========================================================
    SMART MONEY AI COMMERCE
-   COMPLETE DASHBOARD JAVASCRIPT
-   FIXED FOR CURRENT dashboard.html
+   COMPLETE FUNCTIONAL DASHBOARD JAVASCRIPT
    ========================================================= */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
+document.addEventListener("DOMContentLoaded", () => {
+
+    /* =====================================================
+       APP CONFIG
+    ===================================================== */
+
+    const appConfig = window.SM_CONFIG || {};
+
+    const STORAGE_KEYS = {
+        products: "sm_ai_products",
+        activities: "sm_ai_activities",
+        stores: "sm_ai_stores",
+        earnings: "sm_ai_earnings",
+        priceHistory: "sm_ai_price_history",
+        profile: "sm_ai_profile",
+        automation: "sm_ai_automation"
+    };
 
 
-        /* =================================================
-           APP CONFIG
-        ================================================= */
+    /* =====================================================
+       DASHBOARD STATE
+    ===================================================== */
 
-        const appConfig =
-            window.SM_CONFIG ||
-            {};
+    const dashboardState = {
+
+        products: [],
+
+        activities: [],
+
+        stores: [],
+
+        priceHistory: [],
+
+        automation: {
+
+            enabled: false,
+
+            contentReminder: false,
+
+            dailyResearch: false
+
+        },
+
+        earnings: {
+
+            today: 0,
+
+            lifetime: 0,
+
+            profit: 0
+
+        },
+
+        profile: {
+
+            name: "Owner",
+
+            initials: "SM"
+
+        },
+
+        currentSection: "dashboard",
+
+        selectedProduct: null,
+
+        isAnalyzing: false
+
+    };
 
 
-        const appName =
-            appConfig.appName ||
-            "Smart Money AI Commerce";
+    /* =====================================================
+       DOM ELEMENTS
+    ===================================================== */
+
+    const sidebar =
+        document.getElementById("sidebar");
+
+    const sidebarOverlay =
+        document.getElementById("sidebarOverlay");
+
+    const menuToggle =
+        document.getElementById("menuToggle");
+
+    const sidebarClose =
+        document.getElementById("sidebarClose");
+
+    const pageTitle =
+        document.getElementById("pageTitle");
+
+    const dashboardContent =
+        document.querySelector(".dashboard-content");
+
+    const navItems =
+        document.querySelectorAll(".nav-item");
+
+    const globalSearch =
+        document.getElementById("globalSearch");
+
+    const productSearchInput =
+        document.getElementById("productSearchInput");
+
+    const analyzeProductBtn =
+        document.getElementById("analyzeProductBtn");
+
+    const productList =
+        document.getElementById("productList");
+
+    const activityList =
+        document.getElementById("activityList");
+
+    const todayEarnings =
+        document.getElementById("todayEarnings");
+
+    const lifetimeRevenue =
+        document.getElementById("lifetimeRevenue");
+
+    const estimatedProfit =
+        document.getElementById("estimatedProfit");
+
+    const connectedStores =
+        document.getElementById("connectedStores");
+
+    const storeSummaryCount =
+        document.getElementById("storeSummaryCount");
+
+    const connectStoreBtn =
+        document.getElementById("connectStoreBtn");
+
+    const startResearchBtn =
+        document.getElementById("startResearchBtn");
+
+    const viewAutomationBtn =
+        document.getElementById("viewAutomationBtn");
+
+    const viewProductsBtn =
+        document.getElementById("viewProductsBtn");
+
+    const refreshDashboardBtn =
+        document.getElementById("refreshDashboardBtn");
+
+    const settingsBtn =
+        document.getElementById("settingsBtn");
+
+    const profileButton =
+        document.getElementById("profileButton");
+
+    const profileName =
+        document.getElementById("profileName");
+
+    const profileAvatar =
+        document.getElementById("profileAvatar");
+
+    const aiStatusBtn =
+        document.getElementById("aiStatusBtn");
+
+    const aiStatus =
+        document.getElementById("aiStatus");
+
+    const sidebarAiStatus =
+        document.getElementById("sidebarAiStatus");
 
 
-        console.log(
-            appName +
-            " Dashboard Started"
+    /* =====================================================
+       SAFE HTML ESCAPE
+    ===================================================== */
+
+    function escapeHTML(value) {
+
+        const element =
+            document.createElement("div");
+
+        element.textContent =
+            String(value ?? "");
+
+        return element.innerHTML;
+
+    }
+
+
+    /* =====================================================
+       FORMATTERS
+    ===================================================== */
+
+    function formatCurrency(amount) {
+
+        return new Intl.NumberFormat(
+            "en-IN",
+            {
+                style: "currency",
+                currency: "INR",
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }
+        ).format(
+            Number(amount || 0)
+        );
+
+    }
+
+
+    function formatNumber(value) {
+
+        return new Intl.NumberFormat(
+            "en-IN"
+        ).format(
+            Number(value || 0)
+        );
+
+    }
+
+
+    function formatDate(value) {
+
+        try {
+
+            return new Intl.DateTimeFormat(
+                "en-IN",
+                {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                    hour: "numeric",
+                    minute: "2-digit"
+                }
+            ).format(
+                new Date(value)
+            );
+
+        }
+        catch (error) {
+
+            return "Recently";
+
+        }
+
+    }
+
+
+    function createId(prefix = "sm") {
+
+        return (
+            prefix +
+            "_" +
+            Date.now() +
+            "_" +
+            Math.random()
+                .toString(36)
+                .slice(2, 8)
+        );
+
+    }
+
+
+    /* =====================================================
+       LOAD DATA
+    ===================================================== */
+
+    function loadDashboardData() {
+
+        try {
+
+            const products =
+                JSON.parse(
+                    localStorage.getItem(
+                        STORAGE_KEYS.products
+                    ) || "[]"
+                );
+
+
+            const activities =
+                JSON.parse(
+                    localStorage.getItem(
+                        STORAGE_KEYS.activities
+                    ) || "[]"
+                );
+
+
+            const stores =
+                JSON.parse(
+                    localStorage.getItem(
+                        STORAGE_KEYS.stores
+                    ) || "[]"
+                );
+
+
+            const earnings =
+                JSON.parse(
+                    localStorage.getItem(
+                        STORAGE_KEYS.earnings
+                    ) || "{}"
+                );
+
+
+            const priceHistory =
+                JSON.parse(
+                    localStorage.getItem(
+                        STORAGE_KEYS.priceHistory
+                    ) || "[]"
+                );
+
+
+            const profile =
+                JSON.parse(
+                    localStorage.getItem(
+                        STORAGE_KEYS.profile
+                    ) || "{}"
+                );
+
+
+            const automation =
+                JSON.parse(
+                    localStorage.getItem(
+                        STORAGE_KEYS.automation
+                    ) || "{}"
+                );
+
+
+            if (Array.isArray(products)) {
+
+                dashboardState.products =
+                    products;
+
+            }
+
+
+            if (Array.isArray(activities)) {
+
+                dashboardState.activities =
+                    activities;
+
+            }
+
+
+            if (Array.isArray(stores)) {
+
+                dashboardState.stores =
+                    stores;
+
+            }
+
+
+            if (Array.isArray(priceHistory)) {
+
+                dashboardState.priceHistory =
+                    priceHistory;
+
+            }
+
+
+            if (
+                earnings &&
+                typeof earnings === "object"
+            ) {
+
+                dashboardState.earnings = {
+
+                    today:
+                        Number(
+                            earnings.today
+                        ) || 0,
+
+                    lifetime:
+                        Number(
+                            earnings.lifetime
+                        ) || 0,
+
+                    profit:
+                        Number(
+                            earnings.profit
+                        ) || 0
+
+                };
+
+            }
+
+
+            if (
+                profile &&
+                typeof profile === "object"
+            ) {
+
+                dashboardState.profile = {
+
+                    ...dashboardState.profile,
+
+                    ...profile
+
+                };
+
+            }
+
+
+            if (
+                automation &&
+                typeof automation === "object"
+            ) {
+
+                dashboardState.automation = {
+
+                    ...dashboardState.automation,
+
+                    ...automation
+
+                };
+
+            }
+
+        }
+        catch (error) {
+
+            console.error(
+                "Dashboard load error:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       SAVE DATA
+    ===================================================== */
+
+    function saveDashboardData() {
+
+        try {
+
+            localStorage.setItem(
+                STORAGE_KEYS.products,
+                JSON.stringify(
+                    dashboardState.products
+                )
+            );
+
+
+            localStorage.setItem(
+                STORAGE_KEYS.activities,
+                JSON.stringify(
+                    dashboardState.activities
+                )
+            );
+
+
+            localStorage.setItem(
+                STORAGE_KEYS.stores,
+                JSON.stringify(
+                    dashboardState.stores
+                )
+            );
+
+
+            localStorage.setItem(
+                STORAGE_KEYS.earnings,
+                JSON.stringify(
+                    dashboardState.earnings
+                )
+            );
+
+
+            localStorage.setItem(
+                STORAGE_KEYS.priceHistory,
+                JSON.stringify(
+                    dashboardState.priceHistory
+                )
+            );
+
+
+            localStorage.setItem(
+                STORAGE_KEYS.profile,
+                JSON.stringify(
+                    dashboardState.profile
+                )
+            );
+
+
+            localStorage.setItem(
+                STORAGE_KEYS.automation,
+                JSON.stringify(
+                    dashboardState.automation
+                )
+            );
+
+        }
+        catch (error) {
+
+            console.error(
+                "Dashboard save error:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       ACTIVITY SYSTEM
+    ===================================================== */
+
+    function addActivity(
+        title,
+        description = "",
+        icon = "⚡"
+    ) {
+
+        dashboardState.activities.unshift({
+
+            id:
+                createId(
+                    "activity"
+                ),
+
+            title,
+
+            description,
+
+            icon,
+
+            createdAt:
+                new Date()
+                    .toISOString()
+
+        });
+
+
+        dashboardState.activities =
+            dashboardState.activities
+                .slice(0, 50);
+
+
+        saveDashboardData();
+
+
+        renderActivityList();
+
+    }
+
+
+    /* =====================================================
+       UPDATE PROFILE
+    ===================================================== */
+
+    function updateProfileUI() {
+
+        const name =
+            dashboardState.profile.name ||
+            "Owner";
+
+
+        const initials =
+            dashboardState.profile.initials ||
+            name
+                .split(" ")
+                .slice(0, 2)
+                .map(
+                    word =>
+                        word.charAt(0)
+                )
+                .join("")
+                .toUpperCase()
+                .slice(0, 2);
+
+
+        if (profileName) {
+
+            profileName.textContent =
+                name;
+
+        }
+
+
+        if (profileAvatar) {
+
+            profileAvatar.textContent =
+                initials;
+
+        }
+
+    }
+
+
+    /* =====================================================
+       UPDATE STATISTICS
+    ===================================================== */
+
+    function updateStatistics() {
+
+        if (todayEarnings) {
+
+            todayEarnings.textContent =
+                formatCurrency(
+                    dashboardState.earnings.today
+                );
+
+        }
+
+
+        if (lifetimeRevenue) {
+
+            lifetimeRevenue.textContent =
+                formatCurrency(
+                    dashboardState.earnings.lifetime
+                );
+
+        }
+
+
+        if (estimatedProfit) {
+
+            estimatedProfit.textContent =
+                formatCurrency(
+                    dashboardState.earnings.profit
+                );
+
+        }
+
+
+        if (connectedStores) {
+
+            connectedStores.textContent =
+                formatNumber(
+                    dashboardState.stores.length
+                );
+
+        }
+
+
+        if (storeSummaryCount) {
+
+            storeSummaryCount.textContent =
+                formatNumber(
+                    dashboardState.stores.length
+                );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       SIDEBAR
+    ===================================================== */
+
+    function openSidebar() {
+
+        if (!sidebar) return;
+
+        sidebar.classList.add(
+            "open"
         );
 
 
+        if (sidebarOverlay) {
 
-        /* =================================================
-           DASHBOARD STATE
-        ================================================= */
-
-        const dashboardState = {
-
-            products: [],
-
-            activities: [],
-
-            stores: [],
-
-            earnings: {
-
-                today: 0,
-
-                lifetime: 0,
-
-                profit: 0
-
-            },
-
-            currentSection:
-                "dashboard",
-
-            selectedProduct:
-                null,
-
-            isAnalyzing:
-                false
-
-        };
-
-
-
-        /* =================================================
-           DOM ELEMENTS
-        ================================================= */
-
-        const sidebar =
-            document.getElementById(
-                "sidebar"
+            sidebarOverlay.classList.add(
+                "show"
             );
 
+        }
 
-        const sidebarOverlay =
-            document.getElementById(
-                "sidebarOverlay"
+
+        document.body.classList.add(
+            "sidebar-is-open"
+        );
+
+    }
+
+
+    function closeSidebar() {
+
+        if (!sidebar) return;
+
+        sidebar.classList.remove(
+            "open"
+        );
+
+
+        if (sidebarOverlay) {
+
+            sidebarOverlay.classList.remove(
+                "show"
             );
 
-
-        const menuToggle =
-            document.getElementById(
-                "menuToggle"
-            );
+        }
 
 
-        const sidebarClose =
-            document.getElementById(
-                "sidebarClose"
-            );
+        document.body.classList.remove(
+            "sidebar-is-open"
+        );
+
+    }
 
 
-        const sidebarNav =
-            document.getElementById(
-                "sidebarNav"
-            );
+    function toggleSidebar() {
 
+        if (!sidebar) return;
 
-        const navItems =
-            document.querySelectorAll(
-                ".nav-item"
-            );
-
-
-        const pageTitle =
-            document.getElementById(
-                "pageTitle"
-            );
-
-
-        const globalSearch =
-            document.getElementById(
-                "globalSearch"
-            );
-
-
-        const profileButton =
-            document.getElementById(
-                "profileButton"
-            );
-
-
-        const aiStatusBtn =
-            document.getElementById(
-                "aiStatusBtn"
-            );
-
-
-        const settingsBtn =
-            document.getElementById(
-                "settingsBtn"
-            );
-
-
-        const startResearchBtn =
-            document.getElementById(
-                "startResearchBtn"
-            );
-
-
-        const viewAutomationBtn =
-            document.getElementById(
-                "viewAutomationBtn"
-            );
-
-
-        const todayEarnings =
-            document.getElementById(
-                "todayEarnings"
-            );
-
-
-        const lifetimeRevenue =
-            document.getElementById(
-                "lifetimeRevenue"
-            );
-
-
-        const estimatedProfit =
-            document.getElementById(
-                "estimatedProfit"
-            );
-
-
-        const connectedStores =
-            document.getElementById(
-                "connectedStores"
-            );
-
-
-        const dashboardContent =
-            document.querySelector(
-                ".dashboard-content"
-            );
-
-
-
-        /* =================================================
-           SAFE HTML ESCAPE
-        ================================================= */
-
-        function escapeHTML(
-            value
+        if (
+            sidebar.classList.contains(
+                "open"
+            )
         ) {
 
-            const element =
+            closeSidebar();
+
+        }
+        else {
+
+            openSidebar();
+
+        }
+
+    }
+
+
+    /* =====================================================
+       SECTION TITLES
+    ===================================================== */
+
+    const sectionTitles = {
+
+        dashboard:
+            "Dashboard",
+
+        "ai-hunter":
+            "AI Product Hunter",
+
+        "product-research":
+            "Product Research",
+
+        stores:
+            "My Stores",
+
+        automation:
+            "Automation",
+
+        earnings:
+            "Earnings",
+
+        products:
+            "Products",
+
+        "price-history":
+            "Price History",
+
+        activity:
+            "AI Activity"
+
+    };
+
+
+    /* =====================================================
+       STORE HOME CONTENT
+    ===================================================== */
+
+    function ensureDashboardHome() {
+
+        if (!dashboardContent) return null;
+
+        let home =
+            document.getElementById(
+                "dashboardHomeContent"
+            );
+
+
+        if (!home) {
+
+            home =
                 document.createElement(
                     "div"
                 );
 
 
-            element.textContent =
-                String(
-                    value ??
-                    ""
-                );
+            home.id =
+                "dashboardHomeContent";
 
 
-            return element.innerHTML;
-
-        }
-
-
-
-        /* =================================================
-           FORMAT CURRENCY
-        ================================================= */
-
-        function formatCurrency(
-            amount
-        ) {
-
-            return new Intl.NumberFormat(
-                "en-IN",
-                {
-
-                    style:
-                        "currency",
-
-                    currency:
-                        "INR",
-
-                    minimumFractionDigits:
-                        2,
-
-                    maximumFractionDigits:
-                        2
-
-                }
-            ).format(
-                Number(
-                    amount ||
-                    0
-                )
-            );
-
-        }
-
-
-
-        /* =================================================
-           FORMAT NUMBER
-        ================================================= */
-
-        function formatNumber(
-            value
-        ) {
-
-            return new Intl.NumberFormat(
-                "en-IN"
-            ).format(
-                Number(
-                    value ||
-                    0
-                )
-            );
-
-        }
-
-
-
-        /* =================================================
-           LOAD DATA
-        ================================================= */
-
-        function loadDashboardData() {
-
-            try {
-
-                const products =
-                    localStorage.getItem(
-                        "sm_ai_products"
-                    );
-
-
-                const activities =
-                    localStorage.getItem(
-                        "sm_ai_activities"
-                    );
-
-
-                const stores =
-                    localStorage.getItem(
-                        "sm_ai_stores"
-                    );
-
-
-                const earnings =
-                    localStorage.getItem(
-                        "sm_ai_earnings"
-                    );
-
-
-                if (
-                    products
-                ) {
-
-                    const parsedProducts =
-                        JSON.parse(
-                            products
-                        );
-
-
-                    if (
-                        Array.isArray(
-                            parsedProducts
-                        )
-                    ) {
-
-                        dashboardState.products =
-                            parsedProducts;
-
-                    }
-
-                }
-
-
-                if (
-                    activities
-                ) {
-
-                    const parsedActivities =
-                        JSON.parse(
-                            activities
-                        );
-
-
-                    if (
-                        Array.isArray(
-                            parsedActivities
-                        )
-                    ) {
-
-                        dashboardState.activities =
-                            parsedActivities;
-
-                    }
-
-                }
-
-
-                if (
-                    stores
-                ) {
-
-                    const parsedStores =
-                        JSON.parse(
-                            stores
-                        );
-
-
-                    if (
-                        Array.isArray(
-                            parsedStores
-                        )
-                    ) {
-
-                        dashboardState.stores =
-                            parsedStores;
-
-                    }
-
-                }
-
-
-                if (
-                    earnings
-                ) {
-
-                    const parsedEarnings =
-                        JSON.parse(
-                            earnings
-                        );
-
-
-                    if (
-                        parsedEarnings &&
-                        typeof parsedEarnings ===
-                        "object"
-                    ) {
-
-                        dashboardState.earnings = {
-
-                            today:
-                                Number(
-                                    parsedEarnings.today
-                                ) ||
-                                0,
-
-                            lifetime:
-                                Number(
-                                    parsedEarnings.lifetime
-                                ) ||
-                                0,
-
-                            profit:
-                                Number(
-                                    parsedEarnings.profit
-                                ) ||
-                                0
-
-                        };
-
-                    }
-
-                }
-
-            }
-            catch (
-                error
+            while (
+                dashboardContent.firstChild
             ) {
 
-                console.error(
-                    "Dashboard load error:",
-                    error
-                );
-
-            }
-
-        }
-
-
-
-        /* =================================================
-           SAVE DATA
-        ================================================= */
-
-        function saveDashboardData() {
-
-            try {
-
-                localStorage.setItem(
-                    "sm_ai_products",
-                    JSON.stringify(
-                        dashboardState.products
-                    )
-                );
-
-
-                localStorage.setItem(
-                    "sm_ai_activities",
-                    JSON.stringify(
-                        dashboardState.activities
-                    )
-                );
-
-
-                localStorage.setItem(
-                    "sm_ai_stores",
-                    JSON.stringify(
-                        dashboardState.stores
-                    )
-                );
-
-
-                localStorage.setItem(
-                    "sm_ai_earnings",
-                    JSON.stringify(
-                        dashboardState.earnings
-                    )
-                );
-
-            }
-            catch (
-                error
-            ) {
-
-                console.error(
-                    "Dashboard save error:",
-                    error
-                );
-
-            }
-
-        }
-
-
-
-        /* =================================================
-           CREATE INITIAL DATA
-        ================================================= */
-
-        function createInitialData() {
-
-            if (
-                !Array.isArray(
-                    dashboardState.products
-                )
-            ) {
-
-                dashboardState.products =
-                    [];
-
-            }
-
-
-            if (
-                !Array.isArray(
-                    dashboardState.activities
-                )
-            ) {
-
-                dashboardState.activities =
-                    [];
-
-            }
-
-
-            if (
-                !Array.isArray(
-                    dashboardState.stores
-                )
-            ) {
-
-                dashboardState.stores =
-                    [];
-
-            }
-
-
-            saveDashboardData();
-
-        }
-
-
-
-        /* =================================================
-           UPDATE STATISTICS
-        ================================================= */
-
-        function updateStatistics() {
-
-            if (
-                todayEarnings
-            ) {
-
-                todayEarnings.textContent =
-                    formatCurrency(
-                        dashboardState.earnings.today
-                    );
-
-            }
-
-
-            if (
-                lifetimeRevenue
-            ) {
-
-                lifetimeRevenue.textContent =
-                    formatCurrency(
-                        dashboardState.earnings.lifetime
-                    );
-
-            }
-
-
-            if (
-                estimatedProfit
-            ) {
-
-                estimatedProfit.textContent =
-                    formatCurrency(
-                        dashboardState.earnings.profit
-                    );
-
-            }
-
-
-            if (
-                connectedStores
-            ) {
-
-                connectedStores.textContent =
-                    formatNumber(
-                        dashboardState.stores.length
-                    );
-
-            }
-
-        }
-
-
-
-        /* =================================================
-           SIDEBAR OPEN
-        ================================================= */
-
-        function openSidebar() {
-
-            if (
-                !sidebar
-            ) {
-
-                return;
-
-            }
-
-
-            sidebar.classList.add(
-                "open"
-            );
-
-
-            if (
-                sidebarOverlay
-            ) {
-
-                sidebarOverlay.classList.add(
-                    "show"
-                );
-
-            }
-
-
-            document.body.classList.add(
-                "sidebar-is-open"
-            );
-
-        }
-
-
-
-        /* =================================================
-           SIDEBAR CLOSE
-        ================================================= */
-
-        function closeSidebar() {
-
-            if (
-                !sidebar
-            ) {
-
-                return;
-
-            }
-
-
-            sidebar.classList.remove(
-                "open"
-            );
-
-
-            if (
-                sidebarOverlay
-            ) {
-
-                sidebarOverlay.classList.remove(
-                    "show"
-                );
-
-            }
-
-
-            document.body.classList.remove(
-                "sidebar-is-open"
-            );
-
-        }
-
-
-
-        /* =================================================
-           SIDEBAR TOGGLE
-        ================================================= */
-
-        function toggleSidebar() {
-
-            if (
-                !sidebar
-            ) {
-
-                return;
-
-            }
-
-
-            if (
-                sidebar.classList.contains(
-                    "open"
-                )
-            ) {
-
-                closeSidebar();
-
-            }
-            else {
-
-                openSidebar();
-
-            }
-
-        }
-
-
-
-        /* =================================================
-           PAGE TITLES
-        ================================================= */
-
-        const sectionTitles = {
-
-            dashboard:
-                "Dashboard",
-
-            "ai-hunter":
-                "AI Product Hunter",
-
-            "product-research":
-                "Product Research",
-
-            stores:
-                "My Stores",
-
-            automation:
-                "Automation",
-
-            earnings:
-                "Earnings",
-
-            products:
-                "Products",
-
-            "price-history":
-                "Price History",
-
-            activity:
-                "AI Activity"
-
-        };
-
-
-
-        /* =================================================
-           SECTION NAVIGATION
-        ================================================= */
-
-        function navigateToSection(
-            section
-        ) {
-
-            if (
-                !section
-            ) {
-
-                return;
-
-            }
-
-
-            dashboardState.currentSection =
-                section;
-
-
-            navItems.forEach(
-                (
-                    item
-                ) => {
-
-                    item.classList.toggle(
-                        "active",
-                        item.dataset.section ===
-                        section
-                    );
-
-                }
-            );
-
-
-            const title =
-                sectionTitles[
-                    section
-                ] ||
-                "Dashboard";
-
-
-            if (
-                pageTitle
-            ) {
-
-                pageTitle.textContent =
-                    title;
-
-            }
-
-
-            if (
-                section ===
-                "dashboard"
-            ) {
-
-                showDashboardSection();
-
-            }
-            else {
-
-                showSectionPlaceholder(
-                    section,
-                    title
-                );
-
-            }
-
-
-            if (
-                window.innerWidth <=
-                900
-            ) {
-
-                closeSidebar();
-
-            }
-
-
-            window.scrollTo(
-                {
-
-                    top: 0,
-
-                    behavior:
-                        "smooth"
-
-                }
-            );
-
-        }
-
-
-
-        /* =================================================
-           RESTORE DASHBOARD
-        ================================================= */
-
-        function showDashboardSection() {
-
-            const originalDashboard =
-                document.getElementById(
-                    "dashboardHomeContent"
-                );
-
-
-            const dynamicSection =
-                document.getElementById(
-                    "dynamicSection"
-                );
-
-
-            if (
-                dynamicSection
-            ) {
-
-                dynamicSection.remove();
-
-            }
-
-
-            if (
-                originalDashboard
-            ) {
-
-                originalDashboard.style.display =
-                    "";
-
-            }
-
-
-            updateStatistics();
-
-        }
-
-
-
-        /* =================================================
-           SHOW PLACEHOLDER SECTION
-        ================================================= */
-
-        function showSectionPlaceholder(
-            section,
-            title
-        ) {
-
-            if (
-                !dashboardContent
-            ) {
-
-                return;
-
-            }
-
-
-            let homeContent =
-                document.getElementById(
-                    "dashboardHomeContent"
-                );
-
-
-            if (
-                !homeContent
-            ) {
-
-                homeContent =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                homeContent.id =
-                    "dashboardHomeContent";
-
-
-                while (
+                home.appendChild(
                     dashboardContent.firstChild
-                ) {
-
-                    homeContent.appendChild(
-                        dashboardContent.firstChild
-                    );
-
-                }
-
-
-                dashboardContent.appendChild(
-                    homeContent
                 );
 
             }
-
-
-            homeContent.style.display =
-                "none";
-
-
-            let dynamicSection =
-                document.getElementById(
-                    "dynamicSection"
-                );
-
-
-            if (
-                dynamicSection
-            ) {
-
-                dynamicSection.remove();
-
-            }
-
-
-            dynamicSection =
-                document.createElement(
-                    "section"
-                );
-
-
-            dynamicSection.id =
-                "dynamicSection";
-
-
-            dynamicSection.className =
-                "dashboard-card";
-
-
-            dynamicSection.innerHTML =
-                createSectionContent(
-                    section,
-                    title
-                );
 
 
             dashboardContent.appendChild(
-                dynamicSection
+                home
             );
 
+        }
 
-            bindDynamicButtons(
+
+        return home;
+
+    }
+
+
+    /* =====================================================
+       NAVIGATION
+    ===================================================== */
+
+    function navigateToSection(section) {
+
+        if (!section) return;
+
+
+        dashboardState.currentSection =
+            section;
+
+
+        navItems.forEach(
+            item => {
+
+                item.classList.toggle(
+                    "active",
+                    item.dataset.section === section
+                );
+
+            }
+        );
+
+
+        if (pageTitle) {
+
+            pageTitle.textContent =
+                sectionTitles[section] ||
+                "Dashboard";
+
+        }
+
+
+        if (
+            section ===
+            "dashboard"
+        ) {
+
+            showDashboardSection();
+
+        }
+        else {
+
+            showWorkspaceSection(
                 section
             );
 
         }
 
 
-
-        /* =================================================
-           CREATE SECTION CONTENT
-        ================================================= */
-
-        function createSectionContent(
-            section,
-            title
+        if (
+            window.innerWidth <=
+            900
         ) {
 
-            const contentMap = {
+            closeSidebar();
 
-                "ai-hunter":
-                    {
-                        icon: "🤖",
-                        text:
-                            "Discover products and organize product opportunities in your workspace.",
-                        action:
-                            "Start Research",
-                        actionId:
-                            "dynamicResearchBtn"
-                    },
+        }
 
 
-                "product-research":
-                    {
-                        icon: "🔍",
-                        text:
-                            "Research products, save ideas and track opportunities for later review.",
-                        action:
-                            "Open Product Research",
-                        actionId:
-                            "dynamicResearchBtn"
-                    },
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    }
 
 
-                stores:
-                    {
-                        icon: "🏪",
-                        text:
-                            "Manage your authorized store integrations and connected commerce accounts.",
-                        action:
-                            "Manage Stores",
-                        actionId:
-                            "dynamicStoresBtn"
-                    },
+    /* =====================================================
+       SHOW DASHBOARD
+    ===================================================== */
+
+    function showDashboardSection() {
+
+        const home =
+            ensureDashboardHome();
 
 
-                automation:
-                    {
-                        icon: "⚙️",
-                        text:
-                            "Configure automation workflows for approved services and connected accounts.",
-                        action:
-                            "View Automation",
-                        actionId:
-                            "dynamicAutomationBtn"
-                    },
+        const dynamic =
+            document.getElementById(
+                "dynamicSection"
+            );
 
 
-                earnings:
-                    {
-                        icon: "💰",
-                        text:
-                            "Review revenue, profit and connected store performance.",
-                        action:
-                            "Refresh Earnings",
-                        actionId:
-                            "dynamicEarningsBtn"
-                    },
+        if (dynamic) {
+
+            dynamic.remove();
+
+        }
 
 
-                products:
-                    {
-                        icon: "📦",
-                        text:
-                            "View and manage products saved in your Smart Money workspace.",
-                        action:
-                            "View Products",
-                        actionId:
-                            "dynamicProductsBtn"
-                    },
+        if (home) {
+
+            home.style.display =
+                "block";
+
+        }
 
 
-                "price-history":
-                    {
-                        icon: "📉",
-                        text:
-                            "Track price observations and organize product market history.",
-                        action:
-                            "View Price History",
-                        actionId:
-                            "dynamicPriceBtn"
-                    },
+        updateStatistics();
+
+        renderProductList();
+
+        renderActivityList();
+
+    }
 
 
-                activity:
-                    {
-                        icon: "⚡",
-                        text:
-                            "Review recent AI workspace activity and system events.",
-                        action:
-                            "Refresh Activity",
-                        actionId:
-                            "dynamicActivityBtn"
-                    }
+    /* =====================================================
+       SHOW WORKSPACE SECTION
+    ===================================================== */
 
-            };
+    function showWorkspaceSection(section) {
+
+        const home =
+            ensureDashboardHome();
 
 
-            const data =
-                contentMap[
-                    section
-                ] ||
-                {
+        if (home) {
 
-                    icon:
-                        "📊",
+            home.style.display =
+                "none";
 
-                    text:
-                        "This section is ready for configuration.",
+        }
 
-                    action:
-                        "Go Back",
 
-                    actionId:
-                        "dynamicBackBtn"
+        let dynamic =
+            document.getElementById(
+                "dynamicSection"
+            );
+
+
+        if (dynamic) {
+
+            dynamic.remove();
+
+        }
+
+
+        dynamic =
+            document.createElement(
+                "section"
+            );
+
+
+        dynamic.id =
+            "dynamicSection";
+
+
+        dynamic.className =
+            "dynamic-workspace";
+
+
+        dashboardContent.appendChild(
+            dynamic
+        );
+
+
+        switch (section) {
+
+            case "ai-hunter":
+
+                renderAIHunter(
+                    dynamic
+                );
+
+                break;
+
+
+            case "product-research":
+
+                renderProductResearch(
+                    dynamic
+                );
+
+                break;
+
+
+            case "stores":
+
+                renderStores(
+                    dynamic
+                );
+
+                break;
+
+
+            case "automation":
+
+                renderAutomation(
+                    dynamic
+                );
+
+                break;
+
+
+            case "earnings":
+
+                renderEarnings(
+                    dynamic
+                );
+
+                break;
+
+
+            case "products":
+
+                renderProducts(
+                    dynamic
+                );
+
+                break;
+
+
+            case "price-history":
+
+                renderPriceHistory(
+                    dynamic
+                );
+
+                break;
+
+
+            case "activity":
+
+                renderFullActivity(
+                    dynamic
+                );
+
+                break;
+
+
+            default:
+
+                renderAIHunter(
+                    dynamic
+                );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       PRODUCT RESEARCH
+    ===================================================== */
+
+    function analyzeProduct(productName) {
+
+        const name =
+            String(
+                productName ||
+                ""
+            )
+                .trim();
+
+
+        if (!name) {
+
+            showToast(
+                "Enter a product name first.",
+                "🔍"
+            );
+
+            return;
+
+        }
+
+
+        if (
+            dashboardState.isAnalyzing
+        ) {
+
+            showToast(
+                "Analysis is already running.",
+                "⏳"
+            );
+
+            return;
+
+        }
+
+
+        dashboardState.isAnalyzing =
+            true;
+
+
+        showToast(
+            "Analyzing " +
+            name +
+            "...",
+            "🤖"
+        );
+
+
+        const button =
+            document.getElementById(
+                "analyzeProductBtn"
+            );
+
+
+        if (button) {
+
+            button.disabled =
+                true;
+
+            button.textContent =
+                "Analyzing...";
+
+        }
+
+
+        setTimeout(
+            () => {
+
+                const demand =
+                    Math.floor(
+                        Math.random() *
+                        40
+                    ) + 60;
+
+
+                const competition =
+                    Math.floor(
+                        Math.random() *
+                        60
+                    ) + 20;
+
+
+                const estimatedPrice =
+                    Math.floor(
+                        Math.random() *
+                        4000
+                    ) + 299;
+
+
+                const opportunity =
+                    demand -
+                    Math.floor(
+                        competition / 2
+                    );
+
+
+                const product = {
+
+                    id:
+                        createId(
+                            "product"
+                        ),
+
+                    name,
+
+                    demand,
+
+                    competition,
+
+                    estimatedPrice,
+
+                    opportunity,
+
+                    status:
+                        "Research Complete",
+
+                    createdAt:
+                        new Date()
+                            .toISOString()
 
                 };
 
 
-            return `
+                dashboardState.products.unshift(
+                    product
+                );
+
+
+                dashboardState.priceHistory.unshift({
+
+                    id:
+                        createId(
+                            "price"
+                        ),
+
+                    productName:
+                        name,
+
+                    price:
+                        estimatedPrice,
+
+                    createdAt:
+                        new Date()
+                            .toISOString()
+
+                });
+
+
+                dashboardState.isAnalyzing =
+                    false;
+
+
+                saveDashboardData();
+
+
+                addActivity(
+                    "Product research completed",
+                    name +
+                    " was added to your research workspace.",
+                    "🔍"
+                );
+
+
+                updateStatistics();
+
+                renderProductList();
+
+
+                if (button) {
+
+                    button.disabled =
+                        false;
+
+                    button.textContent =
+                        "🤖 Analyze";
+
+                }
+
+
+                if (productSearchInput) {
+
+                    productSearchInput.value =
+                        "";
+
+                }
+
+
+                showToast(
+                    name +
+                    " analysis completed.",
+                    "✓"
+                );
+
+
+                if (
+                    dashboardState.currentSection ===
+                    "products"
+                ) {
+
+                    const dynamic =
+                        document.getElementById(
+                            "dynamicSection"
+                        );
+
+
+                    if (dynamic) {
+
+                        renderProducts(
+                            dynamic
+                        );
+
+                    }
+
+                }
+
+            },
+            900
+        );
+
+    }
+
+
+    /* =====================================================
+       DASHBOARD PRODUCT LIST
+    ===================================================== */
+
+    function renderProductList() {
+
+        if (!productList) return;
+
+
+        const products =
+            dashboardState.products
+                .slice(0, 5);
+
+
+        if (!products.length) {
+
+            productList.innerHTML = `
+
+                <div class="empty-state small-empty">
+
+                    <span>
+                        🔍
+                    </span>
+
+                    <strong>
+                        No products researched yet
+                    </strong>
+
+                    <small>
+                        Start product research to discover opportunities.
+                    </small>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        productList.innerHTML =
+            products.map(
+                product => `
+
+                    <div class="workspace-list-item">
+
+                        <div class="workspace-item-icon">
+                            📦
+                        </div>
+
+                        <div class="workspace-item-content">
+
+                            <strong>
+                                ${escapeHTML(product.name)}
+                            </strong>
+
+                            <small>
+                                Demand ${product.demand}% ·
+                                Competition ${product.competition}%
+                            </small>
+
+                        </div>
+
+                        <div class="workspace-item-meta">
+
+                            ₹${formatNumber(product.estimatedPrice)}
+
+                        </div>
+
+                    </div>
+
+                `
+            ).join("");
+
+    }
+
+
+    /* =====================================================
+       ACTIVITY LIST
+    ===================================================== */
+
+    function renderActivityList() {
+
+        if (!activityList) return;
+
+
+        const activities =
+            dashboardState.activities
+                .slice(0, 6);
+
+
+        if (!activities.length) {
+
+            activityList.innerHTML = `
+
+                <div class="empty-state small-empty">
+
+                    <span>
+                        ⚡
+                    </span>
+
+                    <strong>
+                        No recent activity
+                    </strong>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        activityList.innerHTML =
+            activities.map(
+                activity => `
+
+                    <div class="workspace-list-item">
+
+                        <div class="workspace-item-icon">
+                            ${escapeHTML(activity.icon || "⚡")}
+                        </div>
+
+                        <div class="workspace-item-content">
+
+                            <strong>
+                                ${escapeHTML(activity.title)}
+                            </strong>
+
+                            <small>
+                                ${escapeHTML(activity.description || "")}
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                `
+            ).join("");
+
+    }
+
+
+    /* =====================================================
+       AI HUNTER
+    ===================================================== */
+
+    function renderAIHunter(container) {
+
+        container.innerHTML = `
+
+            <section class="dashboard-card">
 
                 <div class="card-header">
 
                     <div>
 
                         <span class="card-eyebrow">
-                            SMART MONEY WORKSPACE
+                            AI RESEARCH ENGINE
                         </span>
 
-                        <h2 class="card-title">
-                            ${escapeHTML(title)}
+                        <h2>
+                            AI Product Hunter
                         </h2>
 
                         <p class="card-description">
-                            ${escapeHTML(data.text)}
+                            Research product opportunities and save them
+                            to your Smart Money workspace.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="research-input-row">
+
+                    <input
+                        type="text"
+                        id="hunterInput"
+                        placeholder="Enter a product to research"
+                    >
+
+                    <button
+                        type="button"
+                        class="primary-action"
+                        id="hunterAnalyzeBtn"
+                    >
+                        🤖 Start Analysis
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="hunterResults"
+                    class="hunter-results"
+                ></div>
+
+            </section>
+
+        `;
+
+
+        const input =
+            document.getElementById(
+                "hunterInput"
+            );
+
+
+        const button =
+            document.getElementById(
+                "hunterAnalyzeBtn"
+            );
+
+
+        if (button) {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    analyzeProduct(
+                        input.value
+                    );
+
+
+                    setTimeout(
+                        () => {
+
+                            const latest =
+                                dashboardState.products[0];
+
+
+                            const results =
+                                document.getElementById(
+                                    "hunterResults"
+                                );
+
+
+                            if (
+                                latest &&
+                                results
+                            ) {
+
+                                results.innerHTML = `
+
+                                    <div class="dashboard-card">
+
+                                        <h3>
+                                            Research Result
+                                        </h3>
+
+                                        <p>
+                                            Product:
+                                            <strong>
+                                                ${escapeHTML(latest.name)}
+                                            </strong>
+                                        </p>
+
+                                        <p>
+                                            Market Demand:
+                                            <strong>
+                                                ${latest.demand}%
+                                            </strong>
+                                        </p>
+
+                                        <p>
+                                            Competition:
+                                            <strong>
+                                                ${latest.competition}%
+                                            </strong>
+                                        </p>
+
+                                        <p>
+                                            Estimated Market Price:
+                                            <strong>
+                                                ₹${formatNumber(latest.estimatedPrice)}
+                                            </strong>
+                                        </p>
+
+                                    </div>
+
+                                `;
+
+                            }
+
+                        },
+                        1100
+                    );
+
+                }
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       PRODUCT RESEARCH SECTION
+    ===================================================== */
+
+    function renderProductResearch(container) {
+
+        container.innerHTML = `
+
+            <section class="dashboard-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <span class="card-eyebrow">
+                            PRODUCT INTELLIGENCE
+                        </span>
+
+                        <h2>
+                            Product Research
+                        </h2>
+
+                        <p class="card-description">
+                            Add a product name and create a research
+                            record inside your workspace.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="research-input-row">
+
+                    <input
+                        type="text"
+                        id="workspaceProductInput"
+                        placeholder="Example: Wireless Earbuds"
+                    >
+
+                    <button
+                        class="primary-action"
+                        id="workspaceAnalyzeBtn"
+                    >
+                        🔍 Analyze Product
+                    </button>
+
+                </div>
+
+            </section>
+
+        `;
+
+
+        const input =
+            document.getElementById(
+                "workspaceProductInput"
+            );
+
+
+        const button =
+            document.getElementById(
+                "workspaceAnalyzeBtn"
+            );
+
+
+        if (button) {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    analyzeProduct(
+                        input.value
+                    );
+
+                }
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       PRODUCTS
+    ===================================================== */
+
+    function renderProducts(container) {
+
+        const products =
+            dashboardState.products;
+
+
+        container.innerHTML = `
+
+            <section class="dashboard-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <span class="card-eyebrow">
+                            PRODUCT DATABASE
+                        </span>
+
+                        <h2>
+                            Saved Products
+                        </h2>
+
+                        <p class="card-description">
+                            ${formatNumber(products.length)}
+                            product opportunities saved in your workspace.
                         </p>
 
                     </div>
@@ -1135,429 +1696,480 @@ document.addEventListener(
 
 
                 <div
-                    class="empty-state"
-                    style="margin-top:20px;"
+                    class="full-products-list"
+                    id="fullProductsList"
                 >
 
-                    <div class="empty-state-icon">
+                    ${
+                        products.length
+                            ? products.map(
+                                product => `
 
-                        ${data.icon}
+                                    <div class="workspace-list-item">
+
+                                        <div class="workspace-item-icon">
+                                            📦
+                                        </div>
+
+                                        <div class="workspace-item-content">
+
+                                            <strong>
+                                                ${escapeHTML(product.name)}
+                                            </strong>
+
+                                            <small>
+                                                Demand ${product.demand}% ·
+                                                Competition ${product.competition}% ·
+                                                Opportunity ${product.opportunity}
+                                            </small>
+
+                                        </div>
+
+                                        <div class="workspace-item-meta">
+
+                                            <strong>
+                                                ₹${formatNumber(product.estimatedPrice)}
+                                            </strong>
+
+                                            <button
+                                                class="delete-product-btn"
+                                                data-product-id="${escapeHTML(product.id)}"
+                                            >
+                                                Remove
+                                            </button>
+
+                                        </div>
+
+                                    </div>
+
+                                `
+                            ).join("")
+                            : `
+
+                                <div class="empty-state">
+
+                                    <div class="empty-state-icon">
+                                        📦
+                                    </div>
+
+                                    <h3>
+                                        No products saved
+                                    </h3>
+
+                                    <p>
+                                        Start product research to add
+                                        opportunities here.
+                                    </p>
+
+                                </div>
+
+                            `
+                    }
+
+                </div>
+
+            </section>
+
+        `;
+
+
+        container
+            .querySelectorAll(
+                ".delete-product-btn"
+            )
+            .forEach(
+                button => {
+
+                    button.addEventListener(
+                        "click",
+                        () => {
+
+                            const id =
+                                button.dataset.productId;
+
+
+                            dashboardState.products =
+                                dashboardState.products.filter(
+                                    product =>
+                                        product.id !== id
+                                );
+
+
+                            saveDashboardData();
+
+
+                            addActivity(
+                                "Product removed",
+                                "A product was removed from the workspace.",
+                                "🗑️"
+                            );
+
+
+                            renderProducts(
+                                container
+                            );
+
+
+                            renderProductList();
+
+
+                            showToast(
+                                "Product removed.",
+                                "🗑️"
+                            );
+
+                        }
+                    );
+
+                }
+            );
+
+    }
+
+
+    /* =====================================================
+       STORES
+    ===================================================== */
+
+    function renderStores(container) {
+
+        const stores =
+            dashboardState.stores;
+
+
+        container.innerHTML = `
+
+            <section class="dashboard-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <span class="card-eyebrow">
+                            AUTHORIZED INTEGRATIONS
+                        </span>
+
+                        <h2>
+                            My Stores
+                        </h2>
+
+                        <p class="card-description">
+                            Add store connections that you personally
+                            manage and authorize.
+                        </p>
 
                     </div>
 
-
-                    <h3>
-
-                        ${escapeHTML(title)}
-
-                    </h3>
+                </div>
 
 
-                    <p>
+                <div class="research-input-row">
 
-                        This workspace section is active.
-                        The dashboard navigation is now connected
-                        and ready for the next module.
-
-                    </p>
-
-
-                    <button
-                        type="button"
-                        class="primary-action"
-                        id="${data.actionId}"
-                        style="margin-top:18px;"
+                    <input
+                        type="text"
+                        id="storeNameInput"
+                        placeholder="Example: My Shopify Store"
                     >
 
-                        ${escapeHTML(data.action)}
-
+                    <button
+                        class="primary-action"
+                        id="addStoreBtn"
+                    >
+                        + Add Store
                     </button>
 
                 </div>
 
-            `;
 
-        }
+                <div
+                    class="full-stores-list"
+                    id="fullStoresList"
+                >
 
+                    ${
+                        stores.length
+                            ? stores.map(
+                                store => `
 
+                                    <div class="workspace-list-item">
 
-        /* =================================================
-           DYNAMIC SECTION BUTTONS
-        ================================================= */
+                                        <div class="workspace-item-icon">
+                                            🏪
+                                        </div>
 
-        function bindDynamicButtons(
-            section
-        ) {
+                                        <div class="workspace-item-content">
 
-            const researchBtn =
-                document.getElementById(
-                    "dynamicResearchBtn"
-                );
+                                            <strong>
+                                                ${escapeHTML(store.name)}
+                                            </strong>
 
+                                            <small>
+                                                Added ${formatDate(store.createdAt)}
+                                            </small>
 
-            if (
-                researchBtn
-            ) {
+                                        </div>
 
-                researchBtn.addEventListener(
-                    "click",
-                    () => {
+                                        <div class="workspace-item-meta">
 
-                        showToast(
-                            "Product research workspace selected.",
-                            "🔍"
-                        );
+                                            <span>
+                                                Connected
+                                            </span>
 
+                                        </div>
+
+                                    </div>
+
+                                `
+                            ).join("")
+                            : `
+
+                                <div class="empty-state">
+
+                                    <div class="empty-state-icon">
+                                        🏪
+                                    </div>
+
+                                    <h3>
+                                        No stores connected
+                                    </h3>
+
+                                    <p>
+                                        Add a store workspace to track
+                                        your commerce operations.
+                                    </p>
+
+                                </div>
+
+                            `
                     }
-                );
 
-            }
+                </div>
 
+            </section>
 
-            const storesBtn =
-                document.getElementById(
-                    "dynamicStoresBtn"
-                );
+        `;
 
 
-            if (
-                storesBtn
-            ) {
+        const addButton =
+            document.getElementById(
+                "addStoreBtn"
+            );
 
-                storesBtn.addEventListener(
-                    "click",
-                    () => {
+
+        const storeInput =
+            document.getElementById(
+                "storeNameInput"
+            );
+
+
+        if (addButton) {
+
+            addButton.addEventListener(
+                "click",
+                () => {
+
+                    const name =
+                        storeInput.value.trim();
+
+
+                    if (!name) {
 
                         showToast(
-                            "Store management module selected.",
+                            "Enter your store name.",
                             "🏪"
                         );
 
+                        return;
+
                     }
-                );
-
-            }
 
 
-            const automationBtn =
+                    dashboardState.stores.push({
+
+                        id:
+                            createId(
+                                "store"
+                            ),
+
+                        name,
+
+                        createdAt:
+                            new Date()
+                                .toISOString()
+
+                    });
+
+
+                    saveDashboardData();
+
+
+                    updateStatistics();
+
+
+                    addActivity(
+                        "Store workspace added",
+                        name +
+                        " was added to your dashboard.",
+                        "🏪"
+                    );
+
+
+                    renderStores(
+                        container
+                    );
+
+
+                    showToast(
+                        "Store added successfully.",
+                        "✓"
+                    );
+
+                }
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       AUTOMATION
+    ===================================================== */
+
+    function renderAutomation(container) {
+
+        const automation =
+            dashboardState.automation;
+
+
+        container.innerHTML = `
+
+            <section class="dashboard-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <span class="card-eyebrow">
+                            WORKSPACE AUTOMATION
+                        </span>
+
+                        <h2>
+                            Automation
+                        </h2>
+
+                        <p class="card-description">
+                            Configure local workspace reminders and
+                            research preferences.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="automation-list">
+
+                    <label class="automation-option">
+
+                        <input
+                            type="checkbox"
+                            id="dailyResearchToggle"
+                            ${automation.dailyResearch ? "checked" : ""}
+                        >
+
+                        <span>
+                            Daily product research reminder
+                        </span>
+
+                    </label>
+
+
+                    <label class="automation-option">
+
+                        <input
+                            type="checkbox"
+                            id="contentReminderToggle"
+                            ${automation.contentReminder ? "checked" : ""}
+                        >
+
+                        <span>
+                            Content publishing reminder
+                        </span>
+
+                    </label>
+
+
+                    <label class="automation-option">
+
+                        <input
+                            type="checkbox"
+                            id="automationToggle"
+                            ${automation.enabled ? "checked" : ""}
+                        >
+
+                        <span>
+                            Enable workspace automation
+                        </span>
+
+                    </label>
+
+                </div>
+
+            </section>
+
+        `;
+
+
+        const toggles = {
+
+            dailyResearch:
                 document.getElementById(
-                    "dynamicAutomationBtn"
-                );
+                    "dailyResearchToggle"
+                ),
+
+            contentReminder:
+                document.getElementById(
+                    "contentReminderToggle"
+                ),
+
+            enabled:
+                document.getElementById(
+                    "automationToggle"
+                )
+
+        };
 
 
-            if (
-                automationBtn
-            ) {
+        Object.entries(
+            toggles
+        ).forEach(
+            ([key, input]) => {
 
-                automationBtn.addEventListener(
-                    "click",
+                if (!input) return;
+
+
+                input.addEventListener(
+                    "change",
                     () => {
 
-                        showToast(
-                            "Automation workspace selected.",
+                        dashboardState.automation[key] =
+                            input.checked;
+
+
+                        saveDashboardData();
+
+
+                        addActivity(
+                            "Automation updated",
+                            "Workspace automation preferences were changed.",
                             "⚙️"
                         );
 
-                    }
-                );
-
-            }
-
-
-            const earningsBtn =
-                document.getElementById(
-                    "dynamicEarningsBtn"
-                );
-
-
-            if (
-                earningsBtn
-            ) {
-
-                earningsBtn.addEventListener(
-                    "click",
-                    () => {
-
-                        updateStatistics();
-
 
                         showToast(
-                            "Earnings data refreshed.",
-                            "💰"
-                        );
-
-                    }
-                );
-
-            }
-
-
-            const productsBtn =
-                document.getElementById(
-                    "dynamicProductsBtn"
-                );
-
-
-            if (
-                productsBtn
-            ) {
-
-                productsBtn.addEventListener(
-                    "click",
-                    () => {
-
-                        showToast(
-                            formatNumber(
-                                dashboardState.products.length
-                            ) +
-                            " products found in workspace.",
-                            "📦"
-                        );
-
-                    }
-                );
-
-            }
-
-
-            const priceBtn =
-                document.getElementById(
-                    "dynamicPriceBtn"
-                );
-
-
-            if (
-                priceBtn
-            ) {
-
-                priceBtn.addEventListener(
-                    "click",
-                    () => {
-
-                        showToast(
-                            "Price history module selected.",
-                            "📉"
-                        );
-
-                    }
-                );
-
-            }
-
-
-            const activityBtn =
-                document.getElementById(
-                    "dynamicActivityBtn"
-                );
-
-
-            if (
-                activityBtn
-            ) {
-
-                activityBtn.addEventListener(
-                    "click",
-                    () => {
-
-                        showToast(
-                            "AI activity refreshed.",
-                            "⚡"
-                        );
-
-                    }
-                );
-
-            }
-
-        }
-
-
-
-        /* =================================================
-           TOAST SYSTEM
-        ================================================= */
-
-        let toastTimer =
-            null;
-
-
-        function showToast(
-            message,
-            icon = "✓"
-        ) {
-
-            let toast =
-                document.getElementById(
-                    "smartMoneyToast"
-                );
-
-
-            if (
-                !toast
-            ) {
-
-                toast =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                toast.id =
-                    "smartMoneyToast";
-
-
-                toast.style.position =
-                    "fixed";
-
-
-                toast.style.right =
-                    "20px";
-
-
-                toast.style.bottom =
-                    "20px";
-
-
-                toast.style.zIndex =
-                    "9999";
-
-
-                toast.style.maxWidth =
-                    "320px";
-
-
-                toast.style.padding =
-                    "14px 18px";
-
-
-                toast.style.borderRadius =
-                    "14px";
-
-
-                toast.style.background =
-                    "#0e1d31";
-
-
-                toast.style.border =
-                    "1px solid rgba(96,165,250,0.35)";
-
-
-                toast.style.boxShadow =
-                    "0 18px 50px rgba(0,0,0,.35)";
-
-
-                toast.style.color =
-                    "#f8fafc";
-
-
-                toast.style.display =
-                    "flex";
-
-
-                toast.style.alignItems =
-                    "center";
-
-
-                toast.style.gap =
-                    "10px";
-
-
-                toast.style.transform =
-                    "translateY(30px)";
-
-
-                toast.style.opacity =
-                    "0";
-
-
-                toast.style.transition =
-                    "all .25s ease";
-
-
-                document.body.appendChild(
-                    toast
-                );
-
-            }
-
-
-            toast.innerHTML =
-                `
-
-                <span
-                    style="
-                        font-size:20px;
-                    "
-                >
-                    ${escapeHTML(icon)}
-                </span>
-
-                <span>
-
-                    ${escapeHTML(message)}
-
-                </span>
-
-                `;
-
-
-            requestAnimationFrame(
-                () => {
-
-                    toast.style.opacity =
-                        "1";
-
-
-                    toast.style.transform =
-                        "translateY(0)";
-
-                }
-            );
-
-
-            clearTimeout(
-                toastTimer
-            );
-
-
-            toastTimer =
-                setTimeout(
-                    () => {
-
-                        toast.style.opacity =
-                            "0";
-
-
-                        toast.style.transform =
-                            "translateY(30px)";
-
-                    },
-                    3000
-                );
-
-        }
-
-
-
-        /* =================================================
-           NAV ITEM EVENTS
-        ================================================= */
-
-        navItems.forEach(
-            (
-                item
-            ) => {
-
-                item.addEventListener(
-                    "click",
-                    () => {
-
-                        const section =
-                            item.dataset.section;
-
-
-                        navigateToSection(
-                            section
+                            "Automation preference saved.",
+                            "✓"
                         );
 
                     }
@@ -1566,255 +2178,180 @@ document.addEventListener(
             }
         );
 
+    }
 
 
-        /* =================================================
-           MENU TOGGLE
-        ================================================= */
+    /* =====================================================
+       EARNINGS
+    ===================================================== */
 
-        if (
-            menuToggle
-        ) {
+    function renderEarnings(container) {
 
-            menuToggle.addEventListener(
-                "click",
-                (
-                    event
-                ) => {
-
-                    event.preventDefault();
+        const earnings =
+            dashboardState.earnings;
 
 
-                    event.stopPropagation();
+        container.innerHTML = `
+
+            <section class="stats-grid earnings-section-stats">
+
+                <article class="stat-card">
+
+                    <p>
+                        Today Earnings
+                    </p>
+
+                    <h3>
+                        ${formatCurrency(earnings.today)}
+                    </h3>
+
+                </article>
 
 
-                    toggleSidebar();
+                <article class="stat-card">
 
-                }
+                    <p>
+                        Lifetime Revenue
+                    </p>
+
+                    <h3>
+                        ${formatCurrency(earnings.lifetime)}
+                    </h3>
+
+                </article>
+
+
+                <article class="stat-card">
+
+                    <p>
+                        Estimated Profit
+                    </p>
+
+                    <h3>
+                        ${formatCurrency(earnings.profit)}
+                    </h3>
+
+                </article>
+
+            </section>
+
+
+            <section class="dashboard-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <span class="card-eyebrow">
+                            MANUAL PERFORMANCE DATA
+                        </span>
+
+                        <h2>
+                            Update Earnings
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="earnings-form">
+
+                    <input
+                        type="number"
+                        id="todayEarningsInput"
+                        placeholder="Today's earnings"
+                    >
+
+                    <input
+                        type="number"
+                        id="lifetimeEarningsInput"
+                        placeholder="Lifetime revenue"
+                    >
+
+                    <input
+                        type="number"
+                        id="profitInput"
+                        placeholder="Estimated profit"
+                    >
+
+                    <button
+                        class="primary-action"
+                        id="saveEarningsBtn"
+                    >
+                        Save Earnings
+                    </button>
+
+                </div>
+
+            </section>
+
+        `;
+
+
+        const saveButton =
+            document.getElementById(
+                "saveEarningsBtn"
             );
 
-        }
 
+        if (saveButton) {
 
-
-        /* =================================================
-           SIDEBAR CLOSE BUTTON
-        ================================================= */
-
-        if (
-            sidebarClose
-        ) {
-
-            sidebarClose.addEventListener(
-                "click",
-                (
-                    event
-                ) => {
-
-                    event.preventDefault();
-
-
-                    closeSidebar();
-
-                }
-            );
-
-        }
-
-
-
-        /* =================================================
-           OVERLAY CLICK
-        ================================================= */
-
-        if (
-            sidebarOverlay
-        ) {
-
-            sidebarOverlay.addEventListener(
-                "click",
-                () => {
-
-                    closeSidebar();
-
-                }
-            );
-
-        }
-
-
-
-        /* =================================================
-           START PRODUCT RESEARCH
-        ================================================= */
-
-        if (
-            startResearchBtn
-        ) {
-
-            startResearchBtn.addEventListener(
-                "click",
-                () => {
-
-                    navigateToSection(
-                        "product-research"
-                    );
-
-                }
-            );
-
-        }
-
-
-
-        /* =================================================
-           VIEW AUTOMATION
-        ================================================= */
-
-        if (
-            viewAutomationBtn
-        ) {
-
-            viewAutomationBtn.addEventListener(
-                "click",
-                () => {
-
-                    navigateToSection(
-                        "automation"
-                    );
-
-                }
-            );
-
-        }
-
-
-
-        /* =================================================
-           SETTINGS
-        ================================================= */
-
-        if (
-            settingsBtn
-        ) {
-
-            settingsBtn.addEventListener(
+            saveButton.addEventListener(
                 "click",
                 () => {
 
-                    showToast(
-                        "Settings panel will be added next.",
-                        "⚙️"
-                    );
-
-                }
-            );
-
-        }
+                    const today =
+                        Number(
+                            document.getElementById(
+                                "todayEarningsInput"
+                            ).value
+                        ) || 0;
 
 
-
-        /* =================================================
-           AI STATUS BUTTON
-        ================================================= */
-
-        if (
-            aiStatusBtn
-        ) {
-
-            aiStatusBtn.addEventListener(
-                "click",
-                () => {
-
-                    showToast(
-                        "AI system is online and ready.",
-                        "🤖"
-                    );
-
-                }
-            );
-
-        }
+                    const lifetime =
+                        Number(
+                            document.getElementById(
+                                "lifetimeEarningsInput"
+                            ).value
+                        ) || 0;
 
 
-
-        /* =================================================
-           PROFILE BUTTON
-        ================================================= */
-
-        if (
-            profileButton
-        ) {
-
-            profileButton.addEventListener(
-                "click",
-                () => {
-
-                    showToast(
-                        "Profile settings module will be connected here.",
-                        "👤"
-                    );
-
-                }
-            );
-
-        }
+                    const profit =
+                        Number(
+                            document.getElementById(
+                                "profitInput"
+                            ).value
+                        ) || 0;
 
 
+                    dashboardState.earnings = {
 
-        /* =================================================
-           GLOBAL SEARCH
-        ================================================= */
+                        today,
 
-        if (
-            globalSearch
-        ) {
+                        lifetime,
 
-            globalSearch.addEventListener(
-                "keydown",
-                (
-                    event
-                ) => {
+                        profit
 
-                    if (
-                        event.key !==
-                        "Enter"
-                    ) {
-
-                        return;
-
-                    }
+                    };
 
 
-                    const query =
-                        globalSearch.value
-                            .trim();
+                    saveDashboardData();
 
 
-                    if (
-                        !query
-                    ) {
-
-                        showToast(
-                            "Enter a product name to search.",
-                            "🔍"
-                        );
+                    updateStatistics();
 
 
-                        return;
-
-                    }
-
-
-                    navigateToSection(
-                        "product-research"
+                    addActivity(
+                        "Earnings updated",
+                        "Revenue information was updated manually.",
+                        "💰"
                     );
 
 
                     showToast(
-                        "Searching workspace for: " +
-                        query,
-                        "🔍"
+                        "Earnings saved.",
+                        "✓"
                     );
 
                 }
@@ -1822,91 +2359,748 @@ document.addEventListener(
 
         }
 
+    }
 
 
-        /* =================================================
-           WINDOW RESIZE FIX
-        ================================================= */
+    /* =====================================================
+       PRICE HISTORY
+    ===================================================== */
 
-        window.addEventListener(
-            "resize",
+    function renderPriceHistory(container) {
+
+        const history =
+            dashboardState.priceHistory;
+
+
+        container.innerHTML = `
+
+            <section class="dashboard-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <span class="card-eyebrow">
+                            PRICE INTELLIGENCE
+                        </span>
+
+                        <h2>
+                            Price History
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                ${
+                    history.length
+                        ? history.map(
+                            item => `
+
+                                <div class="workspace-list-item">
+
+                                    <div class="workspace-item-icon">
+                                        📉
+                                    </div>
+
+                                    <div class="workspace-item-content">
+
+                                        <strong>
+                                            ${escapeHTML(item.productName)}
+                                        </strong>
+
+                                        <small>
+                                            ${formatDate(item.createdAt)}
+                                        </small>
+
+                                    </div>
+
+                                    <div class="workspace-item-meta">
+
+                                        ₹${formatNumber(item.price)}
+
+                                    </div>
+
+                                </div>
+
+                            `
+                        ).join("")
+                        : `
+
+                            <div class="empty-state">
+
+                                <div class="empty-state-icon">
+                                    📉
+                                </div>
+
+                                <h3>
+                                    No price history
+                                </h3>
+
+                                <p>
+                                    Product research results will create
+                                    price observations here.
+                                </p>
+
+                            </div>
+
+                        `
+                }
+
+            </section>
+
+        `;
+
+    }
+
+
+    /* =====================================================
+       FULL ACTIVITY
+    ===================================================== */
+
+    function renderFullActivity(container) {
+
+        const activities =
+            dashboardState.activities;
+
+
+        container.innerHTML = `
+
+            <section class="dashboard-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <span class="card-eyebrow">
+                            SYSTEM LOG
+                        </span>
+
+                        <h2>
+                            AI Activity
+                        </h2>
+
+                    </div>
+
+
+                    <button
+                        class="secondary-action"
+                        id="clearActivityBtn"
+                    >
+                        Clear History
+                    </button>
+
+                </div>
+
+
+                ${
+                    activities.length
+                        ? activities.map(
+                            activity => `
+
+                                <div class="workspace-list-item">
+
+                                    <div class="workspace-item-icon">
+
+                                        ${escapeHTML(activity.icon)}
+
+                                    </div>
+
+                                    <div class="workspace-item-content">
+
+                                        <strong>
+
+                                            ${escapeHTML(activity.title)}
+
+                                        </strong>
+
+                                        <small>
+
+                                            ${escapeHTML(activity.description)}
+
+                                            ·
+
+                                            ${formatDate(activity.createdAt)}
+
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                            `
+                        ).join("")
+                        : `
+
+                            <div class="empty-state">
+
+                                <div class="empty-state-icon">
+                                    ⚡
+                                </div>
+
+                                <h3>
+                                    No activity
+                                </h3>
+
+                            </div>
+
+                        `
+                }
+
+            </section>
+
+        `;
+
+
+        const clearButton =
+            document.getElementById(
+                "clearActivityBtn"
+            );
+
+
+        if (clearButton) {
+
+            clearButton.addEventListener(
+                "click",
+                () => {
+
+                    dashboardState.activities =
+                        [];
+
+
+                    saveDashboardData();
+
+
+                    renderActivityList();
+
+
+                    renderFullActivity(
+                        container
+                    );
+
+
+                    showToast(
+                        "Activity history cleared.",
+                        "🗑️"
+                    );
+
+                }
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       CONNECT STORE BUTTON
+    ===================================================== */
+
+    if (connectStoreBtn) {
+
+        connectStoreBtn.addEventListener(
+            "click",
             () => {
 
-                if (
-                    window.innerWidth >
-                    900
-                ) {
-
-                    closeSidebar();
-
-                }
+                navigateToSection(
+                    "stores"
+                );
 
             }
         );
 
+    }
 
 
-        /* =================================================
-           ESC KEY
-        ================================================= */
+    /* =====================================================
+       MAIN PRODUCT ANALYZE BUTTON
+    ===================================================== */
 
-        document.addEventListener(
+    if (analyzeProductBtn) {
+
+        analyzeProductBtn.addEventListener(
+            "click",
+            () => {
+
+                analyzeProduct(
+                    productSearchInput
+                        ? productSearchInput.value
+                        : ""
+                );
+
+            }
+        );
+
+    }
+
+
+    if (productSearchInput) {
+
+        productSearchInput.addEventListener(
             "keydown",
-            (
-                event
-            ) => {
+            event => {
 
                 if (
                     event.key ===
-                    "Escape"
+                    "Enter"
                 ) {
 
-                    closeSidebar();
+                    analyzeProduct(
+                        productSearchInput.value
+                    );
 
                 }
 
             }
         );
 
+    }
 
 
-        /* =================================================
-           INITIALIZE
-        ================================================= */
+    /* =====================================================
+       NAVIGATION EVENTS
+    ===================================================== */
 
-        function initializeDashboard() {
+    navItems.forEach(
+        item => {
 
-            loadDashboardData();
+            item.addEventListener(
+                "click",
+                () => {
+
+                    navigateToSection(
+                        item.dataset.section
+                    );
+
+                }
+            );
+
+        }
+    );
 
 
-            createInitialData();
+    /* =====================================================
+       HEADER BUTTONS
+    ===================================================== */
+
+    if (menuToggle) {
+
+        menuToggle.addEventListener(
+            "click",
+            toggleSidebar
+        );
+
+    }
 
 
-            updateStatistics();
+    if (sidebarClose) {
+
+        sidebarClose.addEventListener(
+            "click",
+            closeSidebar
+        );
+
+    }
 
 
-            console.log(
-                "%cSMART MONEY AI COMMERCE READY",
-                "font-size:16px;font-weight:bold;color:#38bdf8;"
+    if (sidebarOverlay) {
+
+        sidebarOverlay.addEventListener(
+            "click",
+            closeSidebar
+        );
+
+    }
+
+
+    if (startResearchBtn) {
+
+        startResearchBtn.addEventListener(
+            "click",
+            () => {
+
+                navigateToSection(
+                    "product-research"
+                );
+
+            }
+        );
+
+    }
+
+
+    if (viewAutomationBtn) {
+
+        viewAutomationBtn.addEventListener(
+            "click",
+            () => {
+
+                navigateToSection(
+                    "automation"
+                );
+
+            }
+        );
+
+    }
+
+
+    if (viewProductsBtn) {
+
+        viewProductsBtn.addEventListener(
+            "click",
+            () => {
+
+                navigateToSection(
+                    "products"
+                );
+
+            }
+        );
+
+    }
+
+
+    if (refreshDashboardBtn) {
+
+        refreshDashboardBtn.addEventListener(
+            "click",
+            () => {
+
+                updateStatistics();
+
+                renderProductList();
+
+                renderActivityList();
+
+                showToast(
+                    "Dashboard refreshed.",
+                    "↻"
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       GLOBAL SEARCH
+    ===================================================== */
+
+    if (globalSearch) {
+
+        globalSearch.addEventListener(
+            "keydown",
+            event => {
+
+                if (
+                    event.key !==
+                    "Enter"
+                ) return;
+
+
+                const query =
+                    globalSearch.value
+                        .trim();
+
+
+                if (!query) {
+
+                    showToast(
+                        "Enter a product name.",
+                        "🔍"
+                    );
+
+                    return;
+
+                }
+
+
+                navigateToSection(
+                    "product-research"
+                );
+
+
+                setTimeout(
+                    () => {
+
+                        const input =
+                            document.getElementById(
+                                "workspaceProductInput"
+                            );
+
+
+                        if (input) {
+
+                            input.value =
+                                query;
+
+                            input.focus();
+
+                        }
+
+                    },
+                    150
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       AI STATUS
+    ===================================================== */
+
+    if (aiStatusBtn) {
+
+        aiStatusBtn.addEventListener(
+            "click",
+            () => {
+
+                showToast(
+                    "AI workspace is ready for product research.",
+                    "🤖"
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       PROFILE
+    ===================================================== */
+
+    if (profileButton) {
+
+        profileButton.addEventListener(
+            "click",
+            () => {
+
+                const name =
+                    window.prompt(
+                        "Enter workspace display name:",
+                        dashboardState.profile.name
+                    );
+
+
+                if (
+                    !name ||
+                    !name.trim()
+                ) return;
+
+
+                dashboardState.profile.name =
+                    name.trim();
+
+
+                dashboardState.profile.initials =
+                    name
+                        .trim()
+                        .split(" ")
+                        .slice(0, 2)
+                        .map(
+                            word =>
+                                word[0]
+                        )
+                        .join("")
+                        .toUpperCase();
+
+
+                saveDashboardData();
+
+                updateProfileUI();
+
+
+                showToast(
+                    "Profile updated.",
+                    "✓"
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       SETTINGS
+    ===================================================== */
+
+    if (settingsBtn) {
+
+        settingsBtn.addEventListener(
+            "click",
+            () => {
+
+                navigateToSection(
+                    "automation"
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       TOAST
+    ===================================================== */
+
+    let toastTimer = null;
+
+
+    function showToast(
+        message,
+        icon = "✓"
+    ) {
+
+        let toast =
+            document.getElementById(
+                "smartMoneyToast"
             );
 
 
-            console.log(
-                "Environment:",
-                appConfig.environment ||
-                "development"
+        if (!toast) {
+
+            toast =
+                document.createElement(
+                    "div"
+                );
+
+
+            toast.id =
+                "smartMoneyToast";
+
+
+            document.body.appendChild(
+                toast
             );
 
         }
 
 
+        toast.innerHTML = `
 
-        /* =================================================
-           START APPLICATION
-        ================================================= */
+            <span class="toast-icon">
+                ${escapeHTML(icon)}
+            </span>
 
-        initializeDashboard();
+            <span class="toast-text">
+                ${escapeHTML(message)}
+            </span>
 
+        `;
+
+
+        toast.classList.add(
+            "show"
+        );
+
+
+        clearTimeout(
+            toastTimer
+        );
+
+
+        toastTimer =
+            setTimeout(
+                () => {
+
+                    toast.classList.remove(
+                        "show"
+                    );
+
+                },
+                3200
+            );
 
     }
-);
+
+
+    /* =====================================================
+       WINDOW EVENTS
+    ===================================================== */
+
+    window.addEventListener(
+        "resize",
+        () => {
+
+            if (
+                window.innerWidth >
+                900
+            ) {
+
+                closeSidebar();
+
+            }
+
+        }
+    );
+
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key ===
+                "Escape"
+            ) {
+
+                closeSidebar();
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       INITIALIZE
+    ===================================================== */
+
+    function initializeDashboard() {
+
+        loadDashboardData();
+
+        updateProfileUI();
+
+        updateStatistics();
+
+        renderProductList();
+
+        renderActivityList();
+
+
+        if (aiStatus) {
+
+            aiStatus.textContent =
+                "AI Ready";
+
+        }
+
+
+        if (sidebarAiStatus) {
+
+            sidebarAiStatus.textContent =
+                "Ready for Analysis";
+
+        }
+
+
+        console.log(
+            "SMART MONEY AI COMMERCE READY"
+        );
+
+    }
+
+
+    initializeDashboard();
+
+});
