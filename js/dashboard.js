@@ -1,6 +1,7 @@
 /* =========================================================
    SMART MONEY AI COMMERCE
-   COMPLETE FUNCTIONAL DASHBOARD JAVASCRIPT
+   COMPLETE DASHBOARD + SELLER CONNECTION SYSTEM
+   dashboard.js
    ========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -11,15 +12,203 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const appConfig = window.SM_CONFIG || {};
 
+
+    /* =====================================================
+       STORAGE KEYS
+    ===================================================== */
+
     const STORAGE_KEYS = {
+
         products: "sm_ai_products",
+
         activities: "sm_ai_activities",
+
         stores: "sm_ai_stores",
+
         earnings: "sm_ai_earnings",
+
         priceHistory: "sm_ai_price_history",
+
         profile: "sm_ai_profile",
-        automation: "sm_ai_automation"
+
+        automation: "sm_ai_automation",
+
+        sellerConnections: "sm_seller_connections",
+
+        sellerDrafts: "sm_seller_drafts",
+
+        dashboardSession: "sm_dashboard_session"
+
     };
+
+
+    /* =====================================================
+       SELLER PLATFORM DIRECTORY
+
+       IMPORTANT:
+       Password, OTP or seller credentials are NEVER stored
+       by this dashboard.
+
+       User logs into the official seller portal themselves.
+    ===================================================== */
+
+    const SELLER_PLATFORMS = [
+
+        {
+            id: "amazon",
+            name: "Amazon Seller",
+
+            description:
+                "Manage your Amazon seller business through the official seller portal.",
+
+            icon: "🛒",
+
+            category: "Marketplace",
+
+            regions:
+                ["India", "International"],
+
+            loginUrl:
+                "https://sellercentral.amazon.in/",
+
+            signupUrl:
+                "https://sellercentral.amazon.in/"
+
+        },
+
+        {
+            id: "flipkart",
+            name: "Flipkart Seller",
+
+            description:
+                "Open the official Flipkart seller portal to register or manage your seller account.",
+
+            icon: "🛍️",
+
+            category: "Marketplace",
+
+            regions:
+                ["India"],
+
+            loginUrl:
+                "https://seller.flipkart.com/",
+
+            signupUrl:
+                "https://seller.flipkart.com/"
+
+        },
+
+        {
+            id: "meesho",
+            name: "Meesho Supplier",
+
+            description:
+                "Access the official Meesho supplier portal for your seller operations.",
+
+            icon: "📦",
+
+            category: "Marketplace",
+
+            regions:
+                ["India"],
+
+            loginUrl:
+                "https://supplier.meesho.com/",
+
+            signupUrl:
+                "https://supplier.meesho.com/"
+
+        },
+
+        {
+            id: "shopify",
+            name: "Shopify",
+
+            description:
+                "Create and manage your own independent online store.",
+
+            icon: "🏪",
+
+            category: "Store Builder",
+
+            regions:
+                ["International"],
+
+            loginUrl:
+                "https://accounts.shopify.com/",
+
+            signupUrl:
+                "https://www.shopify.com/"
+
+        },
+
+        {
+            id: "woocommerce",
+            name: "WooCommerce",
+
+            description:
+                "Manage a self-hosted online store built with WooCommerce.",
+
+            icon: "🛒",
+
+            category: "Store Builder",
+
+            regions:
+                ["International"],
+
+            loginUrl:
+                "https://woocommerce.com/",
+
+            signupUrl:
+                "https://woocommerce.com/"
+
+        },
+
+        {
+            id: "etsy",
+            name: "Etsy Seller",
+
+            description:
+                "Open Etsy's official seller environment for your shop.",
+
+            icon: "🎨",
+
+            category: "Marketplace",
+
+            regions:
+                ["International"],
+
+            loginUrl:
+                "https://www.etsy.com/sell",
+
+            signupUrl:
+                "https://www.etsy.com/sell"
+
+        },
+
+        {
+            id: "ebay",
+            name: "eBay Seller",
+
+            description:
+                "Manage your eBay selling account through the official website.",
+
+            icon: "🌐",
+
+            category: "Marketplace",
+
+            regions:
+                ["International"],
+
+            loginUrl:
+                "https://www.ebay.com/",
+
+            signupUrl:
+                "https://www.ebay.com/"
+
+        }
+
+    ];
 
 
     /* =====================================================
@@ -33,6 +222,10 @@ document.addEventListener("DOMContentLoaded", () => {
         activities: [],
 
         stores: [],
+
+        sellerConnections: [],
+
+        sellerDrafts: [],
 
         priceHistory: [],
 
@@ -61,6 +254,16 @@ document.addEventListener("DOMContentLoaded", () => {
             name: "Owner",
 
             initials: "SM"
+
+        },
+
+        session: {
+
+            active: true,
+
+            createdAt: null,
+
+            lastActiveAt: null
 
         },
 
@@ -250,7 +453,118 @@ document.addEventListener("DOMContentLoaded", () => {
             "_" +
             Math.random()
                 .toString(36)
-                .slice(2, 8)
+                .slice(2, 9)
+        );
+
+    }
+
+
+    /* =====================================================
+       SAFE STORAGE PARSER
+    ===================================================== */
+
+    function readStorage(key, fallback) {
+
+        try {
+
+            const value =
+                localStorage.getItem(key);
+
+            if (!value) {
+
+                return fallback;
+
+            }
+
+            return JSON.parse(value);
+
+        }
+        catch (error) {
+
+            console.error(
+                "Storage read error:",
+                key,
+                error
+            );
+
+            return fallback;
+
+        }
+
+    }
+
+
+    /* =====================================================
+       SESSION PERSISTENCE
+
+       Dashboard browser state remains active until the user
+       explicitly clears/logout logic from their own auth system.
+    ===================================================== */
+
+    function initializePersistentSession() {
+
+        const savedSession =
+            readStorage(
+                STORAGE_KEYS.dashboardSession,
+                null
+            );
+
+
+        if (
+            savedSession &&
+            savedSession.active
+        ) {
+
+            dashboardState.session =
+                savedSession;
+
+        }
+        else {
+
+            dashboardState.session = {
+
+                active: true,
+
+                createdAt:
+                    new Date()
+                        .toISOString(),
+
+                lastActiveAt:
+                    new Date()
+                        .toISOString()
+
+            };
+
+        }
+
+
+        dashboardState.session.lastActiveAt =
+            new Date()
+                .toISOString();
+
+
+        localStorage.setItem(
+            STORAGE_KEYS.dashboardSession,
+            JSON.stringify(
+                dashboardState.session
+            )
+        );
+
+    }
+
+
+    function updateSessionActivity() {
+
+        dashboardState.session.lastActiveAt =
+            new Date()
+                .toISOString();
+
+
+        localStorage.setItem(
+            STORAGE_KEYS.dashboardSession,
+            JSON.stringify(
+                dashboardState.session
+            )
         );
 
     }
@@ -262,161 +576,158 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function loadDashboardData() {
 
-        try {
+        const products =
+            readStorage(
+                STORAGE_KEYS.products,
+                []
+            );
 
-            const products =
-                JSON.parse(
-                    localStorage.getItem(
-                        STORAGE_KEYS.products
-                    ) || "[]"
-                );
+        const activities =
+            readStorage(
+                STORAGE_KEYS.activities,
+                []
+            );
 
+        const stores =
+            readStorage(
+                STORAGE_KEYS.stores,
+                []
+            );
 
-            const activities =
-                JSON.parse(
-                    localStorage.getItem(
-                        STORAGE_KEYS.activities
-                    ) || "[]"
-                );
+        const earnings =
+            readStorage(
+                STORAGE_KEYS.earnings,
+                {}
+            );
 
+        const priceHistory =
+            readStorage(
+                STORAGE_KEYS.priceHistory,
+                []
+            );
 
-            const stores =
-                JSON.parse(
-                    localStorage.getItem(
-                        STORAGE_KEYS.stores
-                    ) || "[]"
-                );
+        const profile =
+            readStorage(
+                STORAGE_KEYS.profile,
+                {}
+            );
 
+        const automation =
+            readStorage(
+                STORAGE_KEYS.automation,
+                {}
+            );
 
-            const earnings =
-                JSON.parse(
-                    localStorage.getItem(
-                        STORAGE_KEYS.earnings
-                    ) || "{}"
-                );
+        const sellerConnections =
+            readStorage(
+                STORAGE_KEYS.sellerConnections,
+                []
+            );
 
-
-            const priceHistory =
-                JSON.parse(
-                    localStorage.getItem(
-                        STORAGE_KEYS.priceHistory
-                    ) || "[]"
-                );
-
-
-            const profile =
-                JSON.parse(
-                    localStorage.getItem(
-                        STORAGE_KEYS.profile
-                    ) || "{}"
-                );
-
-
-            const automation =
-                JSON.parse(
-                    localStorage.getItem(
-                        STORAGE_KEYS.automation
-                    ) || "{}"
-                );
+        const sellerDrafts =
+            readStorage(
+                STORAGE_KEYS.sellerDrafts,
+                []
+            );
 
 
-            if (Array.isArray(products)) {
+        if (Array.isArray(products)) {
 
-                dashboardState.products =
-                    products;
-
-            }
-
-
-            if (Array.isArray(activities)) {
-
-                dashboardState.activities =
-                    activities;
-
-            }
-
-
-            if (Array.isArray(stores)) {
-
-                dashboardState.stores =
-                    stores;
-
-            }
-
-
-            if (Array.isArray(priceHistory)) {
-
-                dashboardState.priceHistory =
-                    priceHistory;
-
-            }
-
-
-            if (
-                earnings &&
-                typeof earnings === "object"
-            ) {
-
-                dashboardState.earnings = {
-
-                    today:
-                        Number(
-                            earnings.today
-                        ) || 0,
-
-                    lifetime:
-                        Number(
-                            earnings.lifetime
-                        ) || 0,
-
-                    profit:
-                        Number(
-                            earnings.profit
-                        ) || 0
-
-                };
-
-            }
-
-
-            if (
-                profile &&
-                typeof profile === "object"
-            ) {
-
-                dashboardState.profile = {
-
-                    ...dashboardState.profile,
-
-                    ...profile
-
-                };
-
-            }
-
-
-            if (
-                automation &&
-                typeof automation === "object"
-            ) {
-
-                dashboardState.automation = {
-
-                    ...dashboardState.automation,
-
-                    ...automation
-
-                };
-
-            }
+            dashboardState.products =
+                products;
 
         }
-        catch (error) {
 
-            console.error(
-                "Dashboard load error:",
-                error
-            );
+
+        if (Array.isArray(activities)) {
+
+            dashboardState.activities =
+                activities;
+
+        }
+
+
+        if (Array.isArray(stores)) {
+
+            dashboardState.stores =
+                stores;
+
+        }
+
+
+        if (Array.isArray(priceHistory)) {
+
+            dashboardState.priceHistory =
+                priceHistory;
+
+        }
+
+
+        if (Array.isArray(sellerConnections)) {
+
+            dashboardState.sellerConnections =
+                sellerConnections;
+
+        }
+
+
+        if (Array.isArray(sellerDrafts)) {
+
+            dashboardState.sellerDrafts =
+                sellerDrafts;
+
+        }
+
+
+        if (
+            earnings &&
+            typeof earnings === "object"
+        ) {
+
+            dashboardState.earnings = {
+
+                today:
+                    Number(earnings.today) || 0,
+
+                lifetime:
+                    Number(earnings.lifetime) || 0,
+
+                profit:
+                    Number(earnings.profit) || 0
+
+            };
+
+        }
+
+
+        if (
+            profile &&
+            typeof profile === "object"
+        ) {
+
+            dashboardState.profile = {
+
+                ...dashboardState.profile,
+
+                ...profile
+
+            };
+
+        }
+
+
+        if (
+            automation &&
+            typeof automation === "object"
+        ) {
+
+            dashboardState.automation = {
+
+                ...dashboardState.automation,
+
+                ...automation
+
+            };
 
         }
 
@@ -486,6 +797,25 @@ document.addEventListener("DOMContentLoaded", () => {
                 )
             );
 
+
+            localStorage.setItem(
+                STORAGE_KEYS.sellerConnections,
+                JSON.stringify(
+                    dashboardState.sellerConnections
+                )
+            );
+
+
+            localStorage.setItem(
+                STORAGE_KEYS.sellerDrafts,
+                JSON.stringify(
+                    dashboardState.sellerDrafts
+                )
+            );
+
+
+            updateSessionActivity();
+
         }
         catch (error) {
 
@@ -495,6 +825,52 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
         }
+
+    }
+
+
+    /* =====================================================
+       PLATFORM HELPERS
+    ===================================================== */
+
+    function getPlatform(platformId) {
+
+        return SELLER_PLATFORMS.find(
+            platform =>
+                platform.id === platformId
+        );
+
+    }
+
+
+    function getConnection(platformId) {
+
+        return dashboardState
+            .sellerConnections
+            .find(
+                connection =>
+                    connection.platformId ===
+                    platformId
+            );
+
+    }
+
+
+    function isPlatformConnected(platformId) {
+
+        return Boolean(
+            getConnection(platformId)
+        );
+
+    }
+
+
+    function getTotalConnectedStores() {
+
+        return (
+            dashboardState.stores.length +
+            dashboardState.sellerConnections.length
+        );
 
     }
 
@@ -512,9 +888,7 @@ document.addEventListener("DOMContentLoaded", () => {
         dashboardState.activities.unshift({
 
             id:
-                createId(
-                    "activity"
-                ),
+                createId("activity"),
 
             title,
 
@@ -531,11 +905,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         dashboardState.activities =
             dashboardState.activities
-                .slice(0, 50);
+                .slice(0, 100);
 
 
         saveDashboardData();
-
 
         renderActivityList();
 
@@ -543,7 +916,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =====================================================
-       UPDATE PROFILE
+       PROFILE UI
     ===================================================== */
 
     function updateProfileUI() {
@@ -621,11 +994,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
+        const totalStores =
+            getTotalConnectedStores();
+
+
         if (connectedStores) {
 
             connectedStores.textContent =
                 formatNumber(
-                    dashboardState.stores.length
+                    totalStores
                 );
 
         }
@@ -635,7 +1012,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             storeSummaryCount.textContent =
                 formatNumber(
-                    dashboardState.stores.length
+                    totalStores
                 );
 
         }
@@ -651,9 +1028,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!sidebar) return;
 
-        sidebar.classList.add(
-            "open"
-        );
+        sidebar.classList.add("open");
 
 
         if (sidebarOverlay) {
@@ -735,7 +1110,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "Product Research",
 
         stores:
-            "My Stores",
+            "Seller Connections",
 
         automation:
             "Automation",
@@ -756,7 +1131,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =====================================================
-       STORE HOME CONTENT
+       DASHBOARD HOME
     ===================================================== */
 
     function ensureDashboardHome() {
@@ -772,9 +1147,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!home) {
 
             home =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
 
             home.id =
@@ -822,7 +1195,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 item.classList.toggle(
                     "active",
-                    item.dataset.section === section
+                    item.dataset.section ===
+                    section
                 );
 
             }
@@ -866,8 +1240,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         window.scrollTo({
+
             top: 0,
+
             behavior: "smooth"
+
         });
 
     }
@@ -914,7 +1291,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =====================================================
-       SHOW WORKSPACE SECTION
+       SHOW WORKSPACE
     ===================================================== */
 
     function showWorkspaceSection(section) {
@@ -967,81 +1344,63 @@ document.addEventListener("DOMContentLoaded", () => {
 
             case "ai-hunter":
 
-                renderAIHunter(
-                    dynamic
-                );
+                renderAIHunter(dynamic);
 
                 break;
 
 
             case "product-research":
 
-                renderProductResearch(
-                    dynamic
-                );
+                renderProductResearch(dynamic);
 
                 break;
 
 
             case "stores":
 
-                renderStores(
-                    dynamic
-                );
+                renderStores(dynamic);
 
                 break;
 
 
             case "automation":
 
-                renderAutomation(
-                    dynamic
-                );
+                renderAutomation(dynamic);
 
                 break;
 
 
             case "earnings":
 
-                renderEarnings(
-                    dynamic
-                );
+                renderEarnings(dynamic);
 
                 break;
 
 
             case "products":
 
-                renderProducts(
-                    dynamic
-                );
+                renderProducts(dynamic);
 
                 break;
 
 
             case "price-history":
 
-                renderPriceHistory(
-                    dynamic
-                );
+                renderPriceHistory(dynamic);
 
                 break;
 
 
             case "activity":
 
-                renderFullActivity(
-                    dynamic
-                );
+                renderFullActivity(dynamic);
 
                 break;
 
 
             default:
 
-                renderAIHunter(
-                    dynamic
-                );
+                renderAIHunter(dynamic);
 
         }
 
@@ -1056,10 +1415,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const name =
             String(
-                productName ||
-                ""
-            )
-                .trim();
+                productName || ""
+            ).trim();
 
 
         if (!name) {
@@ -1122,22 +1479,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const demand =
                     Math.floor(
-                        Math.random() *
-                        40
+                        Math.random() * 40
                     ) + 60;
 
 
                 const competition =
                     Math.floor(
-                        Math.random() *
-                        60
+                        Math.random() * 60
                     ) + 20;
 
 
                 const estimatedPrice =
                     Math.floor(
-                        Math.random() *
-                        4000
+                        Math.random() * 4000
                     ) + 299;
 
 
@@ -1151,9 +1505,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const product = {
 
                     id:
-                        createId(
-                            "product"
-                        ),
+                        createId("product"),
 
                     name,
 
@@ -1183,9 +1535,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 dashboardState.priceHistory.unshift({
 
                     id:
-                        createId(
-                            "price"
-                        ),
+                        createId("price"),
 
                     productName:
                         name,
@@ -1208,10 +1558,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
                 addActivity(
+
                     "Product research completed",
+
                     name +
                     " was added to your research workspace.",
+
                     "🔍"
+
                 );
 
 
@@ -1294,9 +1648,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 <div class="empty-state small-empty">
 
-                    <span>
-                        🔍
-                    </span>
+                    <span>🔍</span>
 
                     <strong>
                         No products researched yet
@@ -1340,7 +1692,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         <div class="workspace-item-meta">
 
-                            ₹${formatNumber(product.estimatedPrice)}
+                            ₹${formatNumber(
+                                product.estimatedPrice
+                            )}
 
                         </div>
 
@@ -1372,9 +1726,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 <div class="empty-state small-empty">
 
-                    <span>
-                        ⚡
-                    </span>
+                    <span>⚡</span>
 
                     <strong>
                         No recent activity
@@ -1396,17 +1748,25 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div class="workspace-list-item">
 
                         <div class="workspace-item-icon">
-                            ${escapeHTML(activity.icon || "⚡")}
+                            ${escapeHTML(
+                                activity.icon ||
+                                "⚡"
+                            )}
                         </div>
 
                         <div class="workspace-item-content">
 
                             <strong>
-                                ${escapeHTML(activity.title)}
+                                ${escapeHTML(
+                                    activity.title
+                                )}
                             </strong>
 
                             <small>
-                                ${escapeHTML(activity.description || "")}
+                                ${escapeHTML(
+                                    activity.description ||
+                                    ""
+                                )}
                             </small>
 
                         </div>
@@ -1450,7 +1810,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 </div>
 
-
                 <div class="research-input-row">
 
                     <input
@@ -1468,7 +1827,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     </button>
 
                 </div>
-
 
                 <div
                     id="hunterResults"
@@ -1507,7 +1865,8 @@ document.addEventListener("DOMContentLoaded", () => {
                         () => {
 
                             const latest =
-                                dashboardState.products[0];
+                                dashboardState
+                                    .products[0];
 
 
                             const results =
@@ -1532,7 +1891,9 @@ document.addEventListener("DOMContentLoaded", () => {
                                         <p>
                                             Product:
                                             <strong>
-                                                ${escapeHTML(latest.name)}
+                                                ${escapeHTML(
+                                                    latest.name
+                                                )}
                                             </strong>
                                         </p>
 
@@ -1551,9 +1912,11 @@ document.addEventListener("DOMContentLoaded", () => {
                                         </p>
 
                                         <p>
-                                            Estimated Market Price:
+                                            Estimated Price:
                                             <strong>
-                                                ₹${formatNumber(latest.estimatedPrice)}
+                                                ₹${formatNumber(
+                                                    latest.estimatedPrice
+                                                )}
                                             </strong>
                                         </p>
 
@@ -1576,7 +1939,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =====================================================
-       PRODUCT RESEARCH SECTION
+       PRODUCT RESEARCH
     ===================================================== */
 
     function renderProductResearch(container) {
@@ -1597,15 +1960,9 @@ document.addEventListener("DOMContentLoaded", () => {
                             Product Research
                         </h2>
 
-                        <p class="card-description">
-                            Add a product name and create a research
-                            record inside your workspace.
-                        </p>
-
                     </div>
 
                 </div>
-
 
                 <div class="research-input-row">
 
@@ -1687,83 +2044,86 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         <p class="card-description">
                             ${formatNumber(products.length)}
-                            product opportunities saved in your workspace.
+                            product opportunities saved.
                         </p>
 
                     </div>
 
                 </div>
 
-
-                <div
-                    class="full-products-list"
-                    id="fullProductsList"
-                >
+                <div class="full-products-list">
 
                     ${
                         products.length
+
                             ? products.map(
                                 product => `
 
-                                    <div class="workspace-list-item">
+                                <div class="workspace-list-item">
 
-                                        <div class="workspace-item-icon">
-                                            📦
-                                        </div>
-
-                                        <div class="workspace-item-content">
-
-                                            <strong>
-                                                ${escapeHTML(product.name)}
-                                            </strong>
-
-                                            <small>
-                                                Demand ${product.demand}% ·
-                                                Competition ${product.competition}% ·
-                                                Opportunity ${product.opportunity}
-                                            </small>
-
-                                        </div>
-
-                                        <div class="workspace-item-meta">
-
-                                            <strong>
-                                                ₹${formatNumber(product.estimatedPrice)}
-                                            </strong>
-
-                                            <button
-                                                class="delete-product-btn"
-                                                data-product-id="${escapeHTML(product.id)}"
-                                            >
-                                                Remove
-                                            </button>
-
-                                        </div>
-
-                                    </div>
-
-                                `
-                            ).join("")
-                            : `
-
-                                <div class="empty-state">
-
-                                    <div class="empty-state-icon">
+                                    <div class="workspace-item-icon">
                                         📦
                                     </div>
 
-                                    <h3>
-                                        No products saved
-                                    </h3>
+                                    <div class="workspace-item-content">
 
-                                    <p>
-                                        Start product research to add
-                                        opportunities here.
-                                    </p>
+                                        <strong>
+                                            ${escapeHTML(
+                                                product.name
+                                            )}
+                                        </strong>
+
+                                        <small>
+                                            Demand ${product.demand}% ·
+                                            Competition ${product.competition}% ·
+                                            Opportunity ${product.opportunity}
+                                        </small>
+
+                                    </div>
+
+                                    <div class="workspace-item-meta">
+
+                                        <strong>
+                                            ₹${formatNumber(
+                                                product.estimatedPrice
+                                            )}
+                                        </strong>
+
+                                        <button
+                                            class="delete-product-btn"
+                                            data-product-id="${escapeHTML(
+                                                product.id
+                                            )}"
+                                        >
+                                            Remove
+                                        </button>
+
+                                    </div>
 
                                 </div>
 
                             `
+                            ).join("")
+
+                            : `
+
+                            <div class="empty-state">
+
+                                <div class="empty-state-icon">
+                                    📦
+                                </div>
+
+                                <h3>
+                                    No products saved
+                                </h3>
+
+                                <p>
+                                    Start product research to add products.
+                                </p>
+
+                            </div>
+
+                        `
                     }
 
                 </div>
@@ -1791,7 +2151,8 @@ document.addEventListener("DOMContentLoaded", () => {
                             dashboardState.products =
                                 dashboardState.products.filter(
                                     product =>
-                                        product.id !== id
+                                        product.id !==
+                                        id
                                 );
 
 
@@ -1828,13 +2189,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =====================================================
-       STORES
+       SELLER CONNECTION SYSTEM
     ===================================================== */
 
     function renderStores(container) {
 
-        const stores =
-            dashboardState.stores;
+        const connections =
+            dashboardState.sellerConnections;
 
 
         container.innerHTML = `
@@ -1846,70 +2207,270 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div>
 
                         <span class="card-eyebrow">
-                            AUTHORIZED INTEGRATIONS
+                            SELLER ACCOUNT HUB
                         </span>
 
                         <h2>
-                            My Stores
+                            Connect Your Seller Accounts
                         </h2>
 
                         <p class="card-description">
-                            Add store connections that you personally
-                            manage and authorize.
+                            Open an official seller portal, sign in or
+                            create your account yourself, then confirm
+                            the connection here.
                         </p>
 
                     </div>
 
                 </div>
 
+                <div class="seller-security-note">
 
-                <div class="research-input-row">
+                    <strong>
+                        🔒 Secure connection notice
+                    </strong>
 
-                    <input
-                        type="text"
-                        id="storeNameInput"
-                        placeholder="Example: My Shopify Store"
-                    >
-
-                    <button
-                        class="primary-action"
-                        id="addStoreBtn"
-                    >
-                        + Add Store
-                    </button>
+                    <p>
+                        Smart Money does not ask for or save your
+                        seller password or OTP. Login is completed
+                        directly on the official seller website.
+                    </p>
 
                 </div>
 
-
-                <div
-                    class="full-stores-list"
-                    id="fullStoresList"
-                >
+                <div class="seller-platform-grid">
 
                     ${
-                        stores.length
-                            ? stores.map(
-                                store => `
+                        SELLER_PLATFORMS.map(
+                            platform => {
 
-                                    <div class="workspace-list-item">
+                                const connection =
+                                    getConnection(
+                                        platform.id
+                                    );
 
-                                        <div class="workspace-item-icon">
-                                            🏪
+
+                                const isConnected =
+                                    Boolean(
+                                        connection
+                                    );
+
+
+                                return `
+
+                                <article
+                                    class="seller-platform-card"
+                                >
+
+                                    <div
+                                        class="seller-platform-top"
+                                    >
+
+                                        <div
+                                            class="seller-platform-icon"
+                                        >
+                                            ${platform.icon}
                                         </div>
 
-                                        <div class="workspace-item-content">
+                                        <span
+                                            class="seller-status-badge ${isConnected ? "connected" : "not-connected"}"
+                                        >
+                                            ${
+                                                isConnected
+                                                    ? "Connected"
+                                                    : "Not Connected"
+                                            }
+                                        </span>
+
+                                    </div>
+
+                                    <h3>
+                                        ${escapeHTML(
+                                            platform.name
+                                        )}
+                                    </h3>
+
+                                    <p>
+                                        ${escapeHTML(
+                                            platform.description
+                                        )}
+                                    </p>
+
+                                    <small>
+                                        ${escapeHTML(
+                                            platform.category
+                                        )}
+                                        ·
+                                        ${escapeHTML(
+                                            platform.regions.join(
+                                                ", "
+                                            )
+                                        )}
+                                    </small>
+
+                                    ${
+                                        isConnected
+
+                                            ? `
+
+                                            <div
+                                                class="seller-connected-info"
+                                            >
+
+                                                <strong>
+                                                    ✓ Connected
+                                                </strong>
+
+                                                <small>
+                                                    ${connection.storeName
+                                                        ? escapeHTML(
+                                                            connection.storeName
+                                                        )
+                                                        : "Seller account"
+                                                    }
+                                                </small>
+
+                                            </div>
+
+                                            <div
+                                                class="seller-action-row"
+                                            >
+
+                                                <button
+                                                    class="secondary-action seller-open-btn"
+                                                    data-platform-id="${platform.id}"
+                                                >
+                                                    Open Portal
+                                                </button>
+
+                                                <button
+                                                    class="danger-action seller-disconnect-btn"
+                                                    data-platform-id="${platform.id}"
+                                                >
+                                                    Disconnect
+                                                </button>
+
+                                            </div>
+
+                                        `
+
+                                            : `
+
+                                            <div
+                                                class="seller-action-row"
+                                            >
+
+                                                <button
+                                                    class="secondary-action seller-signup-btn"
+                                                    data-platform-id="${platform.id}"
+                                                >
+                                                    Create Account
+                                                </button>
+
+                                                <button
+                                                    class="primary-action seller-connect-btn"
+                                                    data-platform-id="${platform.id}"
+                                                >
+                                                    Login & Connect
+                                                </button>
+
+                                            </div>
+
+                                        `
+                                    }
+
+                                </article>
+
+                            `;
+
+                            }
+                        ).join("")
+                    }
+
+                </div>
+
+            </section>
+
+
+            <section class="dashboard-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <span class="card-eyebrow">
+                            CONNECTED ACCOUNTS
+                        </span>
+
+                        <h2>
+                            Your Seller Connections
+                        </h2>
+
+                    </div>
+
+                </div>
+
+                ${
+                    connections.length
+
+                        ? connections.map(
+                            connection => {
+
+                                const platform =
+                                    getPlatform(
+                                        connection.platformId
+                                    );
+
+
+                                if (!platform) {
+
+                                    return "";
+
+                                }
+
+
+                                return `
+
+                                    <div
+                                        class="workspace-list-item"
+                                    >
+
+                                        <div
+                                            class="workspace-item-icon"
+                                        >
+                                            ${platform.icon}
+                                        </div>
+
+                                        <div
+                                            class="workspace-item-content"
+                                        >
 
                                             <strong>
-                                                ${escapeHTML(store.name)}
+                                                ${escapeHTML(
+                                                    platform.name
+                                                )}
                                             </strong>
 
                                             <small>
-                                                Added ${formatDate(store.createdAt)}
+                                                ${
+                                                    connection.storeName
+                                                        ? escapeHTML(
+                                                            connection.storeName
+                                                        )
+                                                        : "Seller connection"
+                                                }
+
+                                                · Connected
+                                                ${formatDate(
+                                                    connection.connectedAt
+                                                )}
                                             </small>
 
                                         </div>
 
-                                        <div class="workspace-item-meta">
+                                        <div
+                                            class="workspace-item-meta"
+                                        >
 
                                             <span>
                                                 Connected
@@ -1919,64 +2480,482 @@ document.addEventListener("DOMContentLoaded", () => {
 
                                     </div>
 
-                                `
-                            ).join("")
-                            : `
+                                `;
 
-                                <div class="empty-state">
+                            }
+                        ).join("")
 
-                                    <div class="empty-state-icon">
-                                        🏪
-                                    </div>
+                        : `
 
-                                    <h3>
-                                        No stores connected
-                                    </h3>
+                            <div class="empty-state">
 
-                                    <p>
-                                        Add a store workspace to track
-                                        your commerce operations.
-                                    </p>
-
+                                <div
+                                    class="empty-state-icon"
+                                >
+                                    🏪
                                 </div>
 
-                            `
-                    }
+                                <h3>
+                                    No seller account connected
+                                </h3>
 
-                </div>
+                                <p>
+                                    Select a marketplace above and
+                                    connect your own seller account.
+                                </p>
+
+                            </div>
+
+                        `
+                }
 
             </section>
 
         `;
 
 
-        const addButton =
-            document.getElementById(
-                "addStoreBtn"
+        /* -----------------------------------------------
+           CREATE ACCOUNT BUTTON
+        ----------------------------------------------- */
+
+        container
+            .querySelectorAll(
+                ".seller-signup-btn"
+            )
+            .forEach(
+                button => {
+
+                    button.addEventListener(
+                        "click",
+                        () => {
+
+                            const platform =
+                                getPlatform(
+                                    button.dataset
+                                        .platformId
+                                );
+
+
+                            if (!platform) return;
+
+
+                            window.open(
+                                platform.signupUrl,
+                                "_blank",
+                                "noopener,noreferrer"
+                            );
+
+
+                            showToast(
+                                platform.name +
+                                " registration portal opened.",
+                                "🏪"
+                            );
+
+
+                            addActivity(
+                                "Seller registration opened",
+                                platform.name +
+                                " official registration portal was opened.",
+                                platform.icon
+                            );
+
+                        }
+                    );
+
+                }
             );
 
 
-        const storeInput =
-            document.getElementById(
-                "storeNameInput"
+        /* -----------------------------------------------
+           LOGIN & CONNECT
+        ----------------------------------------------- */
+
+        container
+            .querySelectorAll(
+                ".seller-connect-btn"
+            )
+            .forEach(
+                button => {
+
+                    button.addEventListener(
+                        "click",
+                        () => {
+
+                            const platform =
+                                getPlatform(
+                                    button.dataset
+                                        .platformId
+                                );
+
+
+                            if (!platform) return;
+
+
+                            openSellerConnectionDialog(
+                                platform,
+                                container
+                            );
+
+                        }
+                    );
+
+                }
             );
 
 
-        if (addButton) {
+        /* -----------------------------------------------
+           OPEN CONNECTED PORTAL
+        ----------------------------------------------- */
 
-            addButton.addEventListener(
+        container
+            .querySelectorAll(
+                ".seller-open-btn"
+            )
+            .forEach(
+                button => {
+
+                    button.addEventListener(
+                        "click",
+                        () => {
+
+                            const platform =
+                                getPlatform(
+                                    button.dataset
+                                        .platformId
+                                );
+
+
+                            if (!platform) return;
+
+
+                            window.open(
+                                platform.loginUrl,
+                                "_blank",
+                                "noopener,noreferrer"
+                            );
+
+
+                            showToast(
+                                "Official seller portal opened.",
+                                "🔗"
+                            );
+
+                        }
+                    );
+
+                }
+            );
+
+
+        /* -----------------------------------------------
+           DISCONNECT
+        ----------------------------------------------- */
+
+        container
+            .querySelectorAll(
+                ".seller-disconnect-btn"
+            )
+            .forEach(
+                button => {
+
+                    button.addEventListener(
+                        "click",
+                        () => {
+
+                            const platformId =
+                                button.dataset
+                                    .platformId;
+
+
+                            const platform =
+                                getPlatform(
+                                    platformId
+                                );
+
+
+                            const confirmed =
+                                window.confirm(
+                                    "Disconnect " +
+                                    (
+                                        platform
+                                            ? platform.name
+                                            : "this seller account"
+                                    ) +
+                                    " from Smart Money?"
+                                );
+
+
+                            if (!confirmed) {
+
+                                return;
+
+                            }
+
+
+                            dashboardState
+                                .sellerConnections =
+                                dashboardState
+                                    .sellerConnections
+                                    .filter(
+                                        connection =>
+                                            connection.platformId !==
+                                            platformId
+                                    );
+
+
+                            saveDashboardData();
+
+                            updateStatistics();
+
+
+                            addActivity(
+                                "Seller account disconnected",
+                                (
+                                    platform
+                                        ? platform.name
+                                        : "Seller platform"
+                                ) +
+                                " was removed from the dashboard.",
+                                "🔌"
+                            );
+
+
+                            renderStores(
+                                container
+                            );
+
+
+                            showToast(
+                                "Seller account disconnected.",
+                                "🔌"
+                            );
+
+                        }
+                    );
+
+                }
+            );
+
+    }
+
+
+    /* =====================================================
+       SELLER CONNECTION DIALOG
+    ===================================================== */
+
+    function openSellerConnectionDialog(
+        platform,
+        container
+    ) {
+
+        const oldModal =
+            document.getElementById(
+                "sellerConnectionModal"
+            );
+
+
+        if (oldModal) {
+
+            oldModal.remove();
+
+        }
+
+
+        const modal =
+            document.createElement(
+                "div"
+            );
+
+
+        modal.id =
+            "sellerConnectionModal";
+
+
+        modal.className =
+            "seller-connection-modal";
+
+
+        modal.innerHTML = `
+
+            <div
+                class="seller-modal-backdrop"
+            ></div>
+
+            <div
+                class="seller-modal-card"
+            >
+
+                <button
+                    class="seller-modal-close"
+                    id="closeSellerModal"
+                    type="button"
+                >
+                    ×
+                </button>
+
+                <div
+                    class="seller-modal-icon"
+                >
+                    ${platform.icon}
+                </div>
+
+                <h2>
+                    Connect ${escapeHTML(
+                        platform.name
+                    )}
+                </h2>
+
+                <p>
+                    Step 1: Open the official seller portal.
+                    Complete login or account registration directly
+                    on that website.
+                </p>
+
+                <button
+                    class="primary-action"
+                    id="openOfficialSellerPortal"
+                >
+                    Open Official Seller Portal
+                </button>
+
+                <div
+                    class="seller-modal-divider"
+                ></div>
+
+                <p>
+                    Step 2: After you have completed your login,
+                    enter an optional display name for this seller
+                    connection.
+                </p>
+
+                <input
+                    type="text"
+                    id="sellerStoreDisplayName"
+                    placeholder="Example: My Main Store"
+                >
+
+                <label
+                    class="seller-confirm-checkbox"
+                >
+
+                    <input
+                        type="checkbox"
+                        id="sellerLoginConfirmed"
+                    >
+
+                    <span>
+                        I confirm that I personally completed login
+                        or registration on the official seller website.
+                    </span>
+
+                </label>
+
+                <button
+                    class="primary-action"
+                    id="confirmSellerConnection"
+                >
+                    ✓ Confirm Connection
+                </button>
+
+                <p
+                    class="seller-modal-security"
+                >
+                    🔒 Never enter your password or OTP here.
+                    Smart Money does not store seller login credentials.
+                </p>
+
+            </div>
+
+        `;
+
+
+        document.body.appendChild(
+            modal
+        );
+
+
+        const closeModal = () => {
+
+            modal.remove();
+
+        };
+
+
+        document
+            .getElementById(
+                "closeSellerModal"
+            )
+            .addEventListener(
+                "click",
+                closeModal
+            );
+
+
+        modal
+            .querySelector(
+                ".seller-modal-backdrop"
+            )
+            .addEventListener(
+                "click",
+                closeModal
+            );
+
+
+        document
+            .getElementById(
+                "openOfficialSellerPortal"
+            )
+            .addEventListener(
                 "click",
                 () => {
 
-                    const name =
-                        storeInput.value.trim();
+                    window.open(
+                        platform.loginUrl,
+                        "_blank",
+                        "noopener,noreferrer"
+                    );
 
 
-                    if (!name) {
+                    showToast(
+                        "Complete your login in the official portal.",
+                        "🔐"
+                    );
+
+                }
+            );
+
+
+        document
+            .getElementById(
+                "confirmSellerConnection"
+            )
+            .addEventListener(
+                "click",
+                () => {
+
+                    const confirmed =
+                        document
+                            .getElementById(
+                                "sellerLoginConfirmed"
+                            )
+                            .checked;
+
+
+                    const storeName =
+                        document
+                            .getElementById(
+                                "sellerStoreDisplayName"
+                            )
+                            .value
+                            .trim();
+
+
+                    if (!confirmed) {
 
                         showToast(
-                            "Enter your store name.",
-                            "🏪"
+                            "Please confirm that login was completed on the official seller website.",
+                            "⚠️"
                         );
 
                         return;
@@ -1984,34 +2963,70 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
 
 
-                    dashboardState.stores.push({
+                    const existing =
+                        getConnection(
+                            platform.id
+                        );
 
-                        id:
-                            createId(
-                                "store"
-                            ),
 
-                        name,
+                    if (existing) {
 
-                        createdAt:
-                            new Date()
-                                .toISOString()
+                        showToast(
+                            "This seller platform is already connected.",
+                            "✓"
+                        );
 
-                    });
+                        closeModal();
+
+                        return;
+
+                    }
+
+
+                    dashboardState
+                        .sellerConnections
+                        .push({
+
+                            id:
+                                createId(
+                                    "seller"
+                                ),
+
+                            platformId:
+                                platform.id,
+
+                            storeName:
+                                storeName ||
+                                platform.name,
+
+                            status:
+                                "connected",
+
+                            connectedAt:
+                                new Date()
+                                    .toISOString(),
+
+                            lastActiveAt:
+                                new Date()
+                                    .toISOString()
+
+                        });
 
 
                     saveDashboardData();
-
 
                     updateStatistics();
 
 
                     addActivity(
-                        "Store workspace added",
-                        name +
-                        " was added to your dashboard.",
-                        "🏪"
+                        "Seller account connected",
+                        platform.name +
+                        " was connected to your Smart Money workspace.",
+                        platform.icon
                     );
+
+
+                    closeModal();
 
 
                     renderStores(
@@ -2020,14 +3035,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
                     showToast(
-                        "Store added successfully.",
+                        platform.name +
+                        " connected successfully.",
                         "✓"
                     );
 
                 }
             );
-
-        }
 
     }
 
@@ -2058,24 +3072,24 @@ document.addEventListener("DOMContentLoaded", () => {
                             Automation
                         </h2>
 
-                        <p class="card-description">
-                            Configure local workspace reminders and
-                            research preferences.
-                        </p>
-
                     </div>
 
                 </div>
 
-
                 <div class="automation-list">
 
-                    <label class="automation-option">
+                    <label
+                        class="automation-option"
+                    >
 
                         <input
                             type="checkbox"
                             id="dailyResearchToggle"
-                            ${automation.dailyResearch ? "checked" : ""}
+                            ${
+                                automation.dailyResearch
+                                    ? "checked"
+                                    : ""
+                            }
                         >
 
                         <span>
@@ -2084,13 +3098,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     </label>
 
-
-                    <label class="automation-option">
+                    <label
+                        class="automation-option"
+                    >
 
                         <input
                             type="checkbox"
                             id="contentReminderToggle"
-                            ${automation.contentReminder ? "checked" : ""}
+                            ${
+                                automation.contentReminder
+                                    ? "checked"
+                                    : ""
+                            }
                         >
 
                         <span>
@@ -2099,13 +3118,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     </label>
 
-
-                    <label class="automation-option">
+                    <label
+                        class="automation-option"
+                    >
 
                         <input
                             type="checkbox"
                             id="automationToggle"
-                            ${automation.enabled ? "checked" : ""}
+                            ${
+                                automation.enabled
+                                    ? "checked"
+                                    : ""
+                            }
                         >
 
                         <span>
@@ -2153,7 +3177,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     "change",
                     () => {
 
-                        dashboardState.automation[key] =
+                        dashboardState
+                            .automation[key] =
                             input.checked;
 
 
@@ -2193,56 +3218,73 @@ document.addEventListener("DOMContentLoaded", () => {
 
         container.innerHTML = `
 
-            <section class="stats-grid earnings-section-stats">
+            <section
+                class="stats-grid earnings-section-stats"
+            >
 
-                <article class="stat-card">
+                <article
+                    class="stat-card"
+                >
 
                     <p>
                         Today Earnings
                     </p>
 
                     <h3>
-                        ${formatCurrency(earnings.today)}
+                        ${formatCurrency(
+                            earnings.today
+                        )}
                     </h3>
 
                 </article>
 
-
-                <article class="stat-card">
+                <article
+                    class="stat-card"
+                >
 
                     <p>
                         Lifetime Revenue
                     </p>
 
                     <h3>
-                        ${formatCurrency(earnings.lifetime)}
+                        ${formatCurrency(
+                            earnings.lifetime
+                        )}
                     </h3>
 
                 </article>
 
-
-                <article class="stat-card">
+                <article
+                    class="stat-card"
+                >
 
                     <p>
                         Estimated Profit
                     </p>
 
                     <h3>
-                        ${formatCurrency(earnings.profit)}
+                        ${formatCurrency(
+                            earnings.profit
+                        )}
                     </h3>
 
                 </article>
 
             </section>
 
+            <section
+                class="dashboard-card"
+            >
 
-            <section class="dashboard-card">
-
-                <div class="card-header">
+                <div
+                    class="card-header"
+                >
 
                     <div>
 
-                        <span class="card-eyebrow">
+                        <span
+                            class="card-eyebrow"
+                        >
                             MANUAL PERFORMANCE DATA
                         </span>
 
@@ -2254,8 +3296,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 </div>
 
-
-                <div class="earnings-form">
+                <div
+                    class="earnings-form"
+                >
 
                     <input
                         type="number"
@@ -2303,25 +3346,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     const today =
                         Number(
-                            document.getElementById(
-                                "todayEarningsInput"
-                            ).value
+                            document
+                                .getElementById(
+                                    "todayEarningsInput"
+                                )
+                                .value
                         ) || 0;
 
 
                     const lifetime =
                         Number(
-                            document.getElementById(
-                                "lifetimeEarningsInput"
-                            ).value
+                            document
+                                .getElementById(
+                                    "lifetimeEarningsInput"
+                                )
+                                .value
                         ) || 0;
 
 
                     const profit =
                         Number(
-                            document.getElementById(
-                                "profitInput"
-                            ).value
+                            document
+                                .getElementById(
+                                    "profitInput"
+                                )
+                                .value
                         ) || 0;
 
 
@@ -2337,7 +3386,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
                     saveDashboardData();
-
 
                     updateStatistics();
 
@@ -2392,60 +3440,66 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 </div>
 
-
                 ${
                     history.length
+
                         ? history.map(
                             item => `
 
-                                <div class="workspace-list-item">
+                            <div class="workspace-list-item">
 
-                                    <div class="workspace-item-icon">
-                                        📉
-                                    </div>
-
-                                    <div class="workspace-item-content">
-
-                                        <strong>
-                                            ${escapeHTML(item.productName)}
-                                        </strong>
-
-                                        <small>
-                                            ${formatDate(item.createdAt)}
-                                        </small>
-
-                                    </div>
-
-                                    <div class="workspace-item-meta">
-
-                                        ₹${formatNumber(item.price)}
-
-                                    </div>
-
-                                </div>
-
-                            `
-                        ).join("")
-                        : `
-
-                            <div class="empty-state">
-
-                                <div class="empty-state-icon">
+                                <div class="workspace-item-icon">
                                     📉
                                 </div>
 
-                                <h3>
-                                    No price history
-                                </h3>
+                                <div class="workspace-item-content">
 
-                                <p>
-                                    Product research results will create
-                                    price observations here.
-                                </p>
+                                    <strong>
+                                        ${escapeHTML(
+                                            item.productName
+                                        )}
+                                    </strong>
+
+                                    <small>
+                                        ${formatDate(
+                                            item.createdAt
+                                        )}
+                                    </small>
+
+                                </div>
+
+                                <div class="workspace-item-meta">
+
+                                    ₹${formatNumber(
+                                        item.price
+                                    )}
+
+                                </div>
 
                             </div>
 
                         `
+                        ).join("")
+
+                        : `
+
+                        <div class="empty-state">
+
+                            <div class="empty-state-icon">
+                                📉
+                            </div>
+
+                            <h3>
+                                No price history
+                            </h3>
+
+                            <p>
+                                Product research results will appear here.
+                            </p>
+
+                        </div>
+
+                    `
                 }
 
             </section>
@@ -2483,7 +3537,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     </div>
 
-
                     <button
                         class="secondary-action"
                         id="clearActivityBtn"
@@ -2493,59 +3546,68 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 </div>
 
-
                 ${
                     activities.length
+
                         ? activities.map(
                             activity => `
 
-                                <div class="workspace-list-item">
+                            <div class="workspace-list-item">
 
-                                    <div class="workspace-item-icon">
+                                <div class="workspace-item-icon">
 
-                                        ${escapeHTML(activity.icon)}
-
-                                    </div>
-
-                                    <div class="workspace-item-content">
-
-                                        <strong>
-
-                                            ${escapeHTML(activity.title)}
-
-                                        </strong>
-
-                                        <small>
-
-                                            ${escapeHTML(activity.description)}
-
-                                            ·
-
-                                            ${formatDate(activity.createdAt)}
-
-                                        </small>
-
-                                    </div>
+                                    ${escapeHTML(
+                                        activity.icon
+                                    )}
 
                                 </div>
 
-                            `
-                        ).join("")
-                        : `
+                                <div class="workspace-item-content">
 
-                            <div class="empty-state">
+                                    <strong>
 
-                                <div class="empty-state-icon">
-                                    ⚡
+                                        ${escapeHTML(
+                                            activity.title
+                                        )}
+
+                                    </strong>
+
+                                    <small>
+
+                                        ${escapeHTML(
+                                            activity.description
+                                        )}
+
+                                        ·
+
+                                        ${formatDate(
+                                            activity.createdAt
+                                        )}
+
+                                    </small>
+
                                 </div>
-
-                                <h3>
-                                    No activity
-                                </h3>
 
                             </div>
 
                         `
+                        ).join("")
+
+                        : `
+
+                        <div class="empty-state">
+
+                            <div class="empty-state-icon">
+                                ⚡
+                            </div>
+
+                            <h3>
+                                No activity
+                            </h3>
+
+                        </div>
+
+                    `
                 }
 
             </section>
@@ -2571,9 +3633,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     saveDashboardData();
 
-
                     renderActivityList();
-
 
                     renderFullActivity(
                         container
@@ -2774,6 +3834,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 renderActivityList();
 
+                updateSessionActivity();
+
+
                 showToast(
                     "Dashboard refreshed.",
                     "↻"
@@ -2862,7 +3925,7 @@ document.addEventListener("DOMContentLoaded", () => {
             () => {
 
                 showToast(
-                    "AI workspace is ready for product research.",
+                    "AI workspace is ready.",
                     "🤖"
                 );
 
@@ -2885,14 +3948,20 @@ document.addEventListener("DOMContentLoaded", () => {
                 const name =
                     window.prompt(
                         "Enter workspace display name:",
-                        dashboardState.profile.name
+                        dashboardState
+                            .profile
+                            .name
                     );
 
 
                 if (
                     !name ||
                     !name.trim()
-                ) return;
+                ) {
+
+                    return;
+
+                }
 
 
                 dashboardState.profile.name =
@@ -3061,11 +4130,39 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
 
+    window.addEventListener(
+        "focus",
+        () => {
+
+            updateSessionActivity();
+
+        }
+    );
+
+
+    document.addEventListener(
+        "visibilitychange",
+        () => {
+
+            if (
+                !document.hidden
+            ) {
+
+                updateSessionActivity();
+
+            }
+
+        }
+    );
+
+
     /* =====================================================
        INITIALIZE
     ===================================================== */
 
     function initializeDashboard() {
+
+        initializePersistentSession();
 
         loadDashboardData();
 
@@ -3096,6 +4193,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         console.log(
             "SMART MONEY AI COMMERCE READY"
+        );
+
+        console.log(
+            "Persistent dashboard session active"
+        );
+
+        console.log(
+            "Seller connection hub ready"
         );
 
     }
