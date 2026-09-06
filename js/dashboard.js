@@ -1,12 +1,8 @@
 /* =========================================================
    SMART MONEY AI COMMERCE
-   DASHBOARD JAVASCRIPT
+   COMPLETE DASHBOARD JAVASCRIPT
    ========================================================= */
 
-
-/* =========================================================
-   DOM READY
-========================================================= */
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -14,130 +10,164 @@ document.addEventListener(
 
 
         /* =================================================
-           CONFIGURATION CHECK
+           CONFIG
         ================================================= */
 
         const appConfig =
-            window.SM_CONFIG || null;
-
-
-        const appName =
-            appConfig?.appName ||
-            "Smart Money AI Commerce";
-
-
-        console.log(
-            appName +
-            " Dashboard Started"
-        );
+            window.SM_CONFIG || {};
 
 
         /* =================================================
-           DASHBOARD STATE
-        ================================================= */
-
-        const dashboardState = {
-
-
-            products: [],
-
-
-            activities: [],
-
-
-            stores: [],
-
-
-            notifications: [],
-
-
-            earnings: {
-
-                today: 0,
-
-                lifetime: 0,
-
-                profit: 0
-
-            },
-
-
-            selectedProduct: null,
-
-
-            isAnalyzing: false
-
-        };
-
-
-
-        /* =================================================
-           DOM ELEMENTS
+           DOM
         ================================================= */
 
         const sidebar =
-            document.querySelector(
-                ".sidebar"
-            );
-
-
-        const sidebarToggle =
             document.getElementById(
-                "sidebarToggle"
+                "sidebar"
             );
 
 
-        const mobileMenuBtn =
+        const menuToggle =
             document.getElementById(
-                "mobileMenuBtn"
+                "menuToggle"
             );
 
 
-        const notificationBtn =
+        const sidebarClose =
             document.getElementById(
-                "notificationBtn"
+                "sidebarClose"
             );
 
 
-        const notificationPanel =
+        const sidebarOverlay =
             document.getElementById(
-                "notificationPanel"
+                "sidebarOverlay"
             );
 
 
-        const searchInput =
+        const sidebarNav =
+            document.getElementById(
+                "sidebarNav"
+            );
+
+
+        const navItems =
+            document.querySelectorAll(
+                ".nav-item"
+            );
+
+
+        const pageTitle =
+            document.getElementById(
+                "pageTitle"
+            );
+
+
+        const globalSearch =
+            document.getElementById(
+                "globalSearch"
+            );
+
+
+        const productSearchInput =
             document.getElementById(
                 "productSearchInput"
             );
 
 
-        const productSearchBtn =
-            document.getElementById(
-                "productSearchBtn"
-            );
-
-
-        const analyzeBtn =
+        const analyzeProductBtn =
             document.getElementById(
                 "analyzeProductBtn"
             );
 
 
-        const refreshBtn =
+        const startResearchBtn =
+            document.getElementById(
+                "startResearchBtn"
+            );
+
+
+        const viewAutomationBtn =
+            document.getElementById(
+                "viewAutomationBtn"
+            );
+
+
+        const settingsBtn =
+            document.getElementById(
+                "settingsBtn"
+            );
+
+
+        const viewProductsBtn =
+            document.getElementById(
+                "viewProductsBtn"
+            );
+
+
+        const refreshDashboardBtn =
             document.getElementById(
                 "refreshDashboardBtn"
             );
 
 
-        const productTableBody =
+        const connectStoreBtn =
             document.getElementById(
-                "productTableBody"
+                "connectStoreBtn"
+            );
+
+
+        const productList =
+            document.getElementById(
+                "productList"
             );
 
 
         const activityList =
             document.getElementById(
                 "activityList"
+            );
+
+
+        const todayEarnings =
+            document.getElementById(
+                "todayEarnings"
+            );
+
+
+        const lifetimeRevenue =
+            document.getElementById(
+                "lifetimeRevenue"
+            );
+
+
+        const estimatedProfit =
+            document.getElementById(
+                "estimatedProfit"
+            );
+
+
+        const connectedStores =
+            document.getElementById(
+                "connectedStores"
+            );
+
+
+        const storeSummaryCount =
+            document.getElementById(
+                "storeSummaryCount"
+            );
+
+
+        const aiStatus =
+            document.getElementById(
+                "aiStatus"
+            );
+
+
+        const sidebarAiStatus =
+            document.getElementById(
+                "sidebarAiStatus"
             );
 
 
@@ -159,67 +189,119 @@ document.addEventListener(
             );
 
 
-        const todayEarning =
-            document.getElementById(
-                "todayEarning"
-            );
+        /* =================================================
+           STATE
+        ================================================= */
+
+        const dashboardState = {
+
+            products: [],
+
+            activities: [],
+
+            stores: [],
+
+            earnings: {
+
+                today: 0,
+
+                lifetime: 0,
+
+                profit: 0
+
+            },
+
+            isAnalyzing: false
+
+        };
 
 
-        const lifetimeEarning =
-            document.getElementById(
-                "lifetimeEarning"
-            );
-
-
-        const totalProfit =
-            document.getElementById(
-                "totalProfit"
-            );
-
-
-        const totalProducts =
-            document.getElementById(
-                "totalProducts"
-            );
-
-
-        const totalStores =
-            document.getElementById(
-                "totalStores"
-            );
-
-
-        const aiStatus =
-            document.getElementById(
-                "aiStatus"
-            );
-
+        let toastTimer = null;
 
 
         /* =================================================
-           TOAST SYSTEM
+           HELPERS
         ================================================= */
 
-        let toastTimer;
+        function isMobile() {
 
+            return window.innerWidth <= 900;
+
+        }
+
+
+        function escapeHTML(
+            value
+        ) {
+
+            const element =
+                document.createElement(
+                    "div"
+                );
+
+
+            element.textContent =
+                String(
+                    value || ""
+                );
+
+
+            return element.innerHTML;
+
+        }
+
+
+        function formatCurrency(
+            amount
+        ) {
+
+            return new Intl.NumberFormat(
+                "en-IN",
+                {
+
+                    style:
+                        "currency",
+
+                    currency:
+                        "INR",
+
+                    minimumFractionDigits:
+                        2,
+
+                    maximumFractionDigits:
+                        2
+
+                }
+            ).format(
+                Number(
+                    amount || 0
+                )
+            );
+
+        }
+
+
+        /* =================================================
+           TOAST
+        ================================================= */
 
         function showToast(
             message,
             icon = "✓"
         ) {
 
-            if (!toast) {
-
-                console.log(
-                    message
-                );
+            if (
+                !toast
+            ) {
 
                 return;
 
             }
 
 
-            if (toastMessage) {
+            if (
+                toastMessage
+            ) {
 
                 toastMessage.textContent =
                     message;
@@ -227,7 +309,9 @@ document.addEventListener(
             }
 
 
-            if (toastIcon) {
+            if (
+                toastIcon
+            ) {
 
                 toastIcon.textContent =
                     icon;
@@ -254,140 +338,568 @@ document.addEventListener(
                         );
 
                     },
-                    3000
+                    3500
                 );
 
         }
 
 
-
         /* =================================================
-           FORMAT CURRENCY
+           SIDEBAR OPEN
         ================================================= */
 
-        function formatCurrency(
-            amount
+        function openSidebar() {
+
+            if (
+                !sidebar
+            ) {
+
+                return;
+
+            }
+
+
+            sidebar.classList.add(
+                "open"
+            );
+
+
+            if (
+                sidebarOverlay
+            ) {
+
+                sidebarOverlay.classList.add(
+                    "show"
+                );
+
+                sidebarOverlay.setAttribute(
+                    "aria-hidden",
+                    "false"
+                );
+
+            }
+
+
+            if (
+                menuToggle
+            ) {
+
+                menuToggle.setAttribute(
+                    "aria-expanded",
+                    "true"
+                );
+
+            }
+
+
+            document.body.style.overflow =
+                "hidden";
+
+        }
+
+
+        /* =================================================
+           SIDEBAR CLOSE
+        ================================================= */
+
+        function closeSidebar() {
+
+            if (
+                !sidebar
+            ) {
+
+                return;
+
+            }
+
+
+            sidebar.classList.remove(
+                "open"
+            );
+
+
+            if (
+                sidebarOverlay
+            ) {
+
+                sidebarOverlay.classList.remove(
+                    "show"
+                );
+
+                sidebarOverlay.setAttribute(
+                    "aria-hidden",
+                    "true"
+                );
+
+            }
+
+
+            if (
+                menuToggle
+            ) {
+
+                menuToggle.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+
+            }
+
+
+            document.body.style.overflow =
+                "";
+
+        }
+
+
+        /* =================================================
+           SIDEBAR TOGGLE
+        ================================================= */
+
+        function toggleSidebar() {
+
+            if (
+                !sidebar
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                sidebar.classList.contains(
+                    "open"
+                )
+            ) {
+
+                closeSidebar();
+
+            }
+            else {
+
+                openSidebar();
+
+            }
+
+        }
+
+
+        /* =================================================
+           MOBILE MENU EVENTS
+        ================================================= */
+
+        if (
+            menuToggle
         ) {
 
-            return new Intl.NumberFormat(
-                "en-IN",
-                {
-
-                    style:
-                        "currency",
-
-                    currency:
-                        "INR",
-
-                    maximumFractionDigits:
-                        0
-
-                }
-            ).format(
-                Number(
-                    amount || 0
-                )
+            menuToggle.addEventListener(
+                "click",
+                toggleSidebar
             );
 
         }
 
 
-
-        /* =================================================
-           FORMAT NUMBER
-        ================================================= */
-
-        function formatNumber(
-            number
+        if (
+            sidebarClose
         ) {
 
-            return new Intl.NumberFormat(
-                "en-IN"
-            ).format(
-                Number(
-                    number || 0
-                )
+            sidebarClose.addEventListener(
+                "click",
+                closeSidebar
             );
 
         }
 
 
+        if (
+            sidebarOverlay
+        ) {
+
+            sidebarOverlay.addEventListener(
+                "click",
+                closeSidebar
+            );
+
+        }
+
 
         /* =================================================
-           LOAD DASHBOARD DATA
+           NAVIGATION
         ================================================= */
 
-        function loadDashboardData() {
+        navItems.forEach(
+            (
+                item
+            ) => {
+
+                item.addEventListener(
+                    "click",
+                    () => {
+
+                        const section =
+                            item.dataset.section;
+
+
+                        navItems.forEach(
+                            (
+                                navItem
+                            ) => {
+
+                                navItem.classList.remove(
+                                    "active"
+                                );
+
+                            }
+                        );
+
+
+                        item.classList.add(
+                            "active"
+                        );
+
+
+                        handleNavigation(
+                            section
+                        );
+
+
+                        if (
+                            isMobile()
+                        ) {
+
+                            closeSidebar();
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+
+        function handleNavigation(
+            section
+        ) {
+
+            const pageNames = {
+
+                dashboard:
+                    "Dashboard",
+
+                "ai-hunter":
+                    "AI Product Hunter",
+
+                "product-research":
+                    "Product Research",
+
+                stores:
+                    "My Stores",
+
+                automation:
+                    "Automation",
+
+                earnings:
+                    "Earnings",
+
+                products:
+                    "Products",
+
+                "price-history":
+                    "Price History",
+
+                activity:
+                    "AI Activity"
+
+            };
+
+
+            if (
+                pageTitle
+            ) {
+
+                pageTitle.textContent =
+                    pageNames[
+                        section
+                    ] ||
+                    "Dashboard";
+
+            }
+
+
+            switch (
+                section
+            ) {
+
+                case "dashboard":
+
+                    window.scrollTo(
+                        {
+
+                            top: 0,
+
+                            behavior:
+                                "smooth"
+
+                        }
+                    );
+
+                    break;
+
+
+                case "product-research":
+
+                    scrollToResearch();
+
+                    break;
+
+
+                case "products":
+
+                    scrollToProducts();
+
+                    break;
+
+
+                case "activity":
+
+                    scrollToActivity();
+
+                    break;
+
+
+                case "stores":
+
+                    showToast(
+                        "Store management will open here.",
+                        "🏪"
+                    );
+
+                    break;
+
+
+                case "automation":
+
+                    showToast(
+                        "Automation center selected.",
+                        "⚙️"
+                    );
+
+                    break;
+
+
+                case "ai-hunter":
+
+                    showToast(
+                        "AI Product Hunter selected.",
+                        "🤖"
+                    );
+
+                    break;
+
+
+                case "earnings":
+
+                    showToast(
+                        "Earnings analytics selected.",
+                        "💰"
+                    );
+
+                    break;
+
+
+                case "price-history":
+
+                    showToast(
+                        "Price history selected.",
+                        "📉"
+                    );
+
+                    break;
+
+            }
+
+        }
+
+
+        /* =================================================
+           SCROLL HELPERS
+        ================================================= */
+
+        function scrollToResearch() {
+
+            const target =
+                document.querySelector(
+                    ".research-card"
+                );
+
+
+            if (
+                target
+            ) {
+
+                target.scrollIntoView(
+                    {
+
+                        behavior:
+                            "smooth",
+
+                        block:
+                            "center"
+
+                    }
+                );
+
+            }
+
+
+            setTimeout(
+                () => {
+
+                    if (
+                        productSearchInput
+                    ) {
+
+                        productSearchInput.focus();
+
+                    }
+
+                },
+                500
+            );
+
+        }
+
+
+        function scrollToProducts() {
+
+            const target =
+                document.querySelector(
+                    ".trending-card"
+                );
+
+
+            if (
+                target
+            ) {
+
+                target.scrollIntoView(
+                    {
+
+                        behavior:
+                            "smooth"
+
+                    }
+                );
+
+            }
+
+        }
+
+
+        function scrollToActivity() {
+
+            const target =
+                document.querySelector(
+                    ".activity-card"
+                );
+
+
+            if (
+                target
+            ) {
+
+                target.scrollIntoView(
+                    {
+
+                        behavior:
+                            "smooth"
+
+                    }
+                );
+
+            }
+
+        }
+
+
+        /* =================================================
+           LOCAL STORAGE
+        ================================================= */
+
+        function loadData() {
 
             try {
 
-                const savedProducts =
+                const products =
                     localStorage.getItem(
                         "sm_ai_products"
                     );
 
 
-                const savedActivities =
+                const activities =
                     localStorage.getItem(
                         "sm_ai_activities"
                     );
 
 
-                const savedStores =
+                const stores =
                     localStorage.getItem(
                         "sm_ai_stores"
                     );
 
 
-                const savedEarnings =
+                const earnings =
                     localStorage.getItem(
                         "sm_ai_earnings"
                     );
 
 
                 if (
-                    savedProducts
+                    products
                 ) {
 
                     dashboardState.products =
                         JSON.parse(
-                            savedProducts
+                            products
                         );
 
                 }
 
 
                 if (
-                    savedActivities
+                    activities
                 ) {
 
                     dashboardState.activities =
                         JSON.parse(
-                            savedActivities
+                            activities
                         );
 
                 }
 
 
                 if (
-                    savedStores
+                    stores
                 ) {
 
                     dashboardState.stores =
                         JSON.parse(
-                            savedStores
+                            stores
                         );
 
                 }
 
 
                 if (
-                    savedEarnings
+                    earnings
                 ) {
 
                     dashboardState.earnings =
                         JSON.parse(
-                            savedEarnings
+                            earnings
                         );
 
                 }
@@ -398,7 +910,7 @@ document.addEventListener(
             ) {
 
                 console.error(
-                    "Dashboard data load error:",
+                    "Dashboard load error:",
                     error
                 );
 
@@ -407,12 +919,7 @@ document.addEventListener(
         }
 
 
-
-        /* =================================================
-           SAVE DASHBOARD DATA
-        ================================================= */
-
-        function saveDashboardData() {
+        function saveData() {
 
             localStorage.setItem(
                 "sm_ai_products",
@@ -448,16 +955,14 @@ document.addEventListener(
         }
 
 
-
         /* =================================================
-           CREATE SAMPLE DATA
+           DEMO DATA
         ================================================= */
 
-        function createInitialDemoData() {
+        function createDemoData() {
 
             if (
-                dashboardState.products.length ===
-                0
+                dashboardState.products.length === 0
             ) {
 
                 dashboardState.products = [
@@ -476,20 +981,11 @@ document.addEventListener(
                         price:
                             1299,
 
-                        estimatedCost:
-                            650,
-
                         estimatedProfit:
                             649,
 
                         score:
-                            92,
-
-                        trend:
-                            "High",
-
-                        status:
-                            "Research"
+                            92
 
                     },
 
@@ -508,20 +1004,11 @@ document.addEventListener(
                         price:
                             899,
 
-                        estimatedCost:
-                            420,
-
                         estimatedProfit:
                             479,
 
                         score:
-                            88,
-
-                        trend:
-                            "High",
-
-                        status:
-                            "Research"
+                            88
 
                     },
 
@@ -540,20 +1027,11 @@ document.addEventListener(
                         price:
                             1499,
 
-                        estimatedCost:
-                            850,
-
                         estimatedProfit:
                             649,
 
                         score:
-                            84,
-
-                        trend:
-                            "Medium",
-
-                        status:
-                            "Research"
+                            84
 
                     }
 
@@ -563,8 +1041,7 @@ document.addEventListener(
 
 
             if (
-                dashboardState.activities.length ===
-                0
+                dashboardState.activities.length === 0
             ) {
 
                 dashboardState.activities = [
@@ -615,23 +1092,22 @@ document.addEventListener(
             }
 
 
-            saveDashboardData();
+            saveData();
 
         }
 
 
-
         /* =================================================
-           UPDATE STATISTICS
+           RENDER STATISTICS
         ================================================= */
 
         function updateStatistics() {
 
             if (
-                todayEarning
+                todayEarnings
             ) {
 
-                todayEarning.textContent =
+                todayEarnings.textContent =
                     formatCurrency(
                         dashboardState.earnings.today
                     );
@@ -640,10 +1116,10 @@ document.addEventListener(
 
 
             if (
-                lifetimeEarning
+                lifetimeRevenue
             ) {
 
-                lifetimeEarning.textContent =
+                lifetimeRevenue.textContent =
                     formatCurrency(
                         dashboardState.earnings.lifetime
                     );
@@ -652,10 +1128,10 @@ document.addEventListener(
 
 
             if (
-                totalProfit
+                estimatedProfit
             ) {
 
-                totalProfit.textContent =
+                estimatedProfit.textContent =
                     formatCurrency(
                         dashboardState.earnings.profit
                     );
@@ -663,119 +1139,30 @@ document.addEventListener(
             }
 
 
+            const storeCount =
+                dashboardState.stores.length;
+
+
             if (
-                totalProducts
+                connectedStores
             ) {
 
-                totalProducts.textContent =
-                    formatNumber(
-                        dashboardState.products.length
-                    );
+                connectedStores.textContent =
+                    storeCount;
 
             }
 
 
             if (
-                totalStores
+                storeSummaryCount
             ) {
 
-                totalStores.textContent =
-                    formatNumber(
-                        dashboardState.stores.length
-                    );
+                storeSummaryCount.textContent =
+                    storeCount;
 
             }
 
         }
-
-
-
-        /* =================================================
-           PRODUCT SCORE CLASS
-        ================================================= */
-
-        function getScoreClass(
-            score
-        ) {
-
-            if (
-                score >= 85
-            ) {
-
-                return "excellent";
-
-            }
-
-
-            if (
-                score >= 70
-            ) {
-
-                return "good";
-
-            }
-
-
-            if (
-                score >= 50
-            ) {
-
-                return "average";
-
-            }
-
-
-            return "low";
-
-        }
-
-
-
-        /* =================================================
-           PRODUCT STATUS CLASS
-        ================================================= */
-
-        function getStatusClass(
-            status
-        ) {
-
-            const value =
-                String(
-                    status || ""
-                ).toLowerCase();
-
-
-            if (
-                value === "live"
-            ) {
-
-                return "live";
-
-            }
-
-
-            if (
-                value === "research"
-            ) {
-
-                return "research";
-
-            }
-
-
-            if (
-                value === "paused"
-            ) {
-
-                return "paused";
-
-            }
-
-
-            return "research";
-
-        }
-
 
 
         /* =================================================
@@ -788,7 +1175,7 @@ document.addEventListener(
         ) {
 
             if (
-                !productTableBody
+                !productList
             ) {
 
                 return;
@@ -800,28 +1187,12 @@ document.addEventListener(
                 products.length === 0
             ) {
 
-                productTableBody.innerHTML =
+                productList.innerHTML =
                     `
-                    <tr>
-                        <td
-                            colspan="7"
-                            class="empty-table"
-                        >
-                            <div>
-                                <span>
-                                    🔍
-                                </span>
-
-                                <strong>
-                                    No products found
-                                </strong>
-
-                                <p>
-                                    Search for a product to start AI analysis.
-                                </p>
-                            </div>
-                        </td>
-                    </tr>
+                    <div class="empty-state">
+                        <span>🔍</span>
+                        <strong>No products found</strong>
+                    </div>
                     `;
 
 
@@ -830,99 +1201,45 @@ document.addEventListener(
             }
 
 
-            productTableBody.innerHTML =
+            productList.innerHTML =
                 products
+                    .slice(
+                        0,
+                        5
+                    )
                     .map(
                         (
                             product
                         ) => {
 
                             return `
-                            <tr
-                                data-product-id="${product.id}"
-                            >
+                            <div class="product-item">
 
-                                <td>
+                                <div class="product-info">
 
-                                    <div class="product-name-cell">
+                                    <div class="product-icon">
+                                        🛍️
+                                    </div>
 
-                                        <div class="product-avatar">
-                                            🛍️
-                                        </div>
+                                    <div>
 
-                                        <div>
+                                        <strong>
+                                            ${escapeHTML(product.name)}
+                                        </strong>
 
-                                            <strong>
-                                                ${escapeHTML(product.name)}
-                                            </strong>
-
-                                            <small>
-                                                ${escapeHTML(product.source)}
-                                            </small>
-
-                                        </div>
+                                        <small>
+                                            ${escapeHTML(product.source)}
+                                        </small>
 
                                     </div>
 
-                                </td>
+                                </div>
 
+                                <div class="product-score">
+                                    ${product.score}/100
+                                </div>
 
-                                <td>
-                                    ${formatCurrency(product.price)}
-                                </td>
-
-
-                                <td>
-                                    ${formatCurrency(product.estimatedProfit)}
-                                </td>
-
-
-                                <td>
-
-                                    <span
-                                        class="score-badge ${getScoreClass(product.score)}"
-                                    >
-                                        ${product.score}/100
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span
-                                        class="trend-badge"
-                                    >
-                                        📈 ${escapeHTML(product.trend)}
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span
-                                        class="status-badge ${getStatusClass(product.status)}"
-                                    >
-                                        ${escapeHTML(product.status)}
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <button
-                                        type="button"
-                                        class="table-action-btn"
-                                        data-view-product="${product.id}"
-                                    >
-                                        View
-                                    </button>
-
-                                </td>
-
-                            </tr>
+                            </div>
                             `;
 
                         }
@@ -931,129 +1248,11 @@ document.addEventListener(
                         ""
                     );
 
-
-            bindProductViewButtons();
-
         }
 
 
-
         /* =================================================
-           HTML ESCAPE
-        ================================================= */
-
-        function escapeHTML(
-            value
-        ) {
-
-            const div =
-                document.createElement(
-                    "div"
-                );
-
-
-            div.textContent =
-                String(
-                    value || ""
-                );
-
-
-            return div.innerHTML;
-
-        }
-
-
-
-        /* =================================================
-           BIND PRODUCT BUTTONS
-        ================================================= */
-
-        function bindProductViewButtons() {
-
-            const buttons =
-                document.querySelectorAll(
-                    "[data-view-product]"
-                );
-
-
-            buttons.forEach(
-                (
-                    button
-                ) => {
-
-                    button.addEventListener(
-                        "click",
-                        () => {
-
-                            const productId =
-                                button.dataset.viewProduct;
-
-
-                            openProductDetails(
-                                productId
-                            );
-
-                        }
-                    );
-
-                }
-            );
-
-        }
-
-
-
-        /* =================================================
-           PRODUCT DETAILS
-        ================================================= */
-
-        function openProductDetails(
-            productId
-        ) {
-
-            const product =
-                dashboardState.products.find(
-                    (
-                        item
-                    ) =>
-                        item.id ===
-                        productId
-                );
-
-
-            if (
-                !product
-            ) {
-
-                return;
-
-            }
-
-
-            dashboardState.selectedProduct =
-                product;
-
-
-            showToast(
-                product.name +
-                " selected. AI Score: " +
-                product.score +
-                "/100",
-                "📦"
-            );
-
-
-            console.log(
-                "Selected Product:",
-                product
-            );
-
-        }
-
-
-
-        /* =================================================
-           RENDER ACTIVITIES
+           RENDER ACTIVITY
         ================================================= */
 
         function renderActivities() {
@@ -1067,31 +1266,11 @@ document.addEventListener(
             }
 
 
-            if (
-                dashboardState.activities.length ===
-                0
-            ) {
-
-                activityList.innerHTML =
-                    `
-                    <div
-                        class="empty-activity"
-                    >
-                        No recent activity
-                    </div>
-                    `;
-
-
-                return;
-
-            }
-
-
             activityList.innerHTML =
                 dashboardState.activities
                     .slice(
                         0,
-                        10
+                        6
                     )
                     .map(
                         (
@@ -1099,25 +1278,17 @@ document.addEventListener(
                         ) => {
 
                             return `
-                            <div
-                                class="activity-item"
-                            >
+                            <div class="activity-item">
 
-                                <div
-                                    class="activity-icon"
-                                >
+                                <div class="activity-icon">
                                     ${activity.icon}
                                 </div>
 
-
-                                <div
-                                    class="activity-content"
-                                >
+                                <div class="activity-content">
 
                                     <strong>
                                         ${escapeHTML(activity.title)}
                                     </strong>
-
 
                                     <small>
                                         ${escapeHTML(activity.time)}
@@ -1135,7 +1306,6 @@ document.addEventListener(
                     );
 
         }
-
 
 
         /* =================================================
@@ -1170,178 +1340,45 @@ document.addEventListener(
                 );
 
 
-            saveDashboardData();
-
+            saveData();
 
             renderActivities();
 
         }
 
 
-
         /* =================================================
-           PRODUCT SEARCH
+           AI STATUS
         ================================================= */
 
-        function searchProducts() {
-
-            if (
-                !searchInput
-            ) {
-
-                return;
-
-            }
-
-
-            const query =
-                searchInput.value
-                    .trim()
-                    .toLowerCase();
-
-
-            if (
-                !query
-            ) {
-
-                renderProducts();
-
-
-                return;
-
-            }
-
-
-            const filteredProducts =
-                dashboardState.products.filter(
-                    (
-                        product
-                    ) => {
-
-                        return (
-                            product.name
-                                .toLowerCase()
-                                .includes(
-                                    query
-                                ) ||
-
-                            product.source
-                                .toLowerCase()
-                                .includes(
-                                    query
-                                )
-                        );
-
-                    }
-                );
-
-
-            renderProducts(
-                filteredProducts
-            );
-
-        }
-
-
-
-        /* =================================================
-           GENERATE PRODUCT SCORE
-        ================================================= */
-
-        function generateProductScore() {
-
-            return Math.floor(
-                Math.random() *
-                30
-            ) + 70;
-
-        }
-
-
-
-        /* =================================================
-           GENERATE DEMO PRODUCT
-        ================================================= */
-
-        function generateProduct(
-            productName
+        function setAIStatus(
+            text
         ) {
 
-            const score =
-                generateProductScore();
+            if (
+                aiStatus
+            ) {
+
+                aiStatus.textContent =
+                    text;
+
+            }
 
 
-            const price =
-                Math.floor(
-                    Math.random() *
-                    2500
-                ) + 500;
+            if (
+                sidebarAiStatus
+            ) {
 
+                sidebarAiStatus.textContent =
+                    text;
 
-            const estimatedCost =
-                Math.floor(
-                    price *
-                    (
-                        0.40 +
-                        Math.random() *
-                        0.25
-                    )
-                );
-
-
-            const profit =
-                price -
-                estimatedCost;
-
-
-            return {
-
-                id:
-                    "product_" +
-                    Date.now(),
-
-
-                name:
-                    productName,
-
-
-                source:
-                    "AI Market Research",
-
-
-                price:
-                    price,
-
-
-                estimatedCost:
-                    estimatedCost,
-
-
-                estimatedProfit:
-                    profit,
-
-
-                score:
-                    score,
-
-
-                trend:
-                    score >= 85
-                        ? "High"
-                        : "Medium",
-
-
-                status:
-                    "Research"
-
-            };
+            }
 
         }
 
 
-
         /* =================================================
-           AI PRODUCT ANALYSIS
+           PRODUCT ANALYSIS
         ================================================= */
 
         async function analyzeProduct() {
@@ -1355,20 +1392,29 @@ document.addEventListener(
             }
 
 
-            const query =
-                searchInput
-                    ? searchInput.value.trim()
+            const productName =
+                productSearchInput
+                    ? productSearchInput.value.trim()
                     : "";
 
 
             if (
-                !query
+                !productName
             ) {
 
                 showToast(
-                    "Enter a product name first.",
+                    "Please enter a product name first.",
                     "⚠️"
                 );
+
+
+                if (
+                    productSearchInput
+                ) {
+
+                    productSearchInput.focus();
+
+                }
 
 
                 return;
@@ -1380,449 +1426,230 @@ document.addEventListener(
                 true;
 
 
-            setAIStatus(
-                "Analyzing Product..."
-            );
-
-
-            const originalButtonHTML =
-                analyzeBtn
-                    ? analyzeBtn.innerHTML
+            const originalText =
+                analyzeProductBtn
+                    ? analyzeProductBtn.innerHTML
                     : "";
 
 
             if (
-                analyzeBtn
+                analyzeProductBtn
             ) {
 
-                analyzeBtn.disabled =
+                analyzeProductBtn.disabled =
                     true;
 
-
-                analyzeBtn.innerHTML =
-                    `
-                    <span>
-                        ⏳
-                    </span>
-
-                    AI Analyzing...
-                    `;
+                analyzeProductBtn.innerHTML =
+                    "⏳ Analyzing...";
 
             }
 
 
-            try {
-
-                /*
-                   ------------------------------------------------
-                   IMPORTANT
-                   This is currently a safe dashboard analysis
-                   placeholder.
-
-                   RapidAPI calls should be performed through
-                   your backend / Supabase Edge Functions.
-
-                   Never put private API keys directly in
-                   browser JavaScript.
-                   ------------------------------------------------
-                */
+            setAIStatus(
+                "AI Analyzing..."
+            );
 
 
-                await wait(
-                    1800
-                );
-
-
-                const product =
-                    generateProduct(
-                        query
-                    );
-
-
-                dashboardState.products.unshift(
-                    product
-                );
-
-
-                saveDashboardData();
-
-
-                renderProducts();
-
-
-                updateStatistics();
-
-
-                addActivity(
-                    "AI analyzed product: " +
-                    product.name,
-                    "🔍"
-                );
-
-
-                showToast(
-                    product.name +
-                    " analyzed successfully. Score: " +
-                    product.score +
-                    "/100",
-                    "🤖"
-                );
-
-            }
-            catch (
-                error
-            ) {
-
-                console.error(
-                    error
-                );
-
-
-                showToast(
-                    "Product analysis failed.",
-                    "⚠️"
-                );
-
-            }
-            finally {
-
-                dashboardState.isAnalyzing =
-                    false;
-
-
-                setAIStatus(
-                    "AI Ready"
-                );
-
-
-                if (
-                    analyzeBtn
-                ) {
-
-                    analyzeBtn.disabled =
-                        false;
-
-
-                    analyzeBtn.innerHTML =
-                        originalButtonHTML;
-
-                }
-
-            }
-
-        }
-
-
-
-        /* =================================================
-           WAIT HELPER
-        ================================================= */
-
-        function wait(
-            milliseconds
-        ) {
-
-            return new Promise(
+            await new Promise(
                 (
                     resolve
                 ) => {
 
                     setTimeout(
                         resolve,
-                        milliseconds
+                        1500
                     );
 
                 }
             );
 
-        }
+
+            const price =
+                Math.floor(
+                    Math.random() *
+                    2500
+                ) + 500;
 
 
+            const cost =
+                Math.floor(
+                    price *
+                    0.55
+                );
 
-        /* =================================================
-           AI STATUS
-        ================================================= */
 
-        function setAIStatus(
-            status
-        ) {
+            const product = {
+
+                id:
+                    "product_" +
+                    Date.now(),
+
+                name:
+                    productName,
+
+                source:
+                    "AI Market Research",
+
+                price:
+                    price,
+
+                estimatedProfit:
+                    price - cost,
+
+                score:
+                    Math.floor(
+                        Math.random() *
+                        25
+                    ) + 75
+
+            };
+
+
+            dashboardState.products.unshift(
+                product
+            );
+
+
+            dashboardState.earnings.profit +=
+                product.estimatedProfit;
+
+
+            saveData();
+
+
+            renderProducts();
+
+            updateStatistics();
+
+
+            addActivity(
+                "AI analyzed product: " +
+                product.name,
+                "🔍"
+            );
+
+
+            showToast(
+                product.name +
+                " analyzed successfully.",
+                "🤖"
+            );
+
 
             if (
-                !aiStatus
+                productSearchInput
             ) {
 
-                return;
-
-            }
-
-
-            aiStatus.textContent =
-                status;
-
-        }
-
-
-
-        /* =================================================
-           REFRESH DASHBOARD
-        ================================================= */
-
-        function refreshDashboard() {
-
-            const originalHTML =
-                refreshBtn
-                    ? refreshBtn.innerHTML
-                    : "";
-
-
-            if (
-                refreshBtn
-            ) {
-
-                refreshBtn.disabled =
-                    true;
-
-
-                refreshBtn.innerHTML =
-                    "⏳ Refreshing";
+                productSearchInput.value =
+                    "";
 
             }
 
 
             setAIStatus(
-                "Refreshing Data..."
+                "Ready for Analysis"
             );
 
 
-            setTimeout(
-                () => {
-
-                    loadDashboardData();
+            dashboardState.isAnalyzing =
+                false;
 
 
-                    updateStatistics();
+            if (
+                analyzeProductBtn
+            ) {
+
+                analyzeProductBtn.disabled =
+                    false;
+
+                analyzeProductBtn.innerHTML =
+                    originalText;
+
+            }
+
+        }
 
 
-                    renderProducts();
+        /* =================================================
+           GLOBAL SEARCH
+        ================================================= */
+
+        function searchProducts(
+            query
+        ) {
+
+            const value =
+                String(
+                    query || ""
+                )
+                    .trim()
+                    .toLowerCase();
 
 
-                    renderActivities();
+            if (
+                !value
+            ) {
+
+                renderProducts();
+
+                return;
+
+            }
 
 
-                    setAIStatus(
-                        "AI Ready"
-                    );
+            const filtered =
+                dashboardState.products.filter(
+                    (
+                        product
+                    ) => {
 
-
-                    if (
-                        refreshBtn
-                    ) {
-
-                        refreshBtn.disabled =
-                            false;
-
-
-                        refreshBtn.innerHTML =
-                            originalHTML;
+                        return (
+                            product.name
+                                .toLowerCase()
+                                .includes(
+                                    value
+                                )
+                        );
 
                     }
-
-
-                    showToast(
-                        "Dashboard refreshed successfully.",
-                        "🔄"
-                    );
-
-                },
-                900
-            );
-
-        }
-
-
-
-        /* =================================================
-           SIDEBAR TOGGLE
-        ================================================= */
-
-        function toggleSidebar() {
-
-            if (
-                !sidebar
-            ) {
-
-                return;
-
-            }
-
-
-            sidebar.classList.toggle(
-                "collapsed"
-            );
-
-
-            localStorage.setItem(
-                "sm_ai_sidebar_collapsed",
-                sidebar.classList.contains(
-                    "collapsed"
-                )
-                    ? "true"
-                    : "false"
-            );
-
-        }
-
-
-
-        /* =================================================
-           LOAD SIDEBAR STATE
-        ================================================= */
-
-        function loadSidebarState() {
-
-            if (
-                !sidebar
-            ) {
-
-                return;
-
-            }
-
-
-            const isCollapsed =
-                localStorage.getItem(
-                    "sm_ai_sidebar_collapsed"
                 );
 
 
-            if (
-                isCollapsed ===
-                "true"
-            ) {
-
-                sidebar.classList.add(
-                    "collapsed"
-                );
-
-            }
-
-        }
-
-
-
-        /* =================================================
-           MOBILE MENU
-        ================================================= */
-
-        function toggleMobileMenu() {
-
-            if (
-                !sidebar
-            ) {
-
-                return;
-
-            }
-
-
-            sidebar.classList.toggle(
-                "mobile-open"
+            renderProducts(
+                filtered
             );
 
         }
 
 
-
         /* =================================================
-           NOTIFICATION PANEL
-        ================================================= */
-
-        function toggleNotifications() {
-
-            if (
-                !notificationPanel
-            ) {
-
-                return;
-
-            }
-
-
-            notificationPanel.classList.toggle(
-                "show"
-            );
-
-        }
-
-
-
-        /* =================================================
-           CLOSE PANELS OUTSIDE CLICK
-        ================================================= */
-
-        document.addEventListener(
-            "click",
-            (
-                event
-            ) => {
-
-                if (
-                    notificationPanel &&
-                    notificationBtn &&
-                    !notificationPanel.contains(
-                        event.target
-                    ) &&
-                    !notificationBtn.contains(
-                        event.target
-                    )
-                ) {
-
-                    notificationPanel.classList.remove(
-                        "show"
-                    );
-
-                }
-
-            }
-        );
-
-
-
-        /* =================================================
-           SEARCH EVENTS
+           EVENTS
         ================================================= */
 
         if (
-            productSearchBtn
+            analyzeProductBtn
         ) {
 
-            productSearchBtn.addEventListener(
+            analyzeProductBtn.addEventListener(
                 "click",
-                searchProducts
+                analyzeProduct
             );
 
         }
 
 
         if (
-            searchInput
+            productSearchInput
         ) {
 
-            searchInput.addEventListener(
-                "input",
-                searchProducts
-            );
-
-
-            searchInput.addEventListener(
+            productSearchInput.addEventListener(
                 "keydown",
                 (
                     event
                 ) => {
 
                     if (
-                        event.key ===
-                        "Enter"
+                        event.key === "Enter"
                     ) {
 
                         analyzeProduct();
@@ -1835,93 +1662,19 @@ document.addEventListener(
         }
 
 
-
-        /* =================================================
-           ANALYZE BUTTON
-        ================================================= */
-
         if (
-            analyzeBtn
+            globalSearch
         ) {
 
-            analyzeBtn.addEventListener(
-                "click",
-                analyzeProduct
-            );
-
-        }
-
-
-
-        /* =================================================
-           REFRESH BUTTON
-        ================================================= */
-
-        if (
-            refreshBtn
-        ) {
-
-            refreshBtn.addEventListener(
-                "click",
-                refreshDashboard
-            );
-
-        }
-
-
-
-        /* =================================================
-           SIDEBAR BUTTON
-        ================================================= */
-
-        if (
-            sidebarToggle
-        ) {
-
-            sidebarToggle.addEventListener(
-                "click",
-                toggleSidebar
-            );
-
-        }
-
-
-
-        /* =================================================
-           MOBILE MENU BUTTON
-        ================================================= */
-
-        if (
-            mobileMenuBtn
-        ) {
-
-            mobileMenuBtn.addEventListener(
-                "click",
-                toggleMobileMenu
-            );
-
-        }
-
-
-
-        /* =================================================
-           NOTIFICATION BUTTON
-        ================================================= */
-
-        if (
-            notificationBtn
-        ) {
-
-            notificationBtn.addEventListener(
-                "click",
+            globalSearch.addEventListener(
+                "input",
                 (
                     event
                 ) => {
 
-                    event.stopPropagation();
-
-
-                    toggleNotifications();
+                    searchProducts(
+                        event.target.value
+                    );
 
                 }
             );
@@ -1929,9 +1682,159 @@ document.addEventListener(
         }
 
 
+        if (
+            startResearchBtn
+        ) {
+
+            startResearchBtn.addEventListener(
+                "click",
+                scrollToResearch
+            );
+
+        }
+
+
+        if (
+            viewAutomationBtn
+        ) {
+
+            viewAutomationBtn.addEventListener(
+                "click",
+                () => {
+
+                    showToast(
+                        "Automation center selected.",
+                        "⚙️"
+                    );
+
+                }
+            );
+
+        }
+
+
+        if (
+            settingsBtn
+        ) {
+
+            settingsBtn.addEventListener(
+                "click",
+                () => {
+
+                    window.location.href =
+                        "settings.html";
+
+                }
+            );
+
+        }
+
+
+        if (
+            viewProductsBtn
+        ) {
+
+            viewProductsBtn.addEventListener(
+                "click",
+                () => {
+
+                    window.location.href =
+                        "products.html";
+
+                }
+            );
+
+        }
+
+
+        if (
+            connectStoreBtn
+        ) {
+
+            connectStoreBtn.addEventListener(
+                "click",
+                () => {
+
+                    window.location.href =
+                        "stores.html";
+
+                }
+            );
+
+        }
+
+
+        if (
+            refreshDashboardBtn
+        ) {
+
+            refreshDashboardBtn.addEventListener(
+                "click",
+                () => {
+
+                    refreshDashboard();
+
+                }
+            );
+
+        }
+
+
+        function refreshDashboard() {
+
+            setAIStatus(
+                "Refreshing..."
+            );
+
+
+            const originalText =
+                refreshDashboardBtn.innerHTML;
+
+
+            refreshDashboardBtn.disabled =
+                true;
+
+            refreshDashboardBtn.innerHTML =
+                "⏳ Refreshing";
+
+
+            setTimeout(
+                () => {
+
+                    loadData();
+
+                    updateStatistics();
+
+                    renderProducts();
+
+                    renderActivities();
+
+                    setAIStatus(
+                        "Ready for Analysis"
+                    );
+
+
+                    refreshDashboardBtn.disabled =
+                        false;
+
+                    refreshDashboardBtn.innerHTML =
+                        originalText;
+
+
+                    showToast(
+                        "Dashboard refreshed.",
+                        "🔄"
+                    );
+
+                },
+                800
+            );
+
+        }
+
 
         /* =================================================
-           KEYBOARD SHORTCUTS
+           ESC CLOSE
         ================================================= */
 
         document.addEventListener(
@@ -1940,60 +1843,11 @@ document.addEventListener(
                 event
             ) => {
 
-                /*
-                   ESC
-                */
-
                 if (
-                    event.key ===
-                    "Escape"
+                    event.key === "Escape"
                 ) {
 
-                    if (
-                        notificationPanel
-                    ) {
-
-                        notificationPanel.classList.remove(
-                            "show"
-                        );
-
-                    }
-
-
-                    if (
-                        sidebar
-                    ) {
-
-                        sidebar.classList.remove(
-                            "mobile-open"
-                        );
-
-                    }
-
-                }
-
-
-                /*
-                   Ctrl + K
-                   Focus product search
-                */
-
-                if (
-                    event.ctrlKey &&
-                    event.key.toLowerCase() ===
-                    "k"
-                ) {
-
-                    event.preventDefault();
-
-
-                    if (
-                        searchInput
-                    ) {
-
-                        searchInput.focus();
-
-                    }
+                    closeSidebar();
 
                 }
 
@@ -2001,55 +1855,60 @@ document.addEventListener(
         );
 
 
+        /* =================================================
+           WINDOW RESIZE
+        ================================================= */
+
+        window.addEventListener(
+            "resize",
+            () => {
+
+                if (
+                    !isMobile()
+                ) {
+
+                    closeSidebar();
+
+                }
+
+            }
+        );
+
 
         /* =================================================
-           INITIALIZE DASHBOARD
+           INITIALIZE
         ================================================= */
 
         function initializeDashboard() {
 
-            loadDashboardData();
+            loadData();
 
-
-            createInitialDemoData();
-
-
-            loadSidebarState();
-
+            createDemoData();
 
             updateStatistics();
 
-
             renderProducts();
-
 
             renderActivities();
 
-
             setAIStatus(
-                "AI Ready"
+                "Ready for Analysis"
             );
 
 
             console.log(
-                "%cSMART MONEY AI COMMERCE READY",
-                "font-size:16px;font-weight:bold;color:#38bdf8;"
+                "SMART MONEY AI COMMERCE DASHBOARD READY"
             );
 
 
             console.log(
                 "Environment:",
-                appConfig?.environment ||
+                appConfig.environment ||
                 "development"
             );
 
         }
 
-
-
-        /* =================================================
-           START APPLICATION
-        ================================================= */
 
         initializeDashboard();
 
