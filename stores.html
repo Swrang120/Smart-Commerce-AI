@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#07111f"
+    >
+
+    <title>
+        Stores - Smart Money AI Commerce
+    </title>
+
+
+    <!-- MAIN DASHBOARD STYLE -->
+
+    <link
+        rel="stylesheet"
+        href="css/dashboard.css"
+    >
+
+
+    <!-- STORES PAGE STYLE -->
+
+    <link
+        rel="stylesheet"
+        href="css/stores.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         DASHBOARD LAYOUT
+    ====================================================== -->
+
+    <div class="dashboard-layout">
+
+
+        <!-- =================================================
+             SIDEBAR
+        ================================================== -->
+
+        <aside
+            class="sidebar"
+            id="sidebar"
+        >
+
+
+            <!-- BRAND -->
+
+            <div class="sidebar-brand">
+
+                <div class="brand-logo">
+                    AI
+                </div>
+
+
+                <div>
+
+                    <h1>
+                        AI Store Manager
+                    </h1>
+
+
+                    <p>
+                        Automated E-Commerce Intelligence
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- NAVIGATION -->
+
+            <nav
+                class="sidebar-nav"
+            >
+
+
+                <p
+                    class="nav-label"
+                >
+                    MAIN MENU
+                </p>
+
+
+                <a
+                    href="dashboard.html"
+                    class="nav-item"
+                >
+
+                    <span
+                        class="nav-icon"
+                    >
+                        📊
+                    </span>
+
+
+                    <span>
+                        Dashboard
+                    </span>
+
+                </a>
+
+
+
+                <a
+                    href="products.html"
+                    class="nav-item"
+                >
+
+                    <span
+                        class="nav-icon"
+                    >
+                        🔍
+                    </span>
+
+
+                    <span>
+                        Product Research
+                    </span>
+
+                </a>
+
+
+
+                <a
+                    href="stores.html"
+                    class="nav-item active"
+                >
+
+                    <span
+                        class="nav-icon"
+                    >
+                        🏪
+                    </span>
+
+
+                    <span>
+                        My Stores
+                    </span>
+
+                </a>
+
+
+
+                <a
+                    href="analytics.html"
+                    class="nav-item"
+                >
+
+                    <span
+                        class="nav-icon"
+                    >
+                        📈
+                    </span>
+
+
+                    <span>
+                        Analytics
+                    </span>
+
+                </a>
+
+
+
+                <a
+                    href="automation.html"
+                    class="nav-item"
+                >
+
+                    <span
+                        class="nav-icon"
+                    >
+                        🤖
+                    </span>
+
+
+                    <span>
+                        Automation
+                    </span>
+
+                </a>
+
+
+
+                <p
+                    class="nav-label nav-label-space"
+                >
+                    SYSTEM
+                </p>
+
+
+
+                <a
+                    href="settings.html"
+                    class="nav-item"
+                >
+
+                    <span
+                        class="nav-icon"
+                    >
+                        ⚙️
+                    </span>
+
+
+                    <span>
+                        Settings
+                    </span>
+
+                </a>
+
+
+            </nav>
+
+
+
+            <!-- SIDEBAR FOOTER -->
+
+            <div
+                class="sidebar-footer"
+            >
+
+                <div
+                    class="system-status"
+                >
+
+                    <div
+                        class="system-status-top"
+                    >
+
+                        <span
+                            class="status-dot"
+                        >
+                        </span>
+
+
+                        <span>
+                            System Ready
+                        </span>
+
+                    </div>
+
+
+                    <p>
+                        Connect only accounts and APIs
+                        you own or are authorized to manage.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </aside>
+
+
+
+        <!-- =================================================
+             MAIN AREA
+        ================================================== -->
+
+        <main
+            class="dashboard-main"
+        >
+
+
+            <!-- =================================================
+                 HEADER
+            ================================================== -->
+
+            <header
+                class="dashboard-header"
+            >
+
+
+                <div
+                    class="header-left"
+                >
+
+
+                    <button
+                        class="mobile-menu-btn"
+                        id="mobileMenuBtn"
+                        type="button"
+                        aria-label="Open Menu"
+                    >
+                        ☰
+                    </button>
+
+
+                    <div>
+
+                        <h2>
+                            My Stores
+                        </h2>
+
+
+                        <p>
+                            Manage your connected and authorized stores
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div
+                    class="header-right"
+                >
+
+
+                    <span
+                        class="header-date"
+                        id="currentDate"
+                    >
+                        Loading...
+                    </span>
+
+
+
+                    <button
+                        class="profile-button"
+                        type="button"
+                        id="profileButton"
+                    >
+
+                        <span
+                            class="profile-avatar"
+                            id="profileAvatar"
+                        >
+                            AI
+                        </span>
+
+
+                        <span
+                            class="profile-text"
+                        >
+
+                            <strong
+                                id="profileName"
+                            >
+                                Store Owner
+                            </strong>
+
+
+                            <small>
+                                Private Workspace
+                            </small>
+
+                        </span>
+
+                    </button>
+
+
+                </div>
+
+
+            </header>
+
+
+
+            <!-- =================================================
+                 PAGE CONTENT
+            ================================================== -->
+
+            <section
+                class="dashboard-content stores-page"
+            >
+
+
+                <!-- =============================================
+                     PAGE HERO
+                ============================================== -->
+
+                <section
+                    class="stores-hero"
+                >
+
+
+                    <div
+                        class="stores-hero-content"
+                    >
+
+
+                        <span
+                            class="stores-badge"
+                        >
+                            🏪 STORE CONTROL CENTER
+                        </span>
+
+
+                        <h1>
+                            Manage Your
+                            <span>
+                                Connected Stores
+                            </span>
+                        </h1>
+
+
+                        <p>
+                            Add and manage marketplace stores that you
+                            own or are authorized to operate. Store
+                            performance and connection status will be
+                            tracked from one workspace.
+                        </p>
+
+
+                    </div>
+
+
+
+                    <div
+                        class="stores-hero-actions"
+                    >
+
+
+                        <button
+                            class="primary-btn"
+                            type="button"
+                            id="connectStoreBtn"
+                        >
+
+                            <span>
+                                ＋
+                            </span>
+
+                            Connect Store
+
+                        </button>
+
+
+                        <button
+                            class="secondary-btn"
+                            type="button"
+                            id="refreshStoresBtn"
+                        >
+
+                            <span>
+                                ↻
+                            </span>
+
+                            Refresh
+
+                        </button>
+
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- =============================================
+                     STORE STATS
+                ============================================== -->
+
+                <section
+                    class="store-stats-grid"
+                >
+
+
+                    <article
+                        class="store-stat-card"
+                    >
+
+                        <div
+                            class="store-stat-top"
+                        >
+
+                            <span>
+                                Connected Stores
+                            </span>
+
+
+                            <div
+                                class="store-stat-icon"
+                            >
+                                🏪
+                            </div>
+
+                        </div>
+
+
+                        <strong
+                            id="connectedStoresCount"
+                        >
+                            0
+                        </strong>
+
+
+                        <p>
+                            Authorized connections
+                        </p>
+
+                    </article>
+
+
+
+                    <article
+                        class="store-stat-card"
+                    >
+
+                        <div
+                            class="store-stat-top"
+                        >
+
+                            <span>
+                                Active Stores
+                            </span>
+
+
+                            <div
+                                class="store-stat-icon"
+                            >
+                                🟢
+                            </div>
+
+                        </div>
+
+
+                        <strong
+                            id="activeStoresCount"
+                        >
+                            0
+                        </strong>
+
+
+                        <p>
+                            Currently operational
+                        </p>
+
+                    </article>
+
+
+
+                    <article
+                        class="store-stat-card"
+                    >
+
+                        <div
+                            class="store-stat-top"
+                        >
+
+                            <span>
+                                Total Sales
+                            </span>
+
+
+                            <div
+                                class="store-stat-icon"
+                            >
+                                📦
+                            </div>
+
+                        </div>
+
+
+                        <strong
+                            id="storeSalesValue"
+                        >
+                            ₹0
+                        </strong>
+
+
+                        <p>
+                            From connected store data
+                        </p>
+
+                    </article>
+
+
+
+                    <article
+                        class="store-stat-card"
+                    >
+
+                        <div
+                            class="store-stat-top"
+                        >
+
+                            <span>
+                                Store Revenue
+                            </span>
+
+
+                            <div
+                                class="store-stat-icon"
+                            >
+                                💰
+                            </div>
+
+                        </div>
+
+
+                        <strong
+                            id="storeRevenueValue"
+                        >
+                            ₹0
+                        </strong>
+
+
+                        <p>
+                            Based on imported analytics
+                        </p>
+
+                    </article>
+
+
+                </section>
+
+
+
+                <!-- =============================================
+                     STORES HEADER
+                ============================================== -->
+
+                <section
+                    class="stores-section"
+                >
+
+
+                    <div
+                        class="section-header stores-section-header"
+                    >
+
+
+                        <div
+                            class="section-title"
+                        >
+
+                            <h3>
+                                Your Stores
+                            </h3>
+
+
+                            <p>
+                                Manage connected marketplaces and stores
+                            </p>
+
+                        </div>
+
+
+
+                        <div
+                            class="stores-toolbar"
+                        >
+
+
+                            <select
+                                id="storeFilter"
+                                class="store-filter"
+                            >
+
+                                <option
+                                    value="all"
+                                >
+                                    All Stores
+                                </option>
+
+
+                                <option
+                                    value="connected"
+                                >
+                                    Connected
+                                </option>
+
+
+                                <option
+                                    value="disconnected"
+                                >
+                                    Disconnected
+                                </option>
+
+
+                                <option
+                                    value="paused"
+                                >
+                                    Paused
+                                </option>
+
+                            </select>
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- =========================================
+                         STORES GRID
+                    ========================================== -->
+
+                    <div
+                        class="stores-grid"
+                        id="storesGrid"
+                    >
+
+
+                        <!-- =====================================
+                             EMPTY STATE
+                        ====================================== -->
+
+                        <div
+                            class="stores-empty-state"
+                            id="storesEmptyState"
+                        >
+
+
+                            <div
+                                class="stores-empty-icon"
+                            >
+                                🏪
+                            </div>
+
+
+                            <h3>
+                                No Stores Connected
+                            </h3>
+
+
+                            <p>
+                                Connect a store you own or are
+                                authorized to manage to begin
+                                tracking products, sales and
+                                performance.
+                            </p>
+
+
+                            <button
+                                class="primary-btn"
+                                type="button"
+                                id="emptyConnectStoreBtn"
+                            >
+
+                                <span>
+                                    ＋
+                                </span>
+
+                                Connect Your First Store
+
+                            </button>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- =============================================
+                     SUPPORTED CONNECTIONS
+                ============================================== -->
+
+                <section
+                    class="supported-section"
+                >
+
+
+                    <div
+                        class="section-header"
+                    >
+
+
+                        <div
+                            class="section-title"
+                        >
+
+                            <h3>
+                                Store Connection Types
+                            </h3>
+
+
+                            <p>
+                                Add authorized stores using supported
+                                integrations or approved data sources
+                            </p>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div
+                        class="connection-types-grid"
+                    >
+
+
+                        <article
+                            class="connection-type-card"
+                        >
+
+                            <div
+                                class="connection-type-icon"
+                            >
+                                🛒
+                            </div>
+
+
+                            <div>
+
+                                <h4>
+                                    Marketplace
+                                </h4>
+
+
+                                <p>
+                                    Connect marketplace accounts through
+                                    official APIs or approved integrations.
+                                </p>
+
+                            </div>
+
+
+                            <span
+                                class="connection-tag"
+                            >
+                                Authorized API
+                            </span>
+
+                        </article>
+
+
+
+                        <article
+                            class="connection-type-card"
+                        >
+
+                            <div
+                                class="connection-type-icon"
+                            >
+                                🏬
+                            </div>
+
+
+                            <div>
+
+                                <h4>
+                                    Shopify Store
+                                </h4>
+
+
+                                <p>
+                                    Connect a store that you own or
+                                    have permission to manage.
+                                </p>
+
+                            </div>
+
+
+                            <span
+                                class="connection-tag"
+                            >
+                                Store Access
+                            </span>
+
+                        </article>
+
+
+
+                        <article
+                            class="connection-type-card"
+                        >
+
+                            <div
+                                class="connection-type-icon"
+                            >
+                                🔗
+                            </div>
+
+
+                            <div>
+
+                                <h4>
+                                    Custom Integration
+                                </h4>
+
+
+                                <p>
+                                    Connect supported data sources and
+                                    authorized e-commerce platforms.
+                                </p>
+
+                            </div>
+
+
+                            <span
+                                class="connection-tag"
+                            >
+                                Custom API
+                            </span>
+
+                        </article>
+
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- =============================================
+                     CONNECTION INFORMATION
+                ============================================== -->
+
+                <section
+                    class="connection-info-card"
+                >
+
+
+                    <div
+                        class="connection-info-icon"
+                    >
+                        🔒
+                    </div>
+
+
+                    <div
+                        class="connection-info-content"
+                    >
+
+                        <h3>
+                            Secure Store Connections
+                        </h3>
+
+
+                        <p>
+                            This workspace is designed for accounts,
+                            stores and APIs that you own or are
+                            explicitly authorized to manage. Sensitive
+                            credentials should be stored securely and
+                            never directly inside public frontend code.
+                        </p>
+
+                    </div>
+
+
+                </section>
+
+
+            </section>
+
+
+        </main>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         CONNECT STORE MODAL
+    ====================================================== -->
+
+    <div
+        class="store-modal"
+        id="storeModal"
+        aria-hidden="true"
+    >
+
+
+        <div
+            class="store-modal-backdrop"
+            id="storeModalBackdrop"
+        >
+        </div>
+
+
+
+        <div
+            class="store-modal-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="storeModalTitle"
+        >
+
+
+            <!-- MODAL HEADER -->
+
+            <div
+                class="store-modal-header"
+            >
+
+
+                <div>
+
+                    <span
+                        class="modal-eyebrow"
+                    >
+                        NEW CONNECTION
+                    </span>
+
+
+                    <h2
+                        id="storeModalTitle"
+                    >
+                        Connect Store
+                    </h2>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="modal-close-btn"
+                    id="closeStoreModalBtn"
+                    aria-label="Close"
+                >
+                    ×
+                </button>
+
+
+            </div>
+
+
+
+            <!-- MODAL CONTENT -->
+
+            <form
+                id="connectStoreForm"
+            >
+
+
+                <div
+                    class="form-grid"
+                >
+
+
+                    <!-- STORE NAME -->
+
+                    <div
+                        class="form-group full-width"
+                    >
+
+                        <label
+                            for="storeName"
+                        >
+                            Store Name
+                        </label>
+
+
+                        <input
+                            type="text"
+                            id="storeName"
+                            name="storeName"
+                            placeholder="Example: My Main Store"
+                            autocomplete="off"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- PLATFORM -->
+
+                    <div
+                        class="form-group"
+                    >
+
+                        <label
+                            for="storePlatform"
+                        >
+                            Platform Type
+                        </label>
+
+
+                        <select
+                            id="storePlatform"
+                            name="storePlatform"
+                            required
+                        >
+
+                            <option
+                                value=""
+                            >
+                                Select Platform
+                            </option>
+
+
+                            <option
+                                value="amazon"
+                            >
+                                Amazon
+                            </option>
+
+
+                            <option
+                                value="flipkart"
+                            >
+                                Flipkart
+                            </option>
+
+
+                            <option
+                                value="meesho"
+                            >
+                                Meesho
+                            </option>
+
+
+                            <option
+                                value="shopify"
+                            >
+                                Shopify
+                            </option>
+
+
+                            <option
+                                value="other"
+                            >
+                                Other / Custom
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- COUNTRY -->
+
+                    <div
+                        class="form-group"
+                    >
+
+                        <label
+                            for="storeCountry"
+                        >
+                            Store Country
+                        </label>
+
+
+                        <select
+                            id="storeCountry"
+                            name="storeCountry"
+                            required
+                        >
+
+                            <option
+                                value="IN"
+                            >
+                                India
+                            </option>
+
+
+                            <option
+                                value="US"
+                            >
+                                United States
+                            </option>
+
+
+                            <option
+                                value="GB"
+                            >
+                                United Kingdom
+                            </option>
+
+
+                            <option
+                                value="OTHER"
+                            >
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- STORE URL -->
+
+                    <div
+                        class="form-group full-width"
+                    >
+
+                        <label
+                            for="storeUrl"
+                        >
+                            Store URL
+                            <span>
+                                Optional
+                            </span>
+                        </label>
+
+
+                        <input
+                            type="url"
+                            id="storeUrl"
+                            name="storeUrl"
+                            placeholder="https://example.com"
+                            autocomplete="url"
+                        >
+
+                    </div>
+
+
+
+                    <!-- CONNECTION NOTE -->
+
+                    <div
+                        class="form-group full-width"
+                    >
+
+                        <label
+                            for="storeNotes"
+                        >
+                            Connection Notes
+                            <span>
+                                Optional
+                            </span>
+                        </label>
+
+
+                        <textarea
+                            id="storeNotes"
+                            name="storeNotes"
+                            rows="4"
+                            placeholder="Describe the authorized connection or integration..."
+                        ></textarea>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- SECURITY NOTICE -->
+
+                <div
+                    class="modal-security-notice"
+                >
+
+                    <span>
+                        🔒
+                    </span>
+
+
+                    <p>
+                        Do not enter passwords, OTPs or personal login
+                        credentials here. Production integrations should
+                        use official OAuth or secure server-side API
+                        connections.
+                    </p>
+
+                </div>
+
+
+
+                <!-- MODAL ACTIONS -->
+
+                <div
+                    class="store-modal-actions"
+                >
+
+                    <button
+                        type="button"
+                        class="secondary-btn"
+                        id="cancelStoreModalBtn"
+                    >
+                        Cancel
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="primary-btn"
+                        id="saveStoreBtn"
+                    >
+
+                        <span>
+                            ＋
+                        </span>
+
+                        Save Store
+
+                    </button>
+
+
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         TOAST
+    ====================================================== -->
+
+    <div
+        class="toast"
+        id="toast"
+        role="status"
+        aria-live="polite"
+    >
+
+
+        <span
+            class="toast-icon"
+            id="toastIcon"
+        >
+            ✓
+        </span>
+
+
+        <span
+            class="toast-message"
+            id="toastMessage"
+        >
+            Ready
+        </span>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script
+        src="js/config.js"
+    ></script>
+
+
+    <script
+        src="js/api.js"
+    ></script>
+
+
+    <script
+        src="js/stores.js"
+    ></script>
+
+
+</body>
+
+</html>
