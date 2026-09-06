@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#07111f"
+    >
+
+    <title>
+        AI Store Manager - Dashboard
+    </title>
+
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <div class="app-layout">
+
+
+        <!-- SIDEBAR -->
+
+        <aside class="sidebar">
+
+
+            <div class="sidebar-brand">
+
+
+                <div class="brand-logo">
+                    AI
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        AI Store
+                    </strong>
+
+                    <small>
+                        MANAGER
+                    </small>
+
+                </div>
+
+
+            </div>
+
+
+
+            <nav class="sidebar-menu">
+
+
+                <a
+                    href="dashboard.html"
+                    class="nav-item active"
+                >
+
+                    <span>
+                        📊
+                    </span>
+
+                    Dashboard
+
+                </a>
+
+
+
+                <a
+                    href="products.html"
+                    class="nav-item"
+                >
+
+                    <span>
+                        📦
+                    </span>
+
+                    Products
+
+                </a>
+
+
+
+                <a
+                    href="#"
+                    class="nav-item"
+                >
+
+                    <span>
+                        🔍
+                    </span>
+
+                    AI Research
+
+                </a>
+
+
+
+                <a
+                    href="#"
+                    class="nav-item"
+                >
+
+                    <span>
+                        🛒
+                    </span>
+
+                    Orders
+
+                </a>
+
+
+
+                <a
+                    href="#"
+                    class="nav-item"
+                >
+
+                    <span>
+                        📈
+                    </span>
+
+                    Analytics
+
+                </a>
+
+
+
+                <a
+                    href="settings.html"
+                    class="nav-item"
+                >
+
+                    <span>
+                        ⚙️
+                    </span>
+
+                    Settings
+
+                </a>
+
+
+            </nav>
+
+
+
+            <div class="sidebar-bottom">
+
+
+                <div class="ai-status">
+
+                    <span class="status-dot"></span>
+
+
+                    <div>
+
+                        <strong>
+                            AI System Ready
+                        </strong>
+
+                        <small>
+                            Monitoring dashboard
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </aside>
+
+
+
+        <!-- MAIN CONTENT -->
+
+        <main class="main-content">
+
+
+            <!-- HEADER -->
+
+            <header class="dashboard-header">
+
+
+                <div>
+
+                    <p class="page-label">
+                        BUSINESS OVERVIEW
+                    </p>
+
+                    <h1>
+                        Welcome Back 👋
+                    </h1>
+
+                </div>
+
+
+
+                <div class="header-actions">
+
+
+                    <button
+                        class="notification-btn"
+                    >
+                        🔔
+                    </button>
+
+
+                    <div class="profile-box">
+
+                        <div class="profile-avatar">
+                            A
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+                                Admin
+                            </strong>
+
+                            <small>
+                                Store Owner
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+            </header>
+
+
+
+            <!-- AI STATUS -->
+
+            <section class="ai-banner">
+
+
+                <div class="ai-banner-icon">
+                    🤖
+                </div>
+
+
+                <div>
+
+                    <span>
+                        AI BUSINESS ASSISTANT
+                    </span>
+
+
+                    <h2>
+                        Your business intelligence
+                        system is ready
+                    </h2>
+
+
+                    <p>
+                        Connect marketplace accounts to begin
+                        authorized product, order and sales analysis.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="banner-btn"
+                    onclick="location.href='settings.html'"
+                >
+
+                    Connect Store →
+
+                </button>
+
+
+            </section>
+
+
+
+            <!-- STATS -->
+
+            <section class="stats-grid">
+
+
+                <article class="stat-card">
+
+
+                    <div class="stat-top">
+
+                        <span>
+                            TODAY'S SALES
+                        </span>
+
+                        <span class="stat-icon">
+                            💰
+                        </span>
+
+                    </div>
+
+
+                    <h2
+                        id="todaySales"
+                    >
+                        ₹0
+                    </h2>
+
+
+                    <p>
+                        Synced sales today
+                    </p>
+
+
+                </article>
+
+
+
+                <article class="stat-card">
+
+
+                    <div class="stat-top">
+
+                        <span>
+                            TOTAL EARNINGS
+                        </span>
+
+                        <span class="stat-icon">
+                            📈
+                        </span>
+
+                    </div>
+
+
+                    <h2
+                        id="totalEarnings"
+                    >
+                        ₹0
+                    </h2>
+
+
+                    <p>
+                        Lifetime tracked earnings
+                    </p>
+
+
+                </article>
+
+
+
+                <article class="stat-card">
+
+
+                    <div class="stat-top">
+
+                        <span>
+                            ACTIVE PRODUCTS
+                        </span>
+
+                        <span class="stat-icon">
+                            📦
+                        </span>
+
+                    </div>
+
+
+                    <h2
+                        id="activeProducts"
+                    >
+                        0
+                    </h2>
+
+
+                    <p>
+                        Products being tracked
+                    </p>
+
+
+                </article>
+
+
+
+                <article class="stat-card">
+
+
+                    <div class="stat-top">
+
+                        <span>
+                            CONNECTED STORES
+                        </span>
+
+                        <span class="stat-icon">
+                            🏪
+                        </span>
+
+                    </div>
+
+
+                    <h2
+                        id="connectedStores"
+                    >
+                        0
+                    </h2>
+
+
+                    <p>
+                        Authorized integrations
+                    </p>
+
+
+                </article>
+
+
+            </section>
+
+
+
+            <!-- MAIN GRID -->
+
+            <section class="dashboard-grid">
+
+
+                <!-- AI RESEARCH -->
+
+                <article class="panel ai-research-panel">
+
+
+                    <div class="panel-header">
+
+
+                        <div>
+
+                            <span class="panel-label">
+                                🤖 AI PRODUCT INTELLIGENCE
+                            </span>
+
+
+                            <h2>
+                                Product Research
+                            </h2>
+
+                        </div>
+
+
+                        <button class="small-btn">
+                            View All
+                        </button>
+
+
+                    </div>
+
+
+
+                    <div class="empty-research">
+
+
+                        <div class="empty-icon">
+                            🔍
+                        </div>
+
+
+                        <h3>
+                            No research data yet
+                        </h3>
+
+
+                        <p>
+                            Connect approved marketplace data
+                            sources to begin analyzing products,
+                            demand and profitability.
+                        </p>
+
+
+                        <button
+                            class="primary-small-btn"
+                            onclick="location.href='products.html'"
+                        >
+
+                            Start Product Research
+
+                        </button>
+
+
+                    </div>
+
+
+                </article>
+
+
+
+                <!-- AI ACTIVITY -->
+
+                <article class="panel activity-panel">
+
+
+                    <div class="panel-header">
+
+
+                        <div>
+
+                            <span class="panel-label">
+                                SYSTEM ACTIVITY
+                            </span>
+
+
+                            <h2>
+                                AI Activity
+                            </h2>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="activity-list">
+
+
+                        <div class="activity-item">
+
+                            <div class="activity-icon">
+                                🤖
+                            </div>
+
+
+                            <div>
+
+                                <strong>
+                                    AI system initialized
+                                </strong>
+
+
+                                <small>
+                                    Ready for store connections
+                                </small>
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        <div class="activity-item">
+
+                            <div class="activity-icon">
+                                📊
+                            </div>
+
+
+                            <div>
+
+                                <strong>
+                                    Dashboard analytics ready
+                                </strong>
+
+
+                                <small>
+                                    Waiting for authorized data
+                                </small>
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        <div class="activity-item">
+
+                            <div class="activity-icon">
+                                🔒
+                            </div>
+
+
+                            <div>
+
+                                <strong>
+                                    Secure mode enabled
+                                </strong>
+
+
+                                <small>
+                                    API connections required
+                                </small>
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </article>
+
+
+            </section>
+
+
+
+            <!-- CONNECT STORES -->
+
+            <section class="panel store-panel">
+
+
+                <div class="panel-header">
+
+
+                    <div>
+
+                        <span class="panel-label">
+                            MARKETPLACE INTEGRATIONS
+                        </span>
+
+
+                        <h2>
+                            Connected Stores
+                        </h2>
+
+                    </div>
+
+
+                    <button
+                        class="primary-small-btn"
+                        onclick="location.href='settings.html'"
+                    >
+
+                        + Add Store
+
+                    </button>
+
+
+                </div>
+
+
+
+                <div class="store-grid">
+
+
+                    <div class="store-card">
+
+                        <div class="store-logo">
+                            🛒
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+                                Amazon
+                            </strong>
+
+
+                            <small>
+                                Not connected
+                            </small>
+
+                        </div>
+
+
+                        <span class="store-status offline">
+                            Not Connected
+                        </span>
+
+
+                    </div>
+
+
+
+                    <div class="store-card">
+
+                        <div class="store-logo">
+                            🛍️
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+                                Flipkart
+                            </strong>
+
+
+                            <small>
+                                Not connected
+                            </small>
+
+                        </div>
+
+
+                        <span class="store-status offline">
+                            Not Connected
+                        </span>
+
+
+                    </div>
+
+
+
+                    <div class="store-card">
+
+                        <div class="store-logo">
+                            👜
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+                                Meesho
+                            </strong>
+
+
+                            <small>
+                                Not connected
+                            </small>
+
+                        </div>
+
+
+                        <span class="store-status offline">
+                            Not Connected
+                        </span>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </section>
+
+
+        </main>
+
+
+    </div>
+
+
+
+    <script
+        src="js/config.js"
+    ></script>
+
+
+    <script
+        src="js/dashboard.js"
+    ></script>
+
+
+</body>
+
+</html>
