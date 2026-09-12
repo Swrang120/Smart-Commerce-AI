@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social Media Studio - Smart Money AI Commerce</title>
+  <meta name="description" content="AI viral video generator and auto-posting studio for YouTube Shorts and Meta Reels.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand-area">
+        <div class="brand-badge">AI</div>
+        <div class="brand-title">
+          Smart Money AI
+          <span>COMMERCE OS</span>
+        </div>
+      </div>
+
+      <p class="nav-section-title">Command Center</p>
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a href="dashboard.html" id="navDashboard">
+            <span class="nav-icon">📊</span>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="products.html" id="navProducts">
+            <span class="nav-icon">📦</span>
+            <span>Products & Profit</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="stores.html" id="navStores">
+            <span class="nav-icon">🏪</span>
+            <span>Connected Stores</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="orders.html" id="navOrders">
+            <span class="nav-icon">💰</span>
+            <span>Orders & Earnings</span>
+          </a>
+        </li>
+      </ul>
+
+      <p class="nav-section-title">Growth & Marketing</p>
+      <ul class="nav-list">
+        <li class="nav-item active">
+          <a href="social-studio.html" id="navSocial">
+            <span class="nav-icon">🎬</span>
+            <span>Social Studio</span>
+            <span class="nav-badge">VIRAL AI</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="settings.html" id="navSettings">
+            <span class="nav-icon">⚙️</span>
+            <span>Supabase & APIs</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <div class="ai-engine-status">
+          <div class="ai-status-row">
+            <span>VIRAL CRON ACTIVE</span>
+            <span class="status-dot"></span>
+          </div>
+          <small style="font-size: 0.72rem; color: var(--text-dim);">
+            Auto-Queue Checks Every 15m
+          </small>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN WRAPPER -->
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">☰</button>
+          <div class="page-header-text">
+            <h1>Viral Social Content Studio</h1>
+            <p>Automated YouTube Shorts & Meta Reels scripts, hashtags, and auto-publishing queue.</p>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <button class="btn btn-primary btn-sm" onclick="triggerAutoPublishQueue()">
+            ⚡ Auto-Publish Queue Now
+          </button>
+        </div>
+      </header>
+
+      <main class="page-content">
+        <div class="grid-2col">
+          <!-- Left Column: AI Script & Campaign Studio -->
+          <div class="glass-panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <span>🤖</span> Gemini AI Video Campaign Generator
+              </div>
+              <span class="badge badge-active">Gemini 3.8 Flash</span>
+            </div>
+
+            <form onsubmit="event.preventDefault(); runAiSocialGenerator();">
+              <div class="form-group">
+                <label class="form-label" for="socialProductTitle">Target Product Name</label>
+                <input type="text" id="socialProductTitle" class="form-control" placeholder="e.g. Ergonomic Magnetic Wireless Car Charger 15W" required>
+              </div>
+
+              <div class="grid-2col" style="gap: 12px;">
+                <div class="form-group">
+                  <label class="form-label" for="socialProductCategory">Niche / Category</label>
+                  <input type="text" id="socialProductCategory" class="form-control" placeholder="Car Tech Accessories">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="socialSellingPrice">Offer Price (₹)</label>
+                  <input type="number" id="socialSellingPrice" class="form-control" placeholder="1199">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="socialPlatformSelect">Social Advertising Channel</label>
+                <select id="socialPlatformSelect" class="form-control">
+                  <option value="youtube">YouTube Shorts (Vertical 9:16 - High Search Traffic)</option>
+                  <option value="facebook">Meta & Instagram Reels (High Impulse CTR)</option>
+                </select>
+              </div>
+
+              <div style="margin-bottom: 18px;">
+                <button type="submit" id="generateSocialBtn" class="btn btn-gold" style="width: 100%;">
+                  ⚡ Generate Viral Video Script with AI
+                </button>
+              </div>
+
+              <!-- AI Script Output Section -->
+              <div id="socialScriptPreview" style="display: none; margin-bottom: 18px;"></div>
+
+              <div class="form-group">
+                <label class="form-label" for="socialCaptionInput">Generated Video Hook Caption</label>
+                <textarea id="socialCaptionInput" class="form-control" rows="3" placeholder="AI-generated caption will appear here..."></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="socialTagsInput">Trending Viral Hashtags</label>
+                <input type="text" id="socialTagsInput" class="form-control" placeholder="#Shorts #Trending #AmazonFinds #SmartCommerce">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="socialVideoUrlInput">Hosted Video URL / Cloud Storage Link</label>
+                <input type="text" id="socialVideoUrlInput" class="form-control" placeholder="https://youtube.com/shorts/demo-clip-2026">
+              </div>
+
+              <div style="display: flex; gap: 12px; margin-top: 20px;">
+                <button type="button" class="btn btn-glass" style="flex: 1;" onclick="scheduleSocialCampaign(false)">
+                  📅 Schedule in Auto-Queue
+                </button>
+                <button type="button" class="btn btn-primary" style="flex: 1;" onclick="scheduleSocialCampaign(true)">
+                  🚀 Publish Instantly
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Right Column: Publishing Queue & Channels -->
+          <div>
+            <!-- Channel Integration Status -->
+            <div class="glass-panel" style="margin-bottom: 24px;">
+              <div class="panel-header">
+                <div class="panel-title">
+                  <span>📱</span> Connected Social Media Channels
+                </div>
+                <a href="settings.html" class="btn btn-glass btn-sm">API Settings ⚙️</a>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div style="padding: 14px; background: rgba(244,63,94,0.08); border: 1px solid rgba(244,63,94,0.25); border-radius: 10px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <strong style="color: #f43f5e;">YouTube Data API</strong>
+                    <span class="badge badge-active">Ready</span>
+                  </div>
+                  <small style="color: var(--text-dim); display: block;">v3 OAuth / API Key Token</small>
+                  <small style="color: var(--text-muted); display: block; margin-top: 4px;">Direct Shorts Uploader</small>
+                </div>
+
+                <div style="padding: 14px; background: rgba(37,99,235,0.08); border: 1px solid rgba(37,99,235,0.25); border-radius: 10px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <strong style="color: #3b82f6;">Meta Graph API</strong>
+                    <span class="badge badge-active">Ready</span>
+                  </div>
+                  <small style="color: var(--text-dim); display: block;">Page Access Token</small>
+                  <small style="color: var(--text-muted); display: block; margin-top: 4px;">FB & Instagram Reels Publisher</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Campaign Queue -->
+            <div class="glass-panel">
+              <div class="panel-header">
+                <div class="panel-title">
+                  <span>📅</span> Social Broadcast Queue (Supabase <code>social_posts</code>)
+                </div>
+                <button class="btn btn-glass btn-sm" onclick="fetchSocialPosts()">🔄 Refresh Queue</button>
+              </div>
+
+              <div id="socialPostsList">
+                <!-- Loaded dynamically by app.js -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    async function triggerAutoPublishQueue() {
+      showToast('Processing scheduled social queue...', 'gold');
+      try {
+        const res = await fetch('/api/social/auto-publish-now', { method: 'POST' });
+        const data = await res.json();
+        showToast(`Auto-published ${data.processedCount || 0} scheduled campaigns!`, 'success');
+        fetchSocialPosts();
+        fetchAiLogs();
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    }
+  </script>
+</body>
+</html>

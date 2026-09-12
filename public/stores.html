@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connected Stores - Smart Money AI Commerce</title>
+  <meta name="description" content="Dual integration store management for Shopify, Flipkart, Amazon, and Meesho with official secure API modes.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand-area">
+        <div class="brand-badge">AI</div>
+        <div class="brand-title">
+          Smart Money AI
+          <span>COMMERCE OS</span>
+        </div>
+      </div>
+
+      <p class="nav-section-title">Command Center</p>
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a href="dashboard.html" id="navDashboard">
+            <span class="nav-icon">📊</span>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="products.html" id="navProducts">
+            <span class="nav-icon">📦</span>
+            <span>Products & Profit</span>
+          </a>
+        </li>
+        <li class="nav-item active">
+          <a href="stores.html" id="navStores">
+            <span class="nav-icon">🏪</span>
+            <span>Connected Stores</span>
+            <span class="nav-badge" id="storesCountBadge">0</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="orders.html" id="navOrders">
+            <span class="nav-icon">💰</span>
+            <span>Orders & Earnings</span>
+          </a>
+        </li>
+      </ul>
+
+      <p class="nav-section-title">Growth & Marketing</p>
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a href="social-studio.html" id="navSocial">
+            <span class="nav-icon">🎬</span>
+            <span>Social Studio</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="settings.html" id="navSettings">
+            <span class="nav-icon">⚙️</span>
+            <span>Supabase & APIs</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <div class="ai-engine-status">
+          <div class="ai-status-row">
+            <span>DUAL API MODE</span>
+            <span class="status-dot"></span>
+          </div>
+          <small style="font-size: 0.72rem; color: var(--text-dim);">
+            Anti-Shadowban Protection Active
+          </small>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN WRAPPER -->
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">☰</button>
+          <div class="page-header-text">
+            <h1>Connected Store Integrations</h1>
+            <p>Official API tokens & authorized seller channels.</p>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <button class="btn btn-primary" onclick="openAddStoreModal('shopify')">
+            + Connect New Store
+          </button>
+        </div>
+      </header>
+
+      <main class="page-content">
+        <!-- Security & Realism Notice Banner -->
+        <div class="glass-panel" style="border-left: 4px solid var(--gold-accent); padding: 20px; margin-bottom: 24px;">
+          <div style="display: flex; gap: 14px; align-items: flex-start;">
+            <span style="font-size: 1.5rem;">🛡️</span>
+            <div>
+              <strong style="color: var(--gold-text); font-size: 0.95rem; display: block; margin-bottom: 4px;">
+                Secure Architecture: Official API Mode vs Headless Scraping
+              </strong>
+              <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">
+                Logging in with headless Chromium browsers on Flipkart or Amazon using raw account credentials triggers OTP/CAPTCHA blocks and account shadowbans. Smart Money AI Commerce utilizes <strong>Official Developer API Tokens</strong> for direct store management and an isolated background worker for supplier catalog feeds.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Platform Connect Bar -->
+        <div class="panel-header" style="margin-bottom: 16px;">
+          <div class="panel-title"><span>⚡</span> Connect Marketplace Channels</div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 30px;">
+          <button class="btn btn-glass" style="justify-content: flex-start; padding: 14px;" onclick="openAddStoreModal('shopify')">
+            <span style="font-size: 1.3rem;">🛍️</span>
+            <div style="text-align: left;">
+              <strong style="display: block;">Shopify</strong>
+              <small style="color: var(--cyan-accent);">Admin REST / GraphQL</small>
+            </div>
+          </button>
+          <button class="btn btn-glass" style="justify-content: flex-start; padding: 14px;" onclick="openAddStoreModal('flipkart')">
+            <span style="font-size: 1.3rem;">📦</span>
+            <div style="text-align: left;">
+              <strong style="display: block;">Flipkart Hub</strong>
+              <small style="color: var(--gold-text);">Seller API v3</small>
+            </div>
+          </button>
+          <button class="btn btn-glass" style="justify-content: flex-start; padding: 14px;" onclick="openAddStoreModal('amazon')">
+            <span style="font-size: 1.3rem;">🛒</span>
+            <div style="text-align: left;">
+              <strong style="display: block;">Amazon SP-API</strong>
+              <small style="color: var(--emerald-success);">Selling Partner API</small>
+            </div>
+          </button>
+          <button class="btn btn-glass" style="justify-content: flex-start; padding: 14px;" onclick="openAddStoreModal('meesho')">
+            <span style="font-size: 1.3rem;">🏷️</span>
+            <div style="text-align: left;">
+              <strong style="display: block;">Meesho</strong>
+              <small style="color: #a855f7;">Supplier Catalog API</small>
+            </div>
+          </button>
+        </div>
+
+        <!-- Current Active Stores Grid -->
+        <div class="panel-header">
+          <div class="panel-title"><span>🏪</span> Active Integrated Stores</div>
+          <button class="btn btn-glass btn-sm" onclick="triggerStoreSync()">🔄 Sync All Channels</button>
+        </div>
+
+        <div class="metrics-grid" id="storesGrid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+          <!-- Populated by app.js -->
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD NEW STORE -->
+  <div class="modal-backdrop" id="addStoreModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="storeModalPlatformTitle" style="font-size: 1.2rem; color: var(--text-main);">
+          Connect Store Integration
+        </h3>
+        <button class="modal-close" onclick="closeModal('addStoreModal')">×</button>
+      </div>
+
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
+        All API secrets are stored securely in the Supabase <code>stores</code> table with row-level security.
+      </p>
+
+      <form id="addStoreForm" onsubmit="submitNewStore(event)">
+        <div class="form-group">
+          <label class="form-label" for="newStorePlatform">Select Marketplace</label>
+          <select id="newStorePlatform" class="form-control">
+            <option value="shopify">Shopify Online Store</option>
+            <option value="flipkart">Flipkart Seller Hub</option>
+            <option value="amazon">Amazon Seller Central (SP-API)</option>
+            <option value="meesho">Meesho Supplier Portal</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="newStoreName">Store Name / Brand Label</label>
+          <input type="text" id="newStoreName" class="form-control" placeholder="e.g. SmartTrend Official Store" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="newStoreApiKey">API Key / Client ID / Seller App ID</label>
+          <input type="text" id="newStoreApiKey" class="form-control" placeholder="Provided in developer portal">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="newStoreApiSecret">API Secret / Client Secret</label>
+          <input type="password" id="newStoreApiSecret" class="form-control" placeholder="••••••••••••••••••••">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="newStoreAccessToken">Access Token (Permanent or Refresh Token)</label>
+          <input type="text" id="newStoreAccessToken" class="form-control" placeholder="shpat_xxxx or amzn.sp.xxxx">
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px;">
+          <button type="button" class="btn btn-glass" onclick="closeModal('addStoreModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Connect Store Securely 🔐</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

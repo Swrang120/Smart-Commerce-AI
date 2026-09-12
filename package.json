@@ -1,0 +1,20 @@
+{
+  "name": "smart-money-ai-commerce",
+  "version": "1.0.0",
+  "description": "Smart Money AI Commerce - Automated E-commerce & Social Marketing System",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "build": "node -c server.js config/supabase.js services/aiEngine.js services/storeSync.js services/socialAutoPost.js",
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "@google/genai": "^2.22.0",
+    "@supabase/supabase-js": "^2.116.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "node-cron": "^4.6.0"
+  }
+}

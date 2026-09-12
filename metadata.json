@@ -1,0 +1,8 @@
+{
+  "name": "Smart Money AI Commerce",
+  "description": "Automated e-commerce & social media marketing system with Supabase integration, supplier dropshipping intelligence, and Gemini AI automation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

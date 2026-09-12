@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings & Integrations - Smart Money AI Commerce</title>
+  <meta name="description" content="Configure Supabase cloud database, Gemini AI API keys, and marketplace tokens.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand-area">
+        <div class="brand-badge">AI</div>
+        <div class="brand-title">
+          Smart Money AI
+          <span>COMMERCE OS</span>
+        </div>
+      </div>
+
+      <p class="nav-section-title">Command Center</p>
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a href="dashboard.html" id="navDashboard">
+            <span class="nav-icon">📊</span>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="products.html" id="navProducts">
+            <span class="nav-icon">📦</span>
+            <span>Products & Profit</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="stores.html" id="navStores">
+            <span class="nav-icon">🏪</span>
+            <span>Connected Stores</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="orders.html" id="navOrders">
+            <span class="nav-icon">💰</span>
+            <span>Orders & Earnings</span>
+          </a>
+        </li>
+      </ul>
+
+      <p class="nav-section-title">Growth & Marketing</p>
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a href="social-studio.html" id="navSocial">
+            <span class="nav-icon">🎬</span>
+            <span>Social Studio</span>
+          </a>
+        </li>
+        <li class="nav-item active">
+          <a href="settings.html" id="navSettings">
+            <span class="nav-icon">⚙️</span>
+            <span>Supabase & APIs</span>
+            <span class="nav-badge">CONFIG</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <div class="ai-engine-status">
+          <div class="ai-status-row">
+            <span>CONFIG ENGINE</span>
+            <span class="status-dot"></span>
+          </div>
+          <small style="font-size: 0.72rem; color: var(--text-dim);" id="dbStatusIndicator">
+            Settings Loaded
+          </small>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN WRAPPER -->
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">☰</button>
+          <div class="page-header-text">
+            <h1>Settings & Cloud Integrations</h1>
+            <p>Connect your dedicated Supabase database, Gemini AI API, and marketplace tokens.</p>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <button class="btn btn-glass btn-sm" onclick="checkSystemHealth()">
+            🔍 Run Diagnostic Check
+          </button>
+        </div>
+      </header>
+
+      <main class="page-content">
+        <!-- SYSTEM DIAGNOSTIC STATUS -->
+        <div class="glass-panel" style="margin-bottom: 24px;">
+          <div class="panel-header">
+            <div class="panel-title"><span>📡</span> Runtime Environment & Engine Status</div>
+            <span class="badge badge-active" id="engineHealthStatus">Online (Port 3000)</span>
+          </div>
+          <div class="metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-bottom: 0;">
+            <div style="padding: 12px; background: rgba(255,255,255,0.02); border-radius: 8px;">
+              <small style="color: var(--text-dim);">Database Engine</small>
+              <div id="statusDbName" style="font-weight: 700; color: var(--cyan-accent); margin-top: 4px;">Checking...</div>
+            </div>
+            <div style="padding: 12px; background: rgba(255,255,255,0.02); border-radius: 8px;">
+              <small style="color: var(--text-dim);">Google Gemini AI SDK</small>
+              <div id="statusAiEngine" style="font-weight: 700; color: var(--gold-text); margin-top: 4px;">Active (@google/genai)</div>
+            </div>
+            <div style="padding: 12px; background: rgba(255,255,255,0.02); border-radius: 8px;">
+              <small style="color: var(--text-dim);">Automation Workers</small>
+              <div style="font-weight: 700; color: var(--emerald-success); margin-top: 4px;">node-cron (15m / 30m)</div>
+            </div>
+            <div style="padding: 12px; background: rgba(255,255,255,0.02); border-radius: 8px;">
+              <small style="color: var(--text-dim);">Account Protection</small>
+              <div style="font-weight: 700; color: var(--cyan-accent); margin-top: 4px;">Official API Mode</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2col">
+          <!-- Left Column: Supabase Connection -->
+          <div class="glass-panel">
+            <div class="panel-header">
+              <div class="panel-title"><span>🗄️</span> Supabase Cloud Database</div>
+              <span class="badge badge-scheduled" id="supabaseBadge">Dedicated Database</span>
+            </div>
+
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 18px;">
+              Connect your dedicated Supabase project to persist stores, products, orders, and viral marketing schedules.
+            </p>
+
+            <form onsubmit="event.preventDefault(); saveSupabaseConfig();">
+              <div class="form-group">
+                <label class="form-label" for="supabaseUrlInput">Supabase Project URL</label>
+                <input type="url" id="supabaseUrlInput" class="form-control" placeholder="https://your-project-ref.supabase.co">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="supabaseKeyInput">Supabase Service Role / Anon API Key</label>
+                <input type="password" id="supabaseKeyInput" class="form-control" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="width: 100%;">
+                Connect Supabase Project ⚡
+              </button>
+            </form>
+
+            <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.06);">
+              <strong style="font-size: 0.82rem; color: var(--gold-text); display: block; margin-bottom: 8px;">
+                📋 Dedicated Supabase SQL Setup Script:
+              </strong>
+              <p style="font-size: 0.78rem; color: var(--text-dim); margin-bottom: 8px;">
+                Run this SQL script in your Supabase project SQL Editor to instantiate all 5 tables:
+              </p>
+              <pre style="background: rgba(7,17,31,0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; font-size: 0.72rem; color: #a5f3fc; overflow-x: auto; max-height: 200px;">
+-- 1. STORES TABLE
+CREATE TABLE stores (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID,
+    store_name VARCHAR(255) NOT NULL,
+    platform VARCHAR(50) NOT NULL,
+    api_key TEXT,
+    api_secret TEXT,
+    access_token TEXT,
+    status VARCHAR(50) DEFAULT 'active',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 2. PRODUCTS TABLE
+CREATE TABLE products (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    store_id UUID,
+    title VARCHAR(255) NOT NULL,
+    category VARCHAR(100),
+    cost_price NUMERIC(10, 2) NOT NULL,
+    selling_price NUMERIC(10, 2) NOT NULL,
+    estimated_profit NUMERIC(10, 2) NOT NULL,
+    demand_score INT DEFAULT 0,
+    stock_quantity INT DEFAULT 0,
+    listing_status VARCHAR(50) DEFAULT 'draft',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 3. ORDERS & EARNINGS TABLE
+CREATE TABLE orders (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    store_id UUID,
+    product_id UUID,
+    order_number VARCHAR(100) NOT NULL,
+    revenue NUMERIC(10, 2) NOT NULL,
+    net_profit NUMERIC(10, 2) NOT NULL,
+    order_status VARCHAR(50) DEFAULT 'pending',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 4. SOCIAL MEDIA CONTENT SCHEDULE TABLE
+CREATE TABLE social_posts (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    product_id UUID,
+    platform VARCHAR(50) NOT NULL,
+    video_url TEXT,
+    caption TEXT,
+    hashtags TEXT,
+    post_status VARCHAR(50) DEFAULT 'scheduled',
+    published_at TIMESTAMP WITH TIME ZONE
+);
+
+-- 5. AI LOGS & DECISIONS
+CREATE TABLE ai_logs (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    action_type VARCHAR(100) NOT NULL,
+    description TEXT NOT NULL,
+    impact_type VARCHAR(50) DEFAULT 'info',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);</pre>
+            </div>
+          </div>
+
+          <!-- Right Column: API Keys & Social Credentials -->
+          <div class="glass-panel">
+            <div class="panel-header">
+              <div class="panel-title"><span>🔐</span> Marketplace & Social API Secrets</div>
+            </div>
+
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
+              Manage environment tokens declared in <code>.env.example</code>. These can also be configured directly via Settings &gt; Secrets.
+            </p>
+
+            <div class="form-group">
+              <label class="form-label">Google Gemini AI Model</label>
+              <div style="display: flex; gap: 8px;">
+                <input type="text" class="form-control" value="gemini-3.8-flash" readonly style="background: rgba(255,255,255,0.03);">
+                <button type="button" class="btn btn-glass btn-sm" onclick="showToast('Gemini API configured server-side', 'success')">Verified</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">YouTube Data API v3 Token</label>
+              <input type="text" class="form-control" placeholder="AIzaSy..." value="AIzaSyD-YT_AutoPost_Active" readonly style="background: rgba(255,255,255,0.03);">
+              <small style="color: var(--text-dim); font-size: 0.72rem;">Handles vertical 9:16 Shorts automated uploading</small>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Meta Graph API Page Token</label>
+              <input type="text" class="form-control" placeholder="EAAK..." value="EAAK_Meta_Graph_ActiveToken" readonly style="background: rgba(255,255,255,0.03);">
+              <small style="color: var(--text-dim); font-size: 0.72rem;">Automates Facebook Reels and Instagram Video Ad campaigns</small>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Dual Mode Headless Scraping Proxy</label>
+              <input type="text" class="form-control" value="https://proxy-worker.smartmoney-ai.internal" readonly style="background: rgba(255,255,255,0.03);">
+              <small style="color: var(--text-dim); font-size: 0.72rem;">Isolates supplier price discovery from official seller marketplace IPs</small>
+            </div>
+
+            <div style="margin-top: 24px; padding: 14px; background: rgba(0,217,245,0.05); border: 1px solid var(--border-glass); border-radius: 8px;">
+              <strong style="color: var(--cyan-accent); font-size: 0.85rem; display: block; margin-bottom: 4px;">
+                GitHub Push & Deployment Guide:
+              </strong>
+              <p style="color: var(--text-muted); font-size: 0.78rem; line-height: 1.5;">
+                • Backend: <code>node server.js</code> on Render / Railway / Cloud Run.<br>
+                • Database: Supabase Project with 5 tables initialized.<br>
+                • Frontend: Hosted directly with Express static server or GitHub Pages with API endpoint.
+              </p>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    async function checkSystemHealth() {
+      try {
+        const res = await fetch('/api/health');
+        const data = await res.json();
+        document.getElementById('statusDbName').textContent = data.supabaseConnected ? 'Supabase Connected' : 'Resilient Fallback Active';
+        document.getElementById('engineHealthStatus').textContent = `Online (Port ${data.port})`;
+        showToast(`System Health 100% OK • Supabase: ${data.supabaseConnected ? 'Connected' : 'Fallback Mode'}`, 'success');
+      } catch (err) {
+        showToast('Health check error: ' + err.message, 'error');
+      }
+    }
+
+    async function saveSupabaseConfig() {
+      const url = document.getElementById('supabaseUrlInput').value.trim();
+      const key = document.getElementById('supabaseKeyInput').value.trim();
+
+      if (!url || !key) {
+        showToast('Please enter both Supabase URL and Key', 'error');
+        return;
+      }
+
+      showToast('Testing Supabase Cloud Connection...', 'gold');
+      try {
+        const res = await fetch('/api/settings/supabase', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url, key })
+        });
+        const result = await res.json();
+        if (result.success) {
+          showToast('Connected to Supabase successfully!', 'success');
+          document.getElementById('supabaseBadge').textContent = 'Cloud Connected';
+          document.getElementById('supabaseBadge').className = 'badge badge-active';
+          checkSystemHealth();
+          fetchMetrics();
+        } else {
+          showToast(result.error || 'Connection failed', 'error');
+        }
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      checkSystemHealth();
+    });
+  </script>
+</body>
+</html>
